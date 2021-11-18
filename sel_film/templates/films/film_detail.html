@@ -1,0 +1,28 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+{{ film.title_ru }} / {{ film.title_en }} {{ film.year }} <br>
+Duration: {{ film.duration }} min<br>
+<img src="{{ film.image.url }}" width="150px"> <br>
+Actors: {{ film.actors }}<br>
+<hr>
+{% for actor in actors_list %}
+    {{ actor }}
+{% endfor %}
+
+Directors:
+{% for director in directors_list %}
+    {{ director }}
+{% endfor %}<br>
+
+Countries:
+{% for country in countries_list %}
+{{ country }}
+{% endfor %}<br>
+
+{% if film.rating %}
+    Rating IMDb: {{ film.rating }}
+{% endif %}
+
+{% endblock content %}

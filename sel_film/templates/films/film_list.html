@@ -1,0 +1,14 @@
+{% extends 'base.html' %}
+
+
+{% block content %}
+
+{% for film in films %}
+    <h1>{{ film.title_ru }} / {{ film.title_en }}</h1>
+    {% if film.image %}
+        <img src="{{ film.image.url }}">
+    {% endif %}
+{% endfor %}
+
+
+{% endblock content %}
