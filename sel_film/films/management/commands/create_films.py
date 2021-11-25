@@ -1,11 +1,12 @@
 from django.core.management.base import BaseCommand
-import json
-from films.models import Film
 from django.core.files import File
+import json
+
+from films.models import Film
 
 
 class Command(BaseCommand):
-    help = 'Load films from json file to db'
+    help = 'Create films instance in DB'
 
     def handle(self, *args, **kwargs):
         with open('data/films_info.json', 'r') as file:
@@ -23,12 +24,9 @@ class Command(BaseCommand):
                 plot=film['plot'],
                 rating=film['rating']
             )
-            f.image.save(f'film_{film["id"]}.jpeg', get_image(film["id"]))
+            f.image.save(f'film_{film["id"]}.jpeg', self.get_image(film["id"]))
             if film['id'] % 100 == 0:
                 print(f'Записан фильм номер {film["id"]}')
 
-    print('Фильмы успешно записаны в базу данных')
-
-
-def get_image(id):
-    return File(open(f'data/posters/films/film_{id}.jpeg', 'rb'))
+    def get_image(id):
+        return File(open(f'data/posters/films/film_{id}.jpeg', 'rb'))
