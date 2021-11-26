@@ -2,31 +2,63 @@ from django.core.management.base import BaseCommand
 from django.core.files import File
 import json
 
-from films.models import Film
+from films.models import Film, Country, Genre, Actor, Director
 
 
 class Command(BaseCommand):
     help = 'Create films instance in DB'
 
     def handle(self, *args, **kwargs):
-        with open('data/films_info.json', 'r') as file:
-            objects = json.loads(file.read())
-        for film in objects[:10_000]:
+        films = self.get_all_films_from_json()
+        for film in films[:1]:
             f = Film.objects.create(
                 title_ru=film['title_ru'],
                 title_en=film['title_en'],
                 year=film['year'],
                 duration=film['duration'],
-                genres=', '.join(film['genres']),
-                countries=', '.join(film['countries']),
-                directors=', '.join(film['directors']),
-                actors=', '.join(film['actors']),
+                rating=film['rating'],
                 plot=film['plot'],
-                rating=film['rating']
             )
+
+            # adding poster
             f.image.save(f'film_{film["id"]}.jpeg', self.get_image(film["id"]))
-            if film['id'] % 100 == 0:
+
+            # adding countries
+            for country in self.get_attr_for_creating('countries', film, Country):
+                f.countries.add(country)
+
+            # adding genres
+            for genre in self.get_attr_for_creating('genres', film, Genre):
+                f.genres.add(genre)
+
+            # adding actors
+            for actor in self.get_attr_for_creating('actors', film, Actor):
+                f.actors.add(actor)
+
+            # adding directors
+            for director in self.get_attr_for_creating('directors', film, Director):
+                f.directors.add(director)
+
+            # мотиринг оздания фильмов
+            if film['id'] % 10 == 0:
                 print(f'Записан фильм номер {film["id"]}')
 
-    def get_image(id):
+    def get_attr_for_creating(self, attr, film, model):
+        inst_list = []
+
+        for obj in film[attr]:
+            if model in (Actor, Director):
+                obj_splited = obj.split()
+                inst = model.objects.get(first_name=obj_splited[0], last_name=' '.join(obj_splited[1:]))
+            else:
+                inst = model.objects.get(title=obj)
+            inst_list.append(inst)
+        return inst_list
+
+    def get_all_films_from_json(self):
+        with open('data/films_info.json', 'r') as file:
+            objects = json.loads(file.read())
+        return objects
+
+    def get_image(self, id):
         return File(open(f'data/posters/films/film_{id}.jpeg', 'rb'))
