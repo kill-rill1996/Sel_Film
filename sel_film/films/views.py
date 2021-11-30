@@ -7,13 +7,13 @@ from django.views import generic
 
 
 def index_page(request):
-    form = FilmForm()
-    if request.method == 'POST':
-        form = FilmForm(request.POST)
-        if form.is_valid():
-            return redirect('film-detail', form.cleaned_data['id'])
-    context = {'form': form}
-    return render(request, 'films/index.html', context)
+    # form = FilmForm()
+    # if request.method == 'POST':
+    #     form = FilmForm(request.POST)
+    #     if form.is_valid():
+    #         return redirect('film-detail', form.cleaned_data['id'])
+    # context = {'form': form}
+    return render(request, 'films/index.html')
 
 
 class FilmListView(generic.ListView):
