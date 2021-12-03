@@ -1,6 +1,6 @@
 from django.http import HttpResponse
 from django.shortcuts import render, redirect
-from .models import Film
+from .models import Film, Actor, Director, Country, Genre
 from .forms import FilmForm
 
 from django.views import generic
@@ -30,9 +30,10 @@ class FilmDetailView(generic.DetailView):
     context_object_name = 'film'
 
     def get_context_data(self, **kwargs):
+        film = Film.objects.get(id=self.kwargs['pk'])
         context = super().get_context_data(**kwargs)
-        context['actors_list'] = context['film'].actors.split(', ')
-        context['countries_list'] = context['film'].countries.split(', ')
-        context['directors_list'] = context['film'].directors.split(', ')
-        context['genres_list'] = context['film'].genres.split(', ')
+        context['actors'] = ', '.join([a.first_name + ' ' + a.last_name for a in film.actors.all()[:5]])
+        context['countries'] = ', '.join([c.title for c in film.countries.all()])
+        context['directors'] = ', '.join([d.first_name + ' ' + d.last_name for d in film.directors.all()[:5]])
+        context['genres'] = ', '.join([g.title for g in film.genres.all()])
         return context
