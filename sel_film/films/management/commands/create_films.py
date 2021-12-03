@@ -21,7 +21,7 @@ class Command(BaseCommand):
             )
 
             # adding poster
-            f.image.save(f'film_{film["id"]}.jpeg', self.get_image(film["id"]))
+            # f.image.save(f'film_{film["id"]}.jpeg', self.get_image(film["id"]))
 
             # adding countries
             for country in self.get_attr_for_creating('countries', film, Country):
