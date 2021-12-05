@@ -10,7 +10,7 @@ class Command(BaseCommand):
 
     def handle(self, *args, **kwargs):
         films = self.get_all_films_from_json()
-        for film in films[:1]:
+        for film in films[1:20]:
             f = Film.objects.create(
                 title_ru=film['title_ru'],
                 title_en=film['title_en'],
@@ -21,7 +21,7 @@ class Command(BaseCommand):
             )
 
             # adding poster
-            # f.image.save(f'film_{film["id"]}.jpeg', self.get_image(film["id"]))
+            f.image.save(f'film_{film["id"]}.jpeg', self.get_image(film["id"]))
 
             # adding countries
             for country in self.get_attr_for_creating('countries', film, Country):
@@ -49,7 +49,10 @@ class Command(BaseCommand):
         for obj in film[attr]:
             if model in (Actor, Director):
                 obj_splited = obj.split()
-                inst = model.objects.get(first_name=obj_splited[0], last_name=' '.join(obj_splited[1:]))
+                if len(obj_splited) == 1:
+                    model.objects.get(first_name=obj_splited[0], last_name=None)
+                else:
+                    inst = model.objects.get(first_name=obj_splited[0], last_name=' '.join(obj_splited[1:]))
             else:
                 inst = model.objects.get(title=obj)
             inst_list.append(inst)
