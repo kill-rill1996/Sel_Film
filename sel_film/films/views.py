@@ -19,7 +19,7 @@ def index_page(request):
 class FilmListView(generic.ListView):
     model = Film
     context_object_name = 'films'
-    paginate_by = 10
+    paginate_by = 6
 
     def get_queryset(self):
         return Film.objects.all()

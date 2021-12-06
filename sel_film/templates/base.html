@@ -14,7 +14,7 @@
 {% block header %}
     <header class="text-gray-600 body-font">
         <div class="container mx-auto flex flex-wrap p-5 flex-col md:flex-row items-center">
-          <a href="index.html" class="flex title-font font-medium items-center text-gray-900 mb-4 md:mb-0">
+          <a href="{% url 'index-page' %}" class="flex title-font font-medium items-center text-gray-900 mb-4 md:mb-0">
             <div class="w-10 h-10 text-white p-2 bg-gray-50 rounded-full text-center text-indigo-900">
               <i class="fab fa-stripe-s white-text"></i>
             </div>
@@ -23,7 +23,7 @@
           <nav class="md:mr-auto md:ml-4 md:py-1 md:pl-4 md:border-l md:border-gray-400	flex flex-wrap items-center text-base justify-center">
             <a href="films_list.html" class="mr-5 hover:text-gray-400">Select film</a>
             <a href="#" class="mr-5 hover:text-gray-900">Select serial</a>
-            <a href="#" class="mr-5 hover:text-gray-900">Library</a>
+            <a href="{% url 'film-list' %}" class="mr-5 hover:text-gray-900">Library</a>
             <a href="#" class="mr-5 hover:text-gray-900">Search</a>
             <a href="about.html" class="mr-5 hover:text-gray-400">About</a>
           </nav>
