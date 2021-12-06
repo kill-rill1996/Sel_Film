@@ -1,6 +1,7 @@
 from django.db import models
 from django.utils.text import slugify
 from .utils import alphabet
+from django.urls import reverse
 
 
 def gen_slug(s):
@@ -23,6 +24,9 @@ class Film(models.Model):
 
     def __str__(self):
         return f'{self.id}. {self.title_ru}'
+
+    def get_absolute_url(self):
+        return reverse('film-detail', kwargs={'pk': self.pk})
 
 
 class Country(models.Model):
