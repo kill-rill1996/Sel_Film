@@ -1,9 +1,12 @@
-from django.http import HttpResponse
-from django.shortcuts import render, redirect
+from django.http import HttpResponse, HttpResponseRedirect
+from django.shortcuts import render, redirect, get_object_or_404
+from django.urls import reverse
+from django.views import generic
+
+
 from .models import Film, Actor, Director, Country, Genre
 from .forms import FilmForm
-
-from django.views import generic
+from .service import main
 
 
 def index_page(request):
@@ -37,3 +40,27 @@ class FilmDetailView(generic.DetailView):
         context['directors'] = ', '.join([d.first_name + ' ' + d.last_name for d in film.directors.all()[:5]])
         context['genres'] = ', '.join([g.title for g in film.genres.all()])
         return context
+
+
+def search_films(request):
+    context = {}
+
+    if request.method == "POST":
+        field_1_title = request.POST['film_1']
+        field_2_title = request.POST['film_2']
+        try:
+            film_1 = Film.objects.get(title_ru__iexact=field_1_title)
+            film_2 = Film.objects.get(title_ru__iexact=field_2_title)
+            print(film_1, film_2)
+            top_ten = main(film_1.id, film_2.id)
+            context['top_ten'] = top_ten
+            context['film_1'] = film_1
+            context['film_2'] = film_2
+        except:
+            context['films_query_1'] = Film.objects.filter(title_ru__icontains=field_1_title)
+            context['films_query_2'] = Film.objects.filter(title_ru__icontains=field_2_title)
+
+        return render(request, 'films/search_films.html', context)
+
+    else:
+        return render(request, 'films/search_films.html', {})

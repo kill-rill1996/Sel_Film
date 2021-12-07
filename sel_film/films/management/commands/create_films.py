@@ -10,7 +10,7 @@ class Command(BaseCommand):
 
     def handle(self, *args, **kwargs):
         films = self.get_all_films_from_json()
-        for film in films[1:20]:
+        for film in films[:20]:
             f = Film.objects.create(
                 title_ru=film['title_ru'],
                 title_en=film['title_en'],
