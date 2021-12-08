@@ -25,7 +25,7 @@ class Serial(models.Model):
         return f'{self.id}. {self.title_ru}'
 
     def get_absolute_url(self):
-        return reverse('film-detail', kwargs={'pk': self.pk})
+        return reverse('serial-detail', kwargs={'pk': self.pk})
 
 
 class Country(models.Model):

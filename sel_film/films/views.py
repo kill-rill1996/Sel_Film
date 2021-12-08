@@ -25,7 +25,7 @@ class FilmListView(generic.ListView):
     paginate_by = 6
 
     def get_queryset(self):
-        return Film.objects.all().order_by('rating')
+        return Film.objects.all().order_by('-rating')
 
 
 class FilmDetailView(generic.DetailView):

@@ -5,13 +5,28 @@ from .models import Serial
 from films.forms import FilmFindForm
 from .service import find_serials
 
+
 class SerialListView(generic.ListView):
     model = Serial
     context_object_name = 'serials'
     paginate_by = 6
 
     def get_queryset(self):
-        return Serial.objects.all().order_by('rating')
+        return Serial.objects.all().order_by('-rating')
+
+
+class SerialDetailView(generic.DetailView):
+    model = Serial
+    context_object_name = 'serial'
+
+    def get_context_data(self, **kwargs):
+        serial = Serial.objects.get(id=self.kwargs['pk'])
+        context = super().get_context_data(**kwargs)
+        context['actors'] = ', '.join([a.first_name + ' ' + a.last_name for a in serial.actors.all()[:5]])
+        context['countries'] = ', '.join([c.title for c in serial.countries.all()])
+        context['directors'] = ', '.join([d.first_name + ' ' + d.last_name for d in serial.directors.all()[:5]])
+        context['genres'] = ', '.join([g.title for g in serial.genres.all()])
+        return context
 
 
 def search_serials(request):
