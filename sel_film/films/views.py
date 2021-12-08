@@ -25,7 +25,7 @@ class FilmListView(generic.ListView):
     paginate_by = 6
 
     def get_queryset(self):
-        return Film.objects.all()
+        return Film.objects.all().order_by('rating')
 
 
 class FilmDetailView(generic.DetailView):
@@ -52,7 +52,6 @@ def search_films(request):
             try:
                 film_1 = Film.objects.get(title_ru__iexact=form.cleaned_data['film_1_title_ru'])
                 film_2 = Film.objects.get(title_ru__iexact=form.cleaned_data['film_2_title_ru'])
-                print(film_1, film_2)
                 top_ten = find_films(id_1=film_1.id, id_2=film_2.id)
                 context['top_ten'] = top_ten
                 context['film_1'] = film_1

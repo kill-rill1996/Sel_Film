@@ -7,6 +7,7 @@ urlpatterns = [
     path('admin/', admin.site.urls),
 
     path('', include('films.urls')),
+    path('serials/', include('serials.urls')),
 ]
 
 if settings.DEBUG:

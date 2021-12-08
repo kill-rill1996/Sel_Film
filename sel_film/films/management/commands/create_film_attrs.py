@@ -5,7 +5,7 @@ from films.models import Country, Genre, Actor, Director
 
 
 class Command(BaseCommand):
-    help = 'Create Country, Genre, Actor, Director instance in DB'
+    help = 'Create Country, Genre, Actor, Director instance for films in DB'
 
     def handle(self, *args, **options):
         self.write_countries_in_db()

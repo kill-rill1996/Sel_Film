@@ -39,7 +39,7 @@ class Command(BaseCommand):
             for director in self.get_attr_for_creating('directors', film, Director):
                 f.directors.add(director)
 
-            # мотиринг оздания фильмов
+            # мониторинг создания фильмов
             if film['id'] % 10 == 0:
                 print(f'Записан фильм номер {film["id"]}')
 
@@ -59,7 +59,7 @@ class Command(BaseCommand):
         return inst_list
 
     def get_all_films_from_json(self):
-        with open('data/films_info_10_lower_title.json', 'r') as file:
+        with open('data/films_info.json', 'r') as file:
             objects = json.loads(file.read())
         return objects
 

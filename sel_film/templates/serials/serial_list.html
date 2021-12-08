@@ -1,8 +1,7 @@
 {% extends 'base.html' %}
 {% load genre_list %}
 
-{% block title %} Films {% endblock %}
-
+{% block title %} Serials {% endblock %}
 
 {% block content %}
 
@@ -27,24 +26,24 @@
           <span class="title-font font-medium">Сериалов</span>
         </span>
       </a>
-    </div>        
+    </div>
     <div class="flex flex-wrap -m-4">
-    {% for film in films %}
+    {% for serial in serials %}
       <div class="p-4 lg:w-1/2 md:w-full">
         <div class="flex border-2 rounded-lg border-gray-200 border-opacity-50 p-8 sm:flex-row flex-col shadow-lg">
           <div class="w-24 h-20 mx-auto mt-8 sm:mr-8 mb-8 sm:mb-0 inline-flex items-center rounded-full bg-indigo-100 text-indigo-500 flex-shrink-0">
-            <a href="{{ film.get_absolute_url }}">
-              <img class="rounded-lg shadow-lg mb-6 sm:mb-0" src="{{ film.image.url }}" alt="">
+            <a href="{{ serial.get_absolute_url }}">
+              <img class="rounded-lg shadow-lg mb-6 sm:mb-0" src="{{ serial.image.url }}" alt="">
             </a>
           </div>
           <div class="flex-grow text-center sm:text-left">
-            <a href="{{ film.get_absolute_url }}">
-              <h2 class="text-gray-900 text-lg title-font font-medium mb-3">{{ film.title_ru|capfirst }} {% if film.title_en %}/ {{ film.title_en|truncatechars:10 }}{% endif %}</h2>
+            <a href="{{ serial.get_absolute_url }}">
+              <h2 class="text-gray-900 text-lg title-font font-medium mb-3">{{ serial.title_ru|capfirst }} {% if serial.title_en %}/ {{ serial.title_en|truncatechars:10 }}{% endif %}</h2>
             </a>
-            <p class="leading-relaxed text-base"><b>Жанры:</b> {% for genre in film.genres.all|split_genres %}{{ genre }}{% endfor %}</p>
-            <p class="leading-relaxed text-base"><b>Год:</b> {{ film.year }}</p>
-            <p class="leading-relaxed text-base text-justify sm:text-left"><b>Сюжет:</b> {{ film.plot|truncatechars:110 }}</p>
-            <a href="{{ film.get_absolute_url }}" class="mt-3 text-indigo-500 inline-flex items-center">Подробнее
+            <p class="leading-relaxed text-base"><b>Жанры:</b> {% for genre in serial.genres.all|split_genres %}{{ genre }}{% endfor %}</p>
+            <p class="leading-relaxed text-base"><b>Год:</b> {{ serial.year }}</p>
+            <p class="leading-relaxed text-base text-justify sm:text-left"><b>Сюжет:</b> {{ serial.plot|truncatechars:110 }}</p>
+            <a href="{{ serial.get_absolute_url }}" class="mt-3 text-indigo-500 inline-flex items-center">Подробнее
               <svg fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" class="w-4 h-4 ml-2" viewBox="0 0 24 24">
                 <path d="M5 12h14M12 5l7 7-7 7"></path>
               </svg>
@@ -57,6 +56,5 @@
   </div>
   {% include 'films/includes/pagination.html' %}
 </section>
-
 
 {% endblock content %}
