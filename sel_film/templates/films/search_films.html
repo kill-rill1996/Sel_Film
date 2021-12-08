@@ -4,45 +4,75 @@
 
 {% block content %}
 
-<center>
-    <div>
-        <form class="m-4 flex" method="post" action="{% url 'search-films' %}">
-            {% csrf_token %}
-            <input id="film_1" class="rounded-l-lg p-4 border-t mr-0 border-b border-l text-gray-800 border-gray-200 bg-white" placeholder="Film #1..." name="film_1"/>
-            <input id="film_2" class="rounded-l-lg p-4 border-t mr-0 border-b border-l text-gray-800 border-gray-200 bg-white" placeholder="Film #2..." name="film_2"/>
-            <button class="px-8 rounded-r-lg bg-yellow-400  text-gray-800 font-bold p-4 uppercase border-yellow-500 border-t border-b border-r">Search</button>
-        </form>
-    </div>
-</center>
+<!--<center>-->
+<!--    <div>-->
+<!--        <form class="m-4 flex" method="post" action="{% url 'search-films' %}">-->
+<!--            {% csrf_token %}-->
+<!--            <input class="rounded-l-lg p-4 border-t mr-0 border-b border-l text-gray-800 border-gray-200 bg-white" placeholder="Film #1..." name="film_1"/>-->
+<!--            <input class="rounded-l-lg p-4 border-t mr-0 border-b border-l text-gray-800 border-gray-200 bg-white" placeholder="Film #2..." name="film_2"/>-->
+<!--            <button class="px-8 rounded-r-lg bg-yellow-400  text-gray-800 font-bold p-4 uppercase border-yellow-500 border-t border-b border-r">Search</button>-->
+<!--        </form>-->
+<!--    </div>-->
+<!--</center>-->
 
 
-{% if films_query_1 or films_query_2 %}
+<!--{% if films_query_1 or films_query_2 %}-->
 
-    {% if films_query_1 %}
-    {% for film in films_query_1 %}
-        <li>{{ film.title_ru }}</li>
-    {% endfor %}
+<!--    {% if films_query_1 %}-->
+<!--    {% for film in films_query_1 %}-->
+<!--        <li>{{ film.title_ru }}</li>-->
+<!--    {% endfor %}-->
+<!--    {% endif %}-->
+
+<!--    {% if films_query_2 %}-->
+<!--    {% for film in films_query_2 %}-->
+<!--        <li>{{ film.title_ru }}</li>-->
+<!--    {% endfor %}-->
+<!--    {% endif %}-->
+<!--{% endif %}-->
+
+
+
+    <form action="" method="post">
+        {% csrf_token %}
+        <table>
+        {{ form }}
+        </table>
+        <input type="submit" value="Submit" />
+    </form>
+
+
+    {% if film_1 and film_2 %}
+        <h1>Вы искали по фильмам</h1>
+        <ul>
+            <li>{{ film_1.title_ru|capfirst }}</li>
+            <li>{{ film_2.title_ru|capfirst }}</li>
+        </ul>
+        <hr>
+        {{ top_ten }}
+
+    {% elif films_1_query or films_2_query%}
+    <hr/>
+
+        {% if films_1_query %}
+            <b>Возможно вы искали (фильм №1):</b>
+            <ul>
+              {% for film in films_1_query %}
+                    <li><a href="{{ film.get_absolute_url }}">{{ film.title_ru|capfirst }} ({{ film.year }})</a></li>
+              {% endfor %}
+            </ul>
+        {% endif %}
+
+        {% if films_2_query %}
+            <b>Возможно вы искали (фильм №2):</b>>
+             <ul>
+              {% for film in films_2_query %}
+                    <li><a href="{{ film.get_absolute_url }}">{{ film.title_ru|capfirst }} ({{ film.year }})</a></li>
+              {% endfor %}
+            </ul>
+        {% endif %}
+
+
     {% endif %}
-
-    {% if films_query_2 %}
-    {% for film in films_query_2 %}
-        <li>{{ film.title_ru }}</li>
-    {% endfor %}
-    {% endif %}
-{% endif %}
-
-{% if film_1 and film_2 %}
-    <h1>Вы искали по фильмам</h1>
-    <ul>
-        <li>{{ film_1.title_ru }}</li>
-        <li>{{ film_2.title_ru }}</li>
-    </ul>
-{% endif %}
-
-{% if top_ten %}
-<hr>
-{{ top_ten }}
-{% endif %}
-
 
 {% endblock content %}

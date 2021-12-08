@@ -10,7 +10,7 @@ class Command(BaseCommand):
 
     def handle(self, *args, **kwargs):
         films = self.get_all_films_from_json()
-        for film in films[:20]:
+        for film in films[:50]:
             f = Film.objects.create(
                 title_ru=film['title_ru'],
                 title_en=film['title_en'],
@@ -59,7 +59,7 @@ class Command(BaseCommand):
         return inst_list
 
     def get_all_films_from_json(self):
-        with open('data/films_info.json', 'r') as file:
+        with open('data/films_info_10_lower_title.json', 'r') as file:
             objects = json.loads(file.read())
         return objects
 

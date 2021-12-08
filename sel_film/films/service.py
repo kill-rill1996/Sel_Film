@@ -197,7 +197,7 @@ def get_objects() -> list:
     """Получает все фильмы"""
     with open('data/films_info.json', 'r') as file:
         films = json.loads(file.read())
-    return films[:20]
+    return films[:50]
 
 
 def create_points_dict(films) -> dict:
@@ -208,11 +208,11 @@ def create_points_dict(films) -> dict:
     return films_point_dict
 
 
-def get_film_by_id(id) -> dict:
+def get_film_by_id(id, films) -> dict:
     """Получает фильм по id и удаляет его из списка всех фильмов"""
-    for film in FILMS:
+    for film in films:
         if film['id'] == id:
-            return FILMS.pop(FILMS.index(film))
+            return films.pop(films.index(film))
 
 
 def get_top_ten_films(films) -> list:
@@ -227,7 +227,7 @@ def get_top_ten_films(films) -> list:
     return top_ten_list
 
 
-def show_top_films(films):
+def show_top_films(films, FILMS_POINTS):
     top_ten = get_top_ten_films(FILMS_POINTS)
     top_films_list = []
     for film in films:
@@ -242,10 +242,13 @@ def is_anime_or_cartoon(film):
         return True
 
 
-def main(id_1, id_2):
+def find_films(id_1, id_2):
+    FILMS = get_objects()
+    FILMS_POINTS = create_points_dict(FILMS)
+
     # get searched films
-    film_1 = get_film_by_id(id_1)
-    film_2 = get_film_by_id(id_2)
+    film_1 = get_film_by_id(id_1, FILMS)
+    film_2 = get_film_by_id(id_2, FILMS)
 
     # get points
     for current_film in FILMS:
@@ -270,6 +273,6 @@ def main(id_1, id_2):
     #     print(film[0]['id'], film[0]['title_ru'], film[0]['year'], film[0]['genres'], film[0]['countries'],
     #           film[0]['directors'], film[0]['actors'])
 
-
-FILMS = get_objects()
-FILMS_POINTS = create_points_dict(FILMS)
+#
+# FILMS = get_objects()
+# FILMS_POINTS = create_points_dict(FILMS)

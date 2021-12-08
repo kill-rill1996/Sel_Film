@@ -5,8 +5,8 @@ from django.views import generic
 
 
 from .models import Film, Actor, Director, Country, Genre
-from .forms import FilmForm
-from .service import main
+from .forms import FilmFindForm
+from .service import find_films
 
 
 def index_page(request):
@@ -43,24 +43,28 @@ class FilmDetailView(generic.DetailView):
 
 
 def search_films(request):
-    context = {}
 
-    if request.method == "POST":
-        field_1_title = request.POST['film_1']
-        field_2_title = request.POST['film_2']
-        try:
-            film_1 = Film.objects.get(title_ru__iexact=field_1_title)
-            film_2 = Film.objects.get(title_ru__iexact=field_2_title)
-            print(film_1, film_2)
-            top_ten = main(film_1.id, film_2.id)
-            context['top_ten'] = top_ten
-            context['film_1'] = film_1
-            context['film_2'] = film_2
-        except:
-            context['films_query_1'] = Film.objects.filter(title_ru__icontains=field_1_title)
-            context['films_query_2'] = Film.objects.filter(title_ru__icontains=field_2_title)
+    if request.method == 'POST':
+        context = {}
+        form = FilmFindForm(request.POST)
 
+        if form.is_valid():
+            try:
+                film_1 = Film.objects.get(title_ru__iexact=form.cleaned_data['film_1_title_ru'])
+                film_2 = Film.objects.get(title_ru__iexact=form.cleaned_data['film_2_title_ru'])
+                print(film_1, film_2)
+                top_ten = find_films(id_1=film_1.id, id_2=film_2.id)
+                context['top_ten'] = top_ten
+                context['film_1'] = film_1
+                context['film_2'] = film_2
+
+            except Film.DoesNotExist:
+                context['films_1_query'] = Film.objects.filter(title_ru__icontains=form.cleaned_data['film_1_title_ru'])[:5]
+                context['films_2_query'] = Film.objects.filter(title_ru__icontains=form.cleaned_data['film_2_title_ru'])[:5]
+
+            context['form'] = form
         return render(request, 'films/search_films.html', context)
 
     else:
-        return render(request, 'films/search_films.html', {})
+        form = FilmFindForm()
+        return render(request, 'films/search_films.html', context={'form': form})
