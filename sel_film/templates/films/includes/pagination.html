@@ -11,9 +11,11 @@
         </div>
         <div class="flex h-8 font-medium ">
             {% for p in paginator.page_range %}
+                {% if p > page_obj.number|add:-3 and p < page_obj.number|add:3 %}
                 <div class="w-8 md:flex justify-center items-center hidden  cursor-pointer leading-5 transition duration-150 ease-in  border-t-2 {% if page_obj.number == p %}border-indigo-500{% else %}border-transparent{% endif %}"><a href="?page={{ p }}">{{ p }}</a></div>
+                {% endif %}
             {% endfor %}
-            
+
 
 
             <!-- <div class="w-8 md:flex justify-center items-center hidden  cursor-pointer leading-5 transition duration-150 ease-in  border-t-2 border-indigo-500  ">2</div>
