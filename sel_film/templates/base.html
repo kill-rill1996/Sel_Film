@@ -4,12 +4,12 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{% block title %} SelFilm {% endblock %}</title>
+    <title>{% block title %}SelFilm{% endblock %}</title>
 
     <link href="https://unpkg.com/tailwindcss@^2/dist/tailwind.min.css" rel="stylesheet">
     <script src="https://kit.fontawesome.com/3dbdcd8c2e.js" crossorigin="anonymous"></script>
 </head>
-<body class="bg-cover bg-center" style="background-image: url('media/bg-1.jpg')">
+<body {% block body_class %}{% endblock %}>
 
 {% block header %}
     <header class="text-gray-600 body-font">
@@ -27,8 +27,7 @@
             <a href="#" class="mr-5 hover:text-gray-900">Search</a>
             <a href="about.html" class="mr-5 hover:text-gray-400">About</a>
           </nav>
-          <button
-                  class="inline-flex items-center bg-gray-100 border-0 py-1 px-3 focus:outline-none hover:bg-gray-200 rounded text-base mt-4 md:mt-0">Registration</button>
+          <button class="inline-flex items-center bg-gray-100 border-0 py-1 px-3 focus:outline-none hover:bg-gray-200 rounded text-base mt-4 md:mt-0">Registration</button>
         </div>
     </header>
 {% endblock %}
