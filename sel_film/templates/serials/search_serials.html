@@ -49,7 +49,9 @@
             <li>{{ film_2.title_ru|capfirst }}</li>
         </ul>
         <hr>
-        {{ top_ten }}
+        {% for film in top_ten %}
+            <p><a href="{{ film.get_absolute_url }}">{{ film.title_ru|capfirst }}</a></p>
+        {% endfor %}
 
     {% elif films_1_query or films_2_query%}
     <hr/>

@@ -15,8 +15,8 @@ class Command(BaseCommand):
             f = Serial.objects.create(
                 title_ru=serial['title_ru'],
                 title_en=serial['title_en'],
-                start_year=2000,
-                end_year=2001,
+                start_year=int(self.year_split(serial['year'])[0]),
+                end_year=int(self.year_split(serial['year'])[1]) if len(self.year_split(serial['year'])) > 1 else None,
                 duration=serial['duration'],
                 rating=serial['rating'],
                 plot=serial['plot'],
@@ -69,8 +69,25 @@ class Command(BaseCommand):
             return True
         return False
 
-    def year_split(self, year):
-        pass
+    def year_split(self, s_year):
+        if s_year:
+            if '(Сериал закончился)' in s_year:
+                s_year = s_year.replace(' (Сериал закончился)', '')
+                serial_years_splited = s_year.split(' — ')
+                if len(serial_years_splited) == 1:
+                    year_start = serial_years_splited[0]
+                    year_end = serial_years_splited[0]
+                else:
+                    year_start = serial_years_splited[0]
+                    year_end = serial_years_splited[1]
+                res = (year_start, year_end)
+
+            if 'по н.в.' in s_year:
+                s_year = s_year.replace('по н.в.', '')
+                serial_years_splited = s_year.split(' — ')
+                year_start = serial_years_splited[0]
+                res = (year_start,)
+        return res
 
     def get_all_serials_from_json(self):
         with open('data/serials_info.json', 'r') as file:

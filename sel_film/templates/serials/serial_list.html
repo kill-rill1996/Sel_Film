@@ -41,7 +41,7 @@
               <h2 class="text-gray-900 text-lg title-font font-medium mb-3">{{ serial.title_ru|capfirst }} {% if serial.title_en %}/ {{ serial.title_en|truncatechars:10 }}{% endif %}</h2>
             </a>
             <p class="leading-relaxed text-base"><b>Жанры:</b> {% for genre in serial.genres.all|split_genres %}{{ genre }}{% endfor %}</p>
-            <p class="leading-relaxed text-base"><b>Год:</b> {{ serial.year }}</p>
+            <p class="leading-relaxed text-base"><b>Год:</b> {{ serial.start_year }}{% if serial.end_year %} - {{ serial.end_year }}{% endif %}</p>
             <p class="leading-relaxed text-base text-justify sm:text-left"><b>Сюжет:</b> {{ serial.plot|truncatechars:110 }}</p>
             <a href="{{ serial.get_absolute_url }}" class="mt-3 text-indigo-500 inline-flex items-center">Подробнее
               <svg fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" class="w-4 h-4 ml-2" viewBox="0 0 24 24">

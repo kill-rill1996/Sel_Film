@@ -10,12 +10,6 @@ from .service import find_films
 
 
 def index_page(request):
-    # form = FilmForm()
-    # if request.method == 'POST':
-    #     form = FilmForm(request.POST)
-    #     if form.is_valid():
-    #         return redirect('film-detail', form.cleaned_data['id'])
-    # context = {'form': form}
     return render(request, 'films/index.html')
 
 
@@ -52,8 +46,8 @@ def search_films(request):
             try:
                 film_1 = Film.objects.get(title_ru__iexact=form.cleaned_data['film_1_title_ru'])
                 film_2 = Film.objects.get(title_ru__iexact=form.cleaned_data['film_2_title_ru'])
-                top_ten = find_films(id_1=film_1.id, id_2=film_2.id)
-                context['top_ten'] = top_ten
+                top_ten_points = find_films(id_1=film_1.id, id_2=film_2.id)
+                context['top_ten'] = [Film.objects.get(id=id) for id, points in top_ten_points]
                 context['film_1'] = film_1
                 context['film_2'] = film_2
 
@@ -61,9 +55,20 @@ def search_films(request):
                 context['films_1_query'] = Film.objects.filter(title_ru__icontains=form.cleaned_data['film_1_title_ru'])[:5]
                 context['films_2_query'] = Film.objects.filter(title_ru__icontains=form.cleaned_data['film_2_title_ru'])[:5]
 
+            # form = FilmFindForm(initial={'film_1_title_ru': form.cleaned_data['film_1_title_ru'],
+            #                              'film_2_title_ru': form.cleaned_data['film_2_title_ru'],
+            #                              })
             context['form'] = form
+
         return render(request, 'films/search_films.html', context)
 
     else:
         form = FilmFindForm()
         return render(request, 'films/search_films.html', context={'form': form})
+
+
+def get_top_ten_films(films_points):
+    top_ten_films = []
+    for id, points in films_points:
+        top_ten_films.append(Film.objects.get(id=id))
+    return top_ten_films

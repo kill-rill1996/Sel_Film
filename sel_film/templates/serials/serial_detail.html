@@ -8,12 +8,15 @@
 <section class="text-gray-600 body-font">
   <div class="container px-5 py-24 mx-auto flex flex-col">
     <div class="lg:w-5/6 mx-auto">
-    	<div class="text-3xl text-center mb-8 text-indigo-700">
+
+      <div class="rounded-lg h-64 overflow-hidden">
+        <img alt="content" class="object-cover object-center h-full w-full" src="{% static 'images/pic-8.png' %}">
+      </div>
+
+      <div class="text-3xl text-center mb-5 mt-8 text-indigo-700">
 			<h1>{{ serial.title_ru|capfirst }} {% if serial.title_en %}/ {{ serial.title_en }} {% endif %}</h1>
     	</div>
-      <div class="rounded-lg h-64 overflow-hidden">
-        <img alt="content" class="object-cover object-center h-full w-full" src="{% static 'images/pic-1.jpeg' %}">
-      </div>
+
       <div class="flex flex-col sm:flex-row mt-10">
         <div class="sm:w-1/3 text-center sm:pr-8 sm:py-8">
           <div class="w-2/5 sm:w-3/5 rounded-full inline-flex items-center justify-center">
@@ -22,7 +25,7 @@
           <div class="flex flex-col items-center text-center justify-center">
             <h2 class="font-medium title-font mt-4 text-gray-900 text-lg">Рейтинг IMDb: {{ serial.rating }}</h2>
             <div class="w-12 h-1 bg-indigo-700 rounded mt-2 mb-4"></div>
-            <p class="text-base"><b>Год выпуска:</b> {{ serial.year }}</p>
+            <p class="text-base"><b>Год выпуска:</b> {{ serial.start_year }}{% if serial.end_year %} - {{ serial.end_year }} (сериал закончился){% endif %}</p>
             <p class="text-base"><b>Страна:</b> {{ countries }}</p>
             <p class="text-base"><b>Жанр:</b> {{ genres }}</p>
             <p class="text-base"><b>Продолжительность серии:</b> {{ serial.duration }} минут</p>
