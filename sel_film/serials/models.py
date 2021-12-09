@@ -16,7 +16,7 @@ class Serial(models.Model):
     directors = models.ManyToManyField('Director', related_name='films', blank=True)
     actors = models.ManyToManyField('Actor', related_name='films', blank=True)
     plot = models.TextField(blank=True, null=True)
-    image = models.ImageField(upload_to='films/', blank=True, null=True)
+    image = models.ImageField(upload_to='serials/', blank=True, null=True)
     seasons = models.IntegerField(blank=True, null=True)
     series = models.IntegerField(blank=True, null=True)
     end_status = models.BooleanField(default=False)

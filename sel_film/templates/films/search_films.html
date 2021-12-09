@@ -1,39 +1,11 @@
 {% extends 'base.html' %}
+{% load static %}
 
 
 
 {% block content %}
 
-<!--<center>-->
-<!--    <div>-->
-<!--        <form class="m-4 flex" method="post" action="{% url 'search-films' %}">-->
-<!--            {% csrf_token %}-->
-<!--            <input class="rounded-l-lg p-4 border-t mr-0 border-b border-l text-gray-800 border-gray-200 bg-white" placeholder="Film #1..." name="film_1"/>-->
-<!--            <input class="rounded-l-lg p-4 border-t mr-0 border-b border-l text-gray-800 border-gray-200 bg-white" placeholder="Film #2..." name="film_2"/>-->
-<!--            <button class="px-8 rounded-r-lg bg-yellow-400  text-gray-800 font-bold p-4 uppercase border-yellow-500 border-t border-b border-r">Search</button>-->
-<!--        </form>-->
-<!--    </div>-->
-<!--</center>-->
-
-
-<!--{% if films_query_1 or films_query_2 %}-->
-
-<!--    {% if films_query_1 %}-->
-<!--    {% for film in films_query_1 %}-->
-<!--        <li>{{ film.title_ru }}</li>-->
-<!--    {% endfor %}-->
-<!--    {% endif %}-->
-
-<!--    {% if films_query_2 %}-->
-<!--    {% for film in films_query_2 %}-->
-<!--        <li>{{ film.title_ru }}</li>-->
-<!--    {% endfor %}-->
-<!--    {% endif %}-->
-<!--{% endif %}-->
-
-
-
-    <form action="" method="post">
+<!--     <form action="" method="post">
         {% csrf_token %}
         <table>
         {{ form }}
@@ -74,7 +46,155 @@
             </ul>
         {% endif %}
 
+    {% endif %} -->
 
-    {% endif %}
+<div class="container mx-auto">
+    <div class="grid grid-cols-2 justify-items-center mt-10">
+        <div class="grid w-full justify-items-center">
+            <div class="mb-6">
+                <h2 class="text-gray-900 text-lg title-font font-normal">Film 1</h2>
+            </div>
+            <div class="w-2/5 sm:w-1/3">
+                <img class="rounded-lg shadow-lg" src="{% static 'images/poster.jpeg' %}" alt="">
+            </div>
+            <div class="mt-6 w-2/5">
+                <input type="text" id="base-input" class="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+            </div>
+        </div>
+        
+        <div class="grid w-full justify-items-center">
+            <div class="mb-6">
+                <h2 class="text-gray-900 text-lg title-font font-normal">Film 2</h2>
+            </div>
+            <div class="w-2/5 sm:w-1/3">
+                <img class="rounded-lg shadow-lg" src="{% static 'images/poster.jpeg' %}" alt="">
+            </div>
+            <div class="mt-6 w-2/5">
+                <input type="text" id="base-input" class="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+            </div>
+        </div>
+    </div>
+    <hr class="mt-8">
+    <div class="grid gap-x-10 gap-y-10 grid-cols-10 mt-10 text-sm">
+        <div class="grid w-full justify-items-center ">
+            <div class="w-2/5 sm:w-full">
+                <img class="rounded-lg shadow-lg" src="{% static 'images/poster.jpeg' %}" alt="">
+            </div>
+            <h2 class="mt-2">Sugessted</h2>
+        </div>
+
+        <div class="grid w-full justify-items-center ">
+            <div class="w-2/5 sm:w-full">
+                <img class="rounded-lg shadow-lg" src="{% static 'images/poster.jpeg' %}" alt="">
+            </div>
+            <h2 class="mt-2">Sugessted</h2>
+        </div>
+
+        <div class="grid w-full justify-items-center ">
+            <div class="w-2/5 sm:w-full">
+                <img class="rounded-lg shadow-lg" src="{% static 'images/poster.jpeg' %}" alt="">
+            </div>
+            <h2 class="mt-2">Sugessted</h2>
+        </div>
+
+        <div class="grid w-full justify-items-center ">
+            <div class="w-2/5 sm:w-full">
+                <img class="rounded-lg shadow-lg" src="{% static 'images/poster.jpeg' %}" alt="">
+            </div>
+            <h2 class="mt-2">Sugessted</h2>
+        </div>
+
+        <div class="grid w-full justify-items-center ">
+            <div class="w-2/5 sm:w-full">
+                <img class="rounded-lg shadow-lg" src="{% static 'images/poster.jpeg' %}" alt="">
+            </div>
+            <h2 class="mt-2">Sugessted</h2>
+        </div>
+
+        <div class="grid w-full justify-items-center ">
+            <div class="w-2/5 sm:w-full">
+                <img class="rounded-lg shadow-lg" src="{% static 'images/poster.jpeg' %}" alt="">
+            </div>
+            <h2 class="mt-2">Sugessted</h2>
+        </div>
+
+        <div class="grid w-full justify-items-center ">
+            <div class="w-2/5 sm:w-full">
+                <img class="rounded-lg shadow-lg" src="{% static 'images/poster.jpeg' %}" alt="">
+            </div>
+            <h2 class="mt-2">Sugessted</h2>
+        </div>
+
+        <div class="grid w-full justify-items-center ">
+            <div class="w-2/5 sm:w-full">
+                <img class="rounded-lg shadow-lg" src="{% static 'images/poster.jpeg' %}" alt="">
+            </div>
+            <h2 class="mt-2">Sugessted</h2>
+        </div>
+
+        <div class="grid w-full justify-items-center ">
+            <div class="w-2/5 sm:w-full">
+                <img class="rounded-lg shadow-lg" src="{% static 'images/poster.jpeg' %}" alt="">
+            </div>
+            <h2 class="mt-2">Sugessted</h2>
+        </div>
+
+        <div class="grid w-full justify-items-center ">
+            <div class="w-2/5 sm:w-full">
+                <img class="rounded-lg shadow-lg" src="{% static 'images/poster.jpeg' %}" alt="">
+            </div>
+            <h2 class="mt-2">Sugessted</h2>
+        </div>
+    </div>
+</div>
+
+            <!-- <div class="flex flex-row">
+                <div class="flex flex-col w-1/2 px-10 justify-center">
+                    <div class="flex content-center">
+                        <h2>Film # 1</h2>
+                    </div>
+                    <div class="w-2/5 sm:w-1/2 inline-flex items-center justify-center shadow-lg">
+                        <img class="rounded-lg" src="{% static 'images/poster.jpeg' %}" alt="">
+                    </div>
+                    <div class="mb-6 w-1/2 mt-8">
+                        <input type="text" id="base-input" class="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+                    </div>
+                </div>
+                <div class="w-1/2 px-10">
+                    <h2>Film # 1</h2>
+                    <div class="w-2/5 sm:w-1/2 inline-flex items-center justify-center shadow-lg">
+                        <img class="rounded-lg" src="{% static 'images/poster.jpeg' %}" alt="">
+                    </div>
+                    <div class="mb-6 w-1/2 mt-8">
+                        <input type="text" id="base-input" class="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+                    </div>
+                </div>
+            </div> -->
+
 
 {% endblock content %}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
