@@ -6,16 +6,13 @@
 {% block content %}
 
 <section class="text-gray-600 body-font">
-  <div class="container px-5 py-24 mx-auto flex flex-col">
+  <div class="container px-5 py-24 -mt-10 mx-auto flex flex-col">
     <div class="lg:w-5/6 mx-auto">
-
-
-
       <div class="rounded-lg h-64 overflow-hidden shadow-lg">
         <img alt="content" class="object-cover object-center h-full w-full" src="{% static 'images/pic-8.png' %}">
       </div>
-      <div class="text-3xl text-center mb-5 mt-8 text-indigo-700">
-			<h1>{{ film.title_ru|capfirst }} {% if film.title_en %}/ {{ film.title_en }} {% endif %}</h1>
+      <div class="text-3xl text-center mb-5 mt-12 text-indigo-700">
+			 <h1>{{ film.title_ru|capfirst }} {% if film.title_en %}/ {{ film.title_en }} {% endif %}</h1>
     	</div>
       <div class="flex flex-col sm:flex-row mt-10">
         <div class="sm:w-1/3 text-center sm:pr-8 sm:py-8">
