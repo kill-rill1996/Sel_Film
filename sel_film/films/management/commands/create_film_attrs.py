@@ -41,7 +41,7 @@ class Command(BaseCommand):
         for actor in self.create_obj_set('actors'):
             actor_splited = actor.split()
             if len(actor_splited) == 1:
-                Actor.objects.create(first_name=actor_splited[0])
+                Actor.objects.create(first_name=actor_splited[0], last_name='')
             else:
                 Actor.objects.create(first_name=actor_splited[0], last_name=' '.join(actor_splited[1:]))
         print('Объекты актеров успешно созданы')
@@ -50,7 +50,7 @@ class Command(BaseCommand):
         for director in self.create_obj_set('directors'):
             director_splited = director.split()
             if len(director_splited) == 1:
-                Director.objects.create(first_name=director_splited[0])
+                Director.objects.create(first_name=director_splited[0], last_name='')
             else:
                 Director.objects.create(first_name=director_splited[0], last_name=' '.join(director_splited[1:]))
         print('Объекты режиссеров успешно созданы')

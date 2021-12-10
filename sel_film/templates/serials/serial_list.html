@@ -54,7 +54,9 @@
     {% endfor %}
     </div>
   </div>
+  {% if serials %}
   {% include 'includes/pagination.html' %}
+  {% endif %}
 </section>
 
 {% endblock content %}
