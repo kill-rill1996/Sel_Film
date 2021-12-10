@@ -2,7 +2,7 @@ from django.shortcuts import render
 from django.views import generic
 
 from .models import Serial
-from films.forms import FilmFindForm
+from films.forms import Film1FindForm, Film2FindForm
 from .service import find_serials
 
 

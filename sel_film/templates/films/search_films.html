@@ -83,11 +83,12 @@
 <!--    Центра - кнопка поиска-->
         <div class="grid w-full justify-items-center">
             <div class="grid w-full justify-items-center">
-                   <div class="mt-6 w-2/5">
+                   <div class="mt-6 w-5/5">
                        <form method="post"  action="{% url 'search-films' %}">
                             {% csrf_token %}
                             <table>
-                            {{ form }}
+                            {{ form_1 }}
+                            {{ form_2 }}
                             </table>
                            <button type="submit" value="Submit" id="base-input" class="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">Search</button>
                        </form>
@@ -98,7 +99,7 @@
                     <b>Возможно вы искали (фильм №1):</b>
                     <ul>
                       {% for film in films_1_query %}
-                            <li><a href="{{ film.get_absolute_url }}">{{ film.title_ru|capfirst }} ({{ film.year }})</a></li>
+                            <li><a target="_blank" href="{{ film.get_absolute_url }}">{{ film.title_ru|capfirst }} ({{ film.year }})</a></li>
                       {% endfor %}
                     </ul>
                     {% endif %}
@@ -106,10 +107,14 @@
                     <b>Возможно вы искали (фильм №2):</b>
                      <ul>
                       {% for film in films_2_query %}
-                            <li><a href="{{ film.get_absolute_url }}">{{ film.title_ru|capfirst }} ({{ film.year }})</a></li>
+                            <li><a target="_blank" href="{{ film.get_absolute_url }}">{{ film.title_ru|capfirst }} ({{ film.year }})</a></li>
                       {% endfor %}
                      </ul>
                      {% endif %}
+                     {% endif %}
+
+                {% if not  films_1_query and not films_2_query and not film_1 and not film_2 %}
+                <b>По вашим запросам ничего не найдено</b>
                 {% endif %}
 
             </div>
