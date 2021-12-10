@@ -11,7 +11,7 @@ class Command(BaseCommand):
     def handle(self, *args, **kwargs):
         serials = self.get_all_serials_from_json()
 
-        for serial in serials[:50]:
+        for serial in serials[4706:]:
             f = Serial.objects.create(
                 title_ru=serial['title_ru'],
                 title_en=serial['title_en'],
@@ -20,8 +20,8 @@ class Command(BaseCommand):
                 duration=serial['duration'],
                 rating=serial['rating'],
                 plot=serial['plot'],
-                seasons=serial['seasons'],
-                series=serial['series'],
+                seasons=self.get_seasons(serial['seasons']),
+                series=self.get_series(serial['series']),
                 end_status=self.get_end_status(serial['end_status']),
             )
 
@@ -55,7 +55,7 @@ class Command(BaseCommand):
             if model in (Actor, Director):
                 obj_splited = obj.split()
                 if len(obj_splited) == 1:
-                    model.objects.get(first_name=obj_splited[0], last_name=None)
+                    inst = model.objects.get(first_name=obj_splited[0], last_name='')
                 else:
                     inst = model.objects.get(first_name=obj_splited[0], last_name=' '.join(obj_splited[1:]))
             else:
@@ -82,12 +82,27 @@ class Command(BaseCommand):
                     year_end = serial_years_splited[1]
                 res = (year_start, year_end)
 
-            if 'по н.в.' in s_year:
+            elif 'по н.в.' in s_year:
                 s_year = s_year.replace('по н.в.', '')
                 serial_years_splited = s_year.split(' — ')
                 year_start = serial_years_splited[0]
                 res = (year_start,)
+
+            else:
+                res = s_year.split()[0]
+
         return res
+
+    def get_seasons(self, film_seasons):
+        if film_seasons:
+            return film_seasons
+        return 1
+
+    def get_series(self, film_series):
+        if film_series:
+            return film_series
+        return 1
+
 
     def get_all_serials_from_json(self):
         with open('data/serials_info.json', 'r') as file:

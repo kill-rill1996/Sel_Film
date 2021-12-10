@@ -1,6 +1,5 @@
 from django.core.management.base import BaseCommand
 import json
-from time import time
 
 from films.models import Country, Genre, Actor, Director
 
@@ -9,7 +8,6 @@ class Command(BaseCommand):
     help = 'Create Country, Genre, Actor, Director instance for films in DB'
 
     def handle(self, *args, **options):
-        time_1 = time()
         obj_list = ['countries', 'genres', 'actors', 'directors']
         all_films_json = self.get_all_films_from_json()
         objects_set = self.create_obj_set(obj_list, all_films_json)
@@ -18,9 +16,7 @@ class Command(BaseCommand):
         self.write_genres_in_db(objects_set)
         self.write_actors_in_db(objects_set)
         self.write_directors_in_db(objects_set)
-        time_2 = time()
-        time_res = time_2 - time_1
-        print(f'Все модели успешно записаны в базу данных за {time_res} сек')
+        print(f'Все модели успешно записаны в базу данных.')
 
     def get_all_films_from_json(self):
         with open('data/films_info.json', 'r') as file:

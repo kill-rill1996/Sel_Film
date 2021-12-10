@@ -11,7 +11,7 @@ class Command(BaseCommand):
     def handle(self, *args, **kwargs):
         error_films = []
         films = self.get_all_films_from_json()
-        for film in films[:100]:
+        for film in films[6574:10_000]:
             f = Film.objects.create(
                 title_ru=film['title_ru'],
                 title_en=film['title_en'],
@@ -58,9 +58,10 @@ class Command(BaseCommand):
             if model in (Actor, Director):
                 obj_splited = obj.split()
                 if len(obj_splited) == 1:
-                    inst = model.objects.get(first_name=obj_splited[0], last_name='')
+                    inst = model.objects.filter(first_name=obj_splited[0], last_name='')[0]
+
                 else:
-                    inst = model.objects.get(first_name=obj_splited[0], last_name=' '.join(obj_splited[1:]))
+                    inst = model.objects.filter(first_name=obj_splited[0], last_name=' '.join(obj_splited[1:]))[0]
             else:
                 inst = model.objects.get(title=obj)
             inst_list.append(inst)
