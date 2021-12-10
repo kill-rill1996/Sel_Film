@@ -58,7 +58,7 @@ def search_films(request):
             # form = FilmFindForm(initial={'film_1_title_ru': form.cleaned_data['film_1_title_ru'],
             #                              'film_2_title_ru': form.cleaned_data['film_2_title_ru'],
             #                              })
-            context['form'] = form
+        context['form'] = form
 
         return render(request, 'films/search_films.html', context)
 
