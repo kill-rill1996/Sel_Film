@@ -11,7 +11,7 @@ class Command(BaseCommand):
     def handle(self, *args, **kwargs):
         error_films = []
         films = self.get_all_films_from_json()
-        for film in films[:30_000]:
+        for film in films[:100]:
             f = Film.objects.create(
                 title_ru=film['title_ru'],
                 title_en=film['title_en'],
@@ -40,13 +40,13 @@ class Command(BaseCommand):
             try:
                 for director in self.get_attr_for_creating('directors', film, Director):
                     f.directors.add(director)
-                print('Directors sohraneni')
             except Exception as e:
                 error_films.append(f'{f.id}. {f.title_ru} - {e} (Режиссеры)')
 
             # мониторинг создания фильмов
             if film['id'] % 10 == 0:
                 print(f'Записан фильм номер {film["id"]}')
+
         for film in error_films:
             print(film)
 
