@@ -52,101 +52,95 @@
 
 <!--Левый фильм -->
 <div class="container mx-auto">
-    <div class="grid grid-cols-3 justify-items-center mt-10">
+    <div class="grid grid-cols-2 justify-items-center mt-10">
 
         <div class="grid w-full justify-items-center">
             {% if film_1 %}
             <div class="mb-6">
-                <h2 class="text-gray-900 text-lg title-font font-normal text-indigo-700">{{ film_1.title_ru|capfirst }}{% if film_1.year %} ({{ film_1.year }}){% endif %}</h2>
+                <h2 class="text-lg text-indigo-800">{{ film_1.title_ru|capfirst }}{% if film_1.year %} ({{ film_1.year }}){% endif %}</h2>
             </div>
             {% else %}
             <div class="mb-6">
-                <h2 class="text-gray-900 text-lg title-font font-normal">Film 1</h2>
+                <h2 class="text-lg text-indigo-800">Film 1</h2>
             </div>
             {% endif %}
             {% if film_1.image.url %}
-            <div class="w-2/5 sm:w-3/5">
+            <div class="grid w-2/5 sm:w-3/5 justify-items-center">
                 <img class="rounded-lg shadow-lg" src="{{ film_1.image.url }}" alt="">
             </div>
             {% else %}
-            <div class="w-2/5 sm:w-3/5">
+            <div class="grid w-2/5 sm:w-3/5 justify-items-center">
                 <img class="rounded-lg shadow-lg" src="{% static 'images/poster.jpeg' %}" alt="">
             </div>
             {% endif %}
-            <div class="mt-6 w-3/5">
-                    <input placeholder="Film #2..." name="film_1_title_ru" class="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
-<!--                    {{ form.film_1_title_ru }}-->
-            </div>
-            </div>
-
-
-<!--    Центра - кнопка поиска-->
-        <div class="grid w-full justify-items-center">
-            <div class="grid w-full justify-items-center">
-                   <div class="mt-6 w-5/5">
-                       <form method="post"  action="{% url 'search-films' %}">
-                            {% csrf_token %}
-                            <table>
-                            {{ form_1 }}
-                            {{ form_2 }}
-                            </table>
-                           <button type="submit" value="Submit" id="base-input" class="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">Search</button>
-                       </form>
-                   </div>
-
-                    {% if films_1_query or films_2_query%}
-                    {% if films_1_query %}
-                    <b>Возможно вы искали (фильм №1):</b>
-                    <ul>
-                      {% for film in films_1_query %}
-                            <li><a target="_blank" href="{{ film.get_absolute_url }}">{{ film.title_ru|capfirst }} ({{ film.year }})</a></li>
-                      {% endfor %}
-                    </ul>
-                    {% endif %}
-                        {% if films_2_query %}
-                    <b>Возможно вы искали (фильм №2):</b>
-                     <ul>
-                      {% for film in films_2_query %}
-                            <li><a target="_blank" href="{{ film.get_absolute_url }}">{{ film.title_ru|capfirst }} ({{ film.year }})</a></li>
-                      {% endfor %}
-                     </ul>
-                     {% endif %}
-                     {% endif %}
-
-                {% if not  films_1_query and not films_2_query and not film_1 and not film_2 %}
-                <b>По вашим запросам ничего не найдено</b>
-                {% endif %}
-
-            </div>
         </div>
 
-
-<!--Правый фильм-->
+        <!--Правый фильм-->
         <div class="grid w-full justify-items-center">
             {% if film_2 %}
             <div class="mb-6">
-                <h2 class="text-gray-900 text-lg title-font font-normal text-indigo-700">{{ film_2.title_ru|capfirst }} {% if film_2.year %}({{ film_2.year }}){% endif %}</h2>
+                <h2 class="text-lg text-indigo-800">{{ film_2.title_ru|capfirst }} {% if film_2.year %}({{ film_2.year }}){% endif %}</h2>
             </div>
             {% else %}
             <div class="mb-6">
-                <h2 class="text-gray-900 text-lg title-font font-normal">Film 2</h2>
+                <h2 class="text-lg text-indigo-800">Film 2</h2>
             </div>
             {% endif %}
 
             {% if film_2.image.url %}
-            <div class="w-2/5 sm:w-3/5">
+            <div class="grid w-2/5 sm:w-3/5 justify-items-center">
                 <img class="rounded-lg shadow-lg" src="{{ film_2.image.url }}" alt="">
             </div>
             {% else %}
-            <div class="w-2/5 sm:w-3/5">
+            <div class="grid w-2/5 sm:w-3/5 justify-items-center">
                 <img class="rounded-lg shadow-lg" src="{% static 'images/poster.jpeg' %}" alt="">
             </div>
             {% endif %}
+        </div>
+    </div>
 
-            <div class="mt-6 w-3/5">
-<!--                 {{ form.film_2_title_ru }}-->
-                    <input  name="film_2_title_ru" placeholder="Film #2..." class="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
-            </div>
+    <!--    Поисковые вводы, кнопка поиска-->
+    <div class="grid grid-cols-1">
+        <div class="w-full justify-items-center">
+               <div class="mt-6 w-full">
+                   <form method="post" action="{% url 'search-films' %}">
+                        {% csrf_token %}
+                        <div class="grid grid-cols-2 justify-items-center">
+                            <div class="w-3/5">
+                                {{ form_1 }}
+                            </div>
+                            <div class="w-3/5">
+                                {{ form_2 }}
+                            </div>
+                        </div>
+                        <div class="grid grid-cols-1 justify-items-center">
+                            <button type="submit" class="grid w-40 bg-gray-50 border border-indigo-700 text-indigo-700 sm:text-sm rounded-lg focus:ring-indigo-500 focus:border-indigo-500 p-2.5">Подобрать</button>
+                        </div>
+                   </form>
+               </div>
+
+                {% if films_1_query or films_2_query%}
+                {% if films_1_query %}
+                <b>Возможно вы искали (фильм №1):</b>
+                <ul>
+                  {% for film in films_1_query %}
+                        <li><a target="_blank" href="{{ film.get_absolute_url }}">{{ film.title_ru|capfirst }} ({{ film.year }})</a></li>
+                  {% endfor %}
+                </ul>
+                {% endif %}
+                    {% if films_2_query %}
+                <b>Возможно вы искали (фильм №2):</b>
+                 <ul>
+                  {% for film in films_2_query %}
+                        <li><a target="_blank" href="{{ film.get_absolute_url }}">{{ film.title_ru|capfirst }} ({{ film.year }})</a></li>
+                  {% endfor %}
+                 </ul>
+                 {% endif %}
+                 {% endif %}
+
+            {% if not  films_1_query and not films_2_query and not film_1 and not film_2 %}
+            <b>По вашим запросам ничего не найдено</b>
+            {% endif %}
         </div>
     </div>
 
