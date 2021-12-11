@@ -5,7 +5,7 @@ class Film1FindForm(forms.Form):
     film_1_title_ru = forms.CharField(label='')
 
     film_1_title_ru.widget.attrs.update({
-        'class': 'bg-gray-50 border border-indigo-500 text-indigo-700 sm:text-sm rounded-lg focus:ring-indigo-500 focus:border-indigo-500 placeholder-indigo-500 block w-full p-2.5 ',
+        'class': 'bg-gray-50 border border-gray-500 text-indigo-700 sm:text-sm rounded-lg focus:ring-indigo-500 focus:border-indigo-500 placeholder-gray-500 block w-full p-2.5 ',
         'placeholder': 'Название фильма'
     })
 
@@ -18,7 +18,7 @@ class Film2FindForm(forms.Form):
     film_2_title_ru = forms.CharField(label='')
 
     film_2_title_ru.widget.attrs.update({
-        'class': 'bg-gray-50 border border-indigo-500 text-indigo-700 sm:text-sm rounded-lg focus:ring-indigo-500 focus:border-indigo-500 placeholder-indigo-500 block w-full p-2.5 ',
+        'class': 'bg-gray-50 border border-gray-500 text-indigo-700 sm:text-sm rounded-lg focus:ring-indigo-500 focus:border-indigo-500 placeholder-gray-500 block w-full p-2.5 ',
         'placeholder': 'Название фильма'
     })
 
