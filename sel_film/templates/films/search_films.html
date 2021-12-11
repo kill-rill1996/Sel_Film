@@ -52,69 +52,62 @@
 
 <!--Левый фильм -->
 <div class="container mx-auto">
-    <div class="grid grid-cols-2 justify-items-center mt-10">
+    <div class="grid grid-cols-1 sm:grid-cols-2 justify-items-center mt-10">
 
         <div class="grid w-full justify-items-center">
+            <div class="mb-4 sm:mb-6">
             {% if film_1 %}
-            <div class="mb-6">
                 <h2 class="text-lg text-indigo-800">{{ film_1.title_ru|capfirst }}{% if film_1.year %} ({{ film_1.year }}){% endif %}</h2>
-            </div>
             {% else %}
-            <div class="mb-6">
                 <h2 class="text-lg text-indigo-800">Film 1</h2>
-            </div>
             {% endif %}
+            </div>
+
+            <div class="grid w-2/5 sm:w-3/5 md:w-5/12 xl:w-3/5 justify-items-center">
             {% if film_1.image.url %}
-            <div class="grid w-2/5 sm:w-3/5 justify-items-center">
                 <img class="rounded-lg shadow-lg" src="{{ film_1.image.url }}" alt="">
-            </div>
             {% else %}
-            <div class="grid w-2/5 sm:w-3/5 justify-items-center">
                 <img class="rounded-lg shadow-lg" src="{% static 'images/poster.jpeg' %}" alt="">
-            </div>
             {% endif %}
+            </div>
         </div>
 
         <!--Правый фильм-->
         <div class="grid w-full justify-items-center">
+            <div class="mt-8 sm:mt-0 mb-4 sm:mb-6">
             {% if film_2 %}
-            <div class="mb-6">
                 <h2 class="text-lg text-indigo-800">{{ film_2.title_ru|capfirst }} {% if film_2.year %}({{ film_2.year }}){% endif %}</h2>
-            </div>
             {% else %}
-            <div class="mb-6">
                 <h2 class="text-lg text-indigo-800">Film 2</h2>
-            </div>
             {% endif %}
+            </div>
 
+            <div class="grid w-2/5 sm:w-3/5 md:w-5/12 xl:w-3/5 justify-items-center">
             {% if film_2.image.url %}
-            <div class="grid w-2/5 sm:w-3/5 justify-items-center">
                 <img class="rounded-lg shadow-lg" src="{{ film_2.image.url }}" alt="">
-            </div>
             {% else %}
-            <div class="grid w-2/5 sm:w-3/5 justify-items-center">
                 <img class="rounded-lg shadow-lg" src="{% static 'images/poster.jpeg' %}" alt="">
-            </div>
             {% endif %}
+            </div>
         </div>
     </div>
 
     <!--    Поисковые вводы, кнопка поиска-->
     <div class="grid grid-cols-1">
         <div class="w-full justify-items-center">
-               <div class="mt-6 w-full">
+               <div class="mt-6 w-full text-sm sm:text-base">
                    <form method="post" action="{% url 'search-films' %}">
                         {% csrf_token %}
-                        <div class="grid grid-cols-2 justify-items-center">
-                            <div class="w-3/5">
+                        <div class="grid grid-cols-1 sm:grid-cols-2 justify-items-center">
+                            <div class="w-44 mb-4 sm:mb-0 md:w-44 lg:w-56 xl:w-80">
                                 {{ form_1 }}
                             </div>
-                            <div class="w-3/5">
+                            <div class="w-44 mb-4 sm:mb-0 md:w-44 lg:w-56 xl:w-80">
                                 {{ form_2 }}
                             </div>
                         </div>
                         <div class="grid grid-cols-1 justify-items-center">
-                            <button type="submit" class="grid w-40 bg-gray-50 border border-indigo-700 text-indigo-700 sm:text-sm rounded-lg focus:ring-indigo-500 focus:border-indigo-500 p-2.5">Подобрать</button>
+                            <button type="submit" class="grid w-32 md:w-40 bg-gray-50 border border-indigo-700 text-indigo-700 sm:text-sm rounded-lg focus:ring-indigo-500 focus:border-indigo-500 p-2.5">Подобрать</button>
                         </div>
                    </form>
                </div>
