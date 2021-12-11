@@ -57,7 +57,7 @@ def search_serials(request):
 
         context['form_1'] = form_1
         context['form_2'] = form_2
-        return render(request, 'films/search_films.html', context)
+        return render(request, 'serials/search_serials.html', context)
 
     else:
         form_1 = Film1FindForm()

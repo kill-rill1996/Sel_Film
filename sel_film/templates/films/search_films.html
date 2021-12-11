@@ -2,7 +2,6 @@
 {% load static %}
 
 
-
 {% block content %}
 
 <!--Левый фильм -->
@@ -51,7 +50,7 @@
     <div class="grid grid-cols-1">
         <div class="w-full justify-items-center">
                <div class="mt-6 w-full text-sm sm:text-base">
-                   <form method="post" {% block action_form %}action="{% url 'search-films' %}{% endblock action_form %}">
+                   <form method="post"  action="{% block action_form %}{% url 'search-films' %}{% endblock action_form %}">
                         {% csrf_token %}
                         <div class="grid grid-cols-1 sm:grid-cols-2 justify-items-center">
                             <div class="w-44 mb-4 sm:mb-0 md:w-44 lg:w-56 xl:w-80">

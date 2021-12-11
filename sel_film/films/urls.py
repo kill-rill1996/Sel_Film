@@ -9,7 +9,7 @@ urlpatterns = [
     path('', index_page, name='index-page'),
     path('films/', FilmListView.as_view(), name='film-list'),
     path('films/<int:pk>/', FilmDetailView.as_view(), name='film-detail'),
-    path('search_films/', search_films, name='search-films'),
+    path('films/search_films/', search_films, name='search-films'),
 
 ]
 

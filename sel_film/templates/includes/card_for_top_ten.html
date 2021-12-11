@@ -1,9 +1,15 @@
+{% load short_title %}
+
+
 <div class="grid w-full justify-items-center ">
     <div class="w-2/5 sm:w-full">
         <a href="{{ film.get_absolute_url }}"><img class="rounded-lg shadow-lg" src="{{ film.image.url }}" alt=""></a>
     </div>
     <div class="text-center">
-    	<h2 class="mt-2">{{ film.title_ru|capfirst }}</h2>
-    	<p>({{ film.year }})</p>
+    	<h2 class="mt-2">{{ film.title_ru|truncate_title|capfirst }}</h2>
+    	<p>{% if film.year %}({{ film.year }}){% endif %}</p>
+        {% if film.start_year %}
+            ({{ film.start_year }}{% if film.end_year %} - {{ film.end_year }}{% endif %})
+        {% endif %}
     </div>
 </div>
