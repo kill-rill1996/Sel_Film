@@ -8,7 +8,7 @@ from .service import find_serials
 
 class SerialListView(generic.ListView):
     model = Serial
-    context_object_name = 'serials'
+    context_object_name = 'films'
     paginate_by = 6
 
     def get_queryset(self):
@@ -17,7 +17,7 @@ class SerialListView(generic.ListView):
 
 class SerialDetailView(generic.DetailView):
     model = Serial
-    context_object_name = 'serial'
+    context_object_name = 'film'
 
     def get_context_data(self, **kwargs):
         serial = Serial.objects.get(id=self.kwargs['pk'])
@@ -62,5 +62,5 @@ def search_serials(request):
     else:
         form_1 = Film1FindForm()
         form_2 = Film2FindForm()
-        return render(request, 'films/search_films.html', context={'form_1': form_1, 'form_2': form_2})
+        return render(request, 'serials/search_serials.html', context={'form_1': form_1, 'form_2': form_2})
 

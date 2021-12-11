@@ -14,7 +14,7 @@
             {% if film_1 %}
                 <h2 class="text-lg text-indigo-800"><a href="{{ film_1.get_absolute_url }}" target="_blank">{{ film_1.title_ru|capfirst }}{% if film_1.year %} ({{ film_1.year }}){% endif %}</a></h2>
             {% else %}
-                <h2 class="text-lg text-indigo-800">Film 1</h2>
+                <h2 class="text-lg text-indigo-800">{% block title_1 %}Фильм 1{% endblock title_1 %}</h2>
             {% endif %}
             </div>
 
@@ -33,7 +33,7 @@
             {% if film_2 %}
                 <h2 class="text-lg text-indigo-800"><a href="{{ film_2.get_absolute_url }}" target="_blank">{{ film_2.title_ru|capfirst }} {% if film_2.year %}({{ film_2.year }}){% endif %}</a></h2>
             {% else %}
-                <h2 class="text-lg text-indigo-800">Film 2</h2>
+                <h2 class="text-lg text-indigo-800">{% block title_2 %}Фильм 2{% endblock title_2 %}</h2>
             {% endif %}
             </div>
 
@@ -51,7 +51,7 @@
     <div class="grid grid-cols-1">
         <div class="w-full justify-items-center">
                <div class="mt-6 w-full text-sm sm:text-base">
-                   <form method="post" action="{% url 'search-films' %}">
+                   <form method="post" {% block action_form %}action="{% url 'search-films' %}{% endblock action_form %}">
                         {% csrf_token %}
                         <div class="grid grid-cols-1 sm:grid-cols-2 justify-items-center">
                             <div class="w-44 mb-4 sm:mb-0 md:w-44 lg:w-56 xl:w-80">
@@ -62,22 +62,23 @@
                             </div>
                         </div>
                         <div class="grid grid-cols-1 justify-items-center">
-                            <button type="submit" class="grid w-32 md:w-40 bg-gray-50 border border-indigo-700 text-indigo-700 sm:text-sm rounded-lg focus:ring-indigo-500 focus:border-indigo-500 p-2.5">Подобрать</button>
+                            <button type="submit" class="grid w-32 md:w-40 bg-gray-100 text-gray-700 border-0 py-1 px-3 focus:outline-none hover:bg-gray-200 rounded-xl text-base mt-4 md:mt-0"><span><i class="fas fa-search mr-2"></i>Подобрать</span></button>
                         </div>
                    </form>
                </div>
 
                 {% if films_1_query or films_2_query%}
+                <hr class="mt-8 mb-4">
                 {% if films_1_query %}
-                <b>Возможно вы искали (фильм №1):</b>
-                <ul>
-                  {% for film in films_1_query %}
-                        <li><a target="_blank" href="{{ film.get_absolute_url }}">{{ film.title_ru|capfirst }} ({{ film.year }})</a></li>
-                  {% endfor %}
-                </ul>
+                    <p>Возможно вы искали (фильм №1):</p>
+                    <ul>
+                      {% for film in films_1_query %}
+                            <li><a target="_blank" href="{{ film.get_absolute_url }}">{{ film.title_ru|capfirst }} ({{ film.year }})</a></li>
+                      {% endfor %}
+                    </ul>
                 {% endif %}
-                    {% if films_2_query %}
-                <b>Возможно вы искали (фильм №2):</b>
+                {% if films_2_query %}
+                <p>Возможно вы искали (фильм №2):</p>
                  <ul>
                   {% for film in films_2_query %}
                         <li><a target="_blank" href="{{ film.get_absolute_url }}">{{ film.title_ru|capfirst }} ({{ film.year }})</a></li>
@@ -86,8 +87,9 @@
                  {% endif %}
                  {% endif %}
 
-            {% if not  films_1_query and not films_2_query and not film_1 and not film_2 %}
-            <b>По вашим запросам ничего не найдено</b>
+            {% if request.method == 'POST' and not films_1_query and not films_2_query and not film_1 and not film_2 %}
+                <hr class="mt-8 mb-4">
+                <p>По вашим запросам ничего не найдено</p>
             {% endif %}
         </div>
     </div>
