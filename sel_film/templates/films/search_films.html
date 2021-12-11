@@ -4,45 +4,45 @@
 
 {% block content %}
 
-<!--Левый фильм -->
 <div class="container mx-auto">
     <div class="grid grid-cols-1 sm:grid-cols-2 justify-items-center mt-10">
 
+        <!--Левый фильм -->
         <div class="grid w-full justify-items-center">
-            <div class="mb-4 sm:mb-6">
             {% if film_1 %}
+            <div class="mb-4 sm:mb-6">
                 <h2 class="text-lg text-indigo-800"><a href="{{ film_1.get_absolute_url }}" target="_blank">{{ film_1.title_ru|capfirst }}{% if film_1.year %} ({{ film_1.year }}){% endif %}</a></h2>
-            {% else %}
-                <h2 class="text-lg text-indigo-800">{% block title_1 %}Фильм 1{% endblock title_1 %}</h2>
-            {% endif %}
             </div>
-
             <div class="grid w-2/5 sm:w-3/5 md:w-5/12 xl:w-3/5 justify-items-center">
-            {% if film_1.image.url %}
                 <a href="{{ film_1.get_absolute_url }}" target="_blank"><img class="rounded-lg shadow-lg" src="{{ film_1.image.url }}" alt=""></a>
-            {% else %}
-                <img class="rounded-lg shadow-lg" src="{% static 'images/poster.jpeg' %}" alt="">
-            {% endif %}
             </div>
+            {% else %}
+            <div class="mb-4 sm:mb-6">
+                <h2 class="text-lg text-indigo-800">{% block title_1 %}Фильм 1{% endblock title_1 %}</h2>
+            </div>
+            <div class="grid w-2/5 sm:w-3/5 md:w-5/12 xl:w-3/5 justify-items-center">
+                <img class="rounded-lg shadow-lg" src="{% static 'images/poster.jpeg' %}" alt="">
+            </div>
+            {% endif %}
         </div>
 
         <!--Правый фильм-->
         <div class="grid w-full justify-items-center">
-            <div class="mt-8 sm:mt-0 mb-4 sm:mb-6">
             {% if film_2 %}
-                <h2 class="text-lg text-indigo-800"><a href="{{ film_2.get_absolute_url }}" target="_blank">{{ film_2.title_ru|capfirst }} {% if film_2.year %}({{ film_2.year }}){% endif %}</a></h2>
+                <div class="mt-8 sm:mt-0 mb-4 sm:mb-6">
+                    <h2 class="text-lg text-indigo-800"><a href="{{ film_2.get_absolute_url }}" target="_blank">{{ film_2.title_ru|capfirst }} {% if film_2.year %}({{ film_2.year }}){% endif %}</a></h2>
+                </div>
+                <div class="grid w-2/5 sm:w-3/5 md:w-5/12 xl:w-3/5 justify-items-center">
+                    <a href="{{ film_2.get_absolute_url }}" target="_blank"><img class="rounded-lg shadow-lg" src="{{ film_2.image.url }}" alt=""></a>
+                </div>
             {% else %}
-                <h2 class="text-lg text-indigo-800">{% block title_2 %}Фильм 2{% endblock title_2 %}</h2>
+                <div class="mt-8 sm:mt-0 mb-4 sm:mb-6">
+                    <h2 class="text-lg text-indigo-800">{% block title_2 %}Фильм 2{% endblock title_2 %}</h2>
+                </div>
+                <div class="grid w-2/5 sm:w-3/5 md:w-5/12 xl:w-3/5 justify-items-center">
+                    <img class="rounded-lg shadow-lg" src="{% static 'images/poster.jpeg' %}" alt="">
+                </div>
             {% endif %}
-            </div>
-
-            <div class="grid w-2/5 sm:w-3/5 md:w-5/12 xl:w-3/5 justify-items-center">
-            {% if film_2.image.url %}
-                <a href="{{ film_2.get_absolute_url }}" target="_blank"><img class="rounded-lg shadow-lg" src="{{ film_2.image.url }}" alt=""></a>
-            {% else %}
-                <img class="rounded-lg shadow-lg" src="{% static 'images/poster.jpeg' %}" alt="">
-            {% endif %}
-            </div>
         </div>
     </div>
 
