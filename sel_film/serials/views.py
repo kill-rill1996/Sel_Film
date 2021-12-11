@@ -53,11 +53,11 @@ def search_serials(request):
                 context['films_2_query'] = Serial.objects.filter(title_ru__icontains=form_2.cleaned_data['film_2_title_ru'])[:5]
         if film_1 and film_2:
             top_ten_points = find_serials(id_1=film_1.id, id_2=film_2.id)
-            context['top_ten'] = [Serial.objects.get(id=id) for id, points in top_ten_points]
+            context['top_ten'] = [Serial.objects.get(id=id) for id, _ in top_ten_points]
 
         context['form_1'] = form_1
         context['form_2'] = form_2
-        return render(request, 'serials/search_serials.html', context)
+        return render(request, 'films/search_films.html', context)
 
     else:
         form_1 = Film1FindForm()

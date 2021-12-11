@@ -27,11 +27,10 @@ class Command(BaseCommand):
         set_list = {attr: [] for attr in obj_list}
         for film in all_serials:
             for obj in obj_list:
-                for object in film[f'{obj}']:
-                    if object not in set_list[obj]:
-                        set_list[obj].append(object)
-        # for k in set_list:
-        #     set_list[k] = set(set_list[k])
+                for object in film[obj]:
+                    set_list[obj].append(object)
+        for k in set_list:
+            set_list[k] = set(set_list[k])
         return set_list
 
     def write_countries_in_db(self, objects_set):
