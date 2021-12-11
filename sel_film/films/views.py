@@ -58,8 +58,9 @@ def search_films(request):
                 context['film_2'] = film_2
             except Film.DoesNotExist:
                 context['films_2_query'] = Film.objects.filter(title_ru__icontains=form_2.cleaned_data['film_2_title_ru'])[:5]
-
-        if film_1 and film_2:
+        if film_1 == film_2:
+            context['films_duplicate'] = True
+        elif film_1 and film_2:
             top_ten_points = find_films(id_1=film_1.id, id_2=film_2.id)
             context['top_ten'] = [Film.objects.get(id=id) for id, _ in top_ten_points]
 
