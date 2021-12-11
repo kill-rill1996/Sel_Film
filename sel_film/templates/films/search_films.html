@@ -65,74 +65,77 @@
                         </div>
                    </form>
                </div>
+               {% if films_duplicate %}
+                   <hr class="mt-8 mb-4">
+                   <p>Вы ввели два одинаковых фильма.</p>
+               {% else %}
+                    {% if films_1_query or films_2_query %}
+                        <hr class="mt-8 mb-4">
+                        {% if films_1_query and not film_2 and not films_2_query %}
+                            <p>Возможно вы искали (фильм № 1):</p>
+                            <ul>
+                              {% for film in films_1_query %}
+                                <li><a target="_blank" href="{{ film.get_absolute_url }}">{{ film.title_ru|capfirst }} ({{ film.year }})</a></li>
+                              {% endfor %}
+                            </ul>
+                            <p>Фильм № 2 не найден.</p>
+                        {% endif %}
 
-                {% if films_1_query or films_2_query %}
-                    <hr class="mt-8 mb-4">
-                    {% if films_1_query and not film_2 and not films_2_query %}
-                        <p>Возможно вы искали (фильм № 1):</p>
-                        <ul>
-                          {% for film in films_1_query %}
-                            <li><a target="_blank" href="{{ film.get_absolute_url }}">{{ film.title_ru|capfirst }} ({{ film.year }})</a></li>
-                          {% endfor %}
-                        </ul>
+                        {% if films_1_query and film_2 %}
+                            <p>Возможно вы искали (фильм № 1):</p>
+                            <ul>
+                              {% for film in films_1_query %}
+                                <li><a target="_blank" href="{{ film.get_absolute_url }}">{{ film.title_ru|capfirst }} ({{ film.year }})</a></li>
+                              {% endfor %}
+                            </ul>
+                        {% endif %}
+
+                        {% if films_2_query and not film_1 and not films_1_query %}
+                            <p>Фильм № 1 не найден.</p>
+                            <p>Возможно вы искали (фильм № 2):</p>
+                            <ul>
+                              {% for film in films_2_query %}
+                                <li><a target="_blank" href="{{ film.get_absolute_url }}">{{ film.title_ru|capfirst }} ({{ film.year }})</a></li>
+                              {% endfor %}
+                            </ul>
+                        {% endif %}
+
+                        {% if films_2_query and film_1 %}
+                            <p>Возможно вы искали (фильм № 2):</p>
+                            <ul>
+                              {% for film in films_2_query %}
+                                <li><a target="_blank" href="{{ film.get_absolute_url }}">{{ film.title_ru|capfirst }} ({{ film.year }})</a></li>
+                              {% endfor %}
+                            </ul>
+                        {% endif %}
+
+                        {% if films_1_query and films_2_query %}
+                            <p>Возможно вы искали (фильм № 1):</p>
+                            <ul>
+                              {% for film in films_1_query %}
+                                <li><a target="_blank" href="{{ film.get_absolute_url }}">{{ film.title_ru|capfirst }} ({{ film.year }})</a></li>
+                              {% endfor %}
+                            </ul>
+                            <p>Возможно вы искали (фильм № 2):</p>
+                            <ul>
+                              {% for film in films_2_query %}
+                                <li><a target="_blank" href="{{ film.get_absolute_url }}">{{ film.title_ru|capfirst }} ({{ film.year }})</a></li>
+                              {% endfor %}
+                            </ul>
+                        {% endif %}
+
+                    {% elif film_1 and not film_2 %}
+                        <hr class="mt-8 mb-4">
                         <p>Фильм № 2 не найден.</p>
-                    {% endif %}
 
-                    {% if films_1_query and film_2 %}
-                        <p>Возможно вы искали (фильм № 1):</p>
-                        <ul>
-                          {% for film in films_1_query %}
-                            <li><a target="_blank" href="{{ film.get_absolute_url }}">{{ film.title_ru|capfirst }} ({{ film.year }})</a></li>
-                          {% endfor %}
-                        </ul>
-                    {% endif %}
-
-                    {% if films_2_query and not film_1 and not films_1_query %}
+                    {% elif film_2 and not film_1 %}
+                        <hr class="mt-8 mb-4">
                         <p>Фильм № 1 не найден.</p>
-                        <p>Возможно вы искали (фильм № 2):</p>
-                        <ul>
-                          {% for film in films_2_query %}
-                            <li><a target="_blank" href="{{ film.get_absolute_url }}">{{ film.title_ru|capfirst }} ({{ film.year }})</a></li>
-                          {% endfor %}
-                        </ul>
+
+                    {% elif request.method == 'POST' and not film_1 and not film_2 %}
+                        <hr class="mt-8 mb-4">
+                        <p>Фильмы не найдены. Попробуйте найти названия фильмов через <a class="text-indigo-500" href="#">поиск</a></p>
                     {% endif %}
-
-                    {% if films_2_query and film_1 %}
-                        <p>Возможно вы искали (фильм № 2):</p>
-                        <ul>
-                          {% for film in films_2_query %}
-                            <li><a target="_blank" href="{{ film.get_absolute_url }}">{{ film.title_ru|capfirst }} ({{ film.year }})</a></li>
-                          {% endfor %}
-                        </ul>
-                    {% endif %}
-
-                    {% if films_1_query and films_2_query %}
-                        <p>Возможно вы искали (фильм № 1):</p>
-                        <ul>
-                          {% for film in films_1_query %}
-                            <li><a target="_blank" href="{{ film.get_absolute_url }}">{{ film.title_ru|capfirst }} ({{ film.year }})</a></li>
-                          {% endfor %}
-                        </ul>
-                        <p>Возможно вы искали (фильм № 2):</p>
-                        <ul>
-                          {% for film in films_2_query %}
-                            <li><a target="_blank" href="{{ film.get_absolute_url }}">{{ film.title_ru|capfirst }} ({{ film.year }})</a></li>
-                          {% endfor %}
-                        </ul>
-                    {% endif %}
-
-                {% elif film_1 and not film_2 %}
-                    <hr class="mt-8 mb-4">
-                    <p>Фильм № 2 не найден.</p>
-
-                {% elif film_2 and not film_1 %}
-                    <hr class="mt-8 mb-4">
-                    <p>Фильм № 1 не найден.</p>
-
-                {% elif request.methos == 'POST' and not film_1 and not film_2 %}
-                    <hr class="mt-8 mb-4">
-                    <p>Фильмы не найдены. Попробуйте найти названия фильмов через поиск <a href="#">Search</a></p>
-
                 {% endif %}
         </div>
     </div>
