@@ -1,0 +1,10 @@
+{% extends 'base.html' %}
+
+{% block content%}
+    {% if films %}
+        {% for film in films %}
+            <a href="{{ film.get_absolute_url }}">{{ film.title_ru }}</a>
+        {% endfor %}
+
+    {% endif %}
+{% endblock %}

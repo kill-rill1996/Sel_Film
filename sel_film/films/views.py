@@ -76,9 +76,12 @@ def search_films(request):
                                                                     'form_2': form_2,
                                                                    })
 
-
-def get_top_ten_films(films_points):
-    top_ten_films = []
-    for id, points in films_points:
-        top_ten_films.append(Film.objects.get(id=id))
-    return top_ten_films
+def search(request):
+    if request.method == "POST":
+        context = {}
+        search_data = request.POST['search_data']
+        films = Film.objects.filter(title_ru__icontains=search_data)
+        context['films'] = films
+        return render(request, 'search_results.html', context)
+    else:
+        return render(request, 'search_results.html')
