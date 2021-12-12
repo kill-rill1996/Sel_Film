@@ -27,18 +27,18 @@
             <a href="#" class="mr-5 hover:text-gray-900">Search</a>
             <a href="about.html" class="mr-5 hover:text-gray-400">About</a>
           </nav>
-
+          <div class="inline-flex ml-4 sm:-ml-5 md:ml-36 lg:ml-0 justify-center">
             <!-- Форма поиска по сайту-->
             <form method="POST" action="{% url 'search' %}">
                 {% csrf_token %}
-                <div class="inline-flex items-center mr-4 -mt-1">
+                <div class="inline-flex items-center mt-2 lg:-mt-1">
                   <div class="mt-1 relative rounded-md shadow-sm">
                     <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
                       <span class="text-gray-400 sm:text-sm">
                         <i class="fas fa-search"></i>
                       </span>
                     </div>
-                    <input type="text" name="search_data" id="price" class="focus:ring-gray-500 focus:border-gray-900 block w-full pl-7 pr-12 sm:text-sm border border-gray-400 rounded-md py-1.5" placeholder=" Search...">
+                    <input type="text" name="search_data" id="price" class="focus:ring-gray-500 focus:border-gray-900 block w-full pl-7 pr-12 sm:text-sm border border-gray-400 rounded-md py-1 md:py-1.5" placeholder=" Search...">
                     <div class="absolute inset-y-0 right-0 flex items-center">
                       <label for="currency" class="sr-only">Currency</label>
                       <select id="currency" name="currency" class="focus:ring-gray-500 focus:border-gray-500 h-full py-0 pl-2 pr-1 border-transparent bg-transparent text-gray-500 sm:text-sm rounded-md">
@@ -49,7 +49,8 @@
                   </div>
                 </div>
             </form>
-          <button class="inline-flex items-center bg-gray-100 border-0 py-1 px-3 focus:outline-none hover:bg-gray-200 rounded text-base mt-4 md:mt-0">Registration</button>
+          <!-- <button class="inline-flex items-center bg-gray-100 border-0 py-1 px-3 focus:outline-none hover:bg-gray-200 rounded text-base mt-3.5 lg:mt-0">Registration</button> -->
+          </div>
         </div>
     </header>
 {% endblock %}
