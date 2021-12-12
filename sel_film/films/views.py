@@ -1,4 +1,5 @@
 from django.http import HttpResponse, HttpResponseRedirect
+from django.core.paginator import Paginator
 from django.shortcuts import render, redirect, get_object_or_404
 from django.urls import reverse
 from django.views import generic
@@ -77,12 +78,14 @@ def search_films(request):
                                                                     'form_2': form_2,
                                                                    })
 
+
 def search(request):
     if request.method == "POST":
         context = {}
         search_data = request.POST['search_data']
-        films = Film.objects.filter(title_ru__icontains=search_data).order_by('-rating')[:20]
-        context['films'] = films
+        search_data_lower = request.POST['search_data'].lower()
+        films_list = Film.objects.filter(title_ru__icontains=search_data_lower).order_by('-rating')[:20]
+        context['films'] = films_list
         context['search_data'] = search_data
         return render(request, 'search_results.html', context)
     else:
