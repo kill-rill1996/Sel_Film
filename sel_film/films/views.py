@@ -4,7 +4,7 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.urls import reverse
 from django.views import generic
 
-
+from serials.models import Serial
 from .models import Film, Actor, Director, Country, Genre
 from .forms import Film1FindForm, Film2FindForm
 from .service import find_films
@@ -82,10 +82,15 @@ def search_films(request):
 def search(request):
     if request.method == "POST":
         context = {}
-        print(request.POST)
         search_data = request.POST['search_data']
         search_data_lower = request.POST['search_data'].lower()
-        films_list = Film.objects.filter(title_ru__icontains=search_data_lower).order_by('-rating')[:20]
+        model_type = request.POST['currency']
+
+        if model_type == 'FILMS':
+            films_list = Film.objects.filter(title_ru__icontains=search_data_lower).order_by('-rating')[:20]
+        else:
+            films_list = Serial.objects.filter(title_ru__icontains=search_data_lower).order_by('-rating')[:20]
+
         context['films'] = films_list
         context['search_data'] = search_data
         return render(request, 'search_results.html', context)
