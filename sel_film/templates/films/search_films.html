@@ -67,74 +67,172 @@
                </div>
                {% if films_duplicate %}
                    <hr class="mt-8 mb-4">
-                   <p>Вы ввели два одинаковых фильма.</p>
+                   <div class="flex flex-wrap -mx-4 -my-8 mb-4">
+                      <div class="py-10 px-4 lg:w-1/3">
+                        <div class="h-full flex items-start">
+                          <div class="flex-grow pl-6">
+                            <h2 class="tracking-widest text-xs title-font font-medium text-indigo-500 mb-1">РЕЗУЛЬТАТЫ ПОИСКА</h2>
+                            <h1 class="title-font text-lg font-medium text-gray-900 mb-3">Вы ввели два одинаковых фильма.</h1>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
                {% else %}
                     {% if films_1_query or films_2_query %}
                         <hr class="mt-8 mb-4">
                         {% if films_1_query and not film_2 and not films_2_query %}
-                            <p>Возможно вы искали (фильм № 1):</p>
-                            <ul>
-                              {% for film in films_1_query %}
-                                <li><a target="_blank" href="{{ film.get_absolute_url }}">{{ film.title_ru|capfirst }} ({{ film.year }})</a></li>
-                              {% endfor %}
-                            </ul>
-                            <p>Фильм № 2 не найден.</p>
+                            <div class="flex flex-wrap -mx-4 -my-8 mb-4">
+                              <div class="py-10 px-4 lg:w-1/3">
+                                <div class="h-full flex items-start">
+                                  <div class="flex-grow pl-6">
+                                    <h2 class="tracking-widest text-xs title-font font-medium text-indigo-500 mb-1">РЕЗУЛЬТАТЫ ПОИСКА</h2>
+                                    <h1 class="title-font text-lg font-medium text-gray-900 mb-3">Возможно вы имели в виду (Фильм № 1):</h1>
+                                    {% for film in films_1_query %}
+                                    <a target="_blank" href="{{ film.get_absolute_url }}" class="inline-flex items-center mb-4">
+                                      <img alt="blog" src="{{ film.image.url }}" class="w-10 h-10 rounded-full flex-shrink-0 object-cover object-center">
+                                      <span class="flex-grow flex flex-col pl-3">
+                                        <span class="title-font font-base text-gray-900">{{ film.title_ru|capfirst }} ({{ film.year }})</span>
+                                      </span>
+                                    </a>
+                                    {% endfor %}
+                                    <h1 class="title-font text-lg font-medium text-gray-900 mb-3">Фильм № 2 не найден.</h1>
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
                         {% endif %}
 
                         {% if films_1_query and film_2 %}
-                            <p>Возможно вы искали (фильм № 1):</p>
-                            <ul>
-                              {% for film in films_1_query %}
-                                <li><a target="_blank" href="{{ film.get_absolute_url }}">{{ film.title_ru|capfirst }} ({{ film.year }})</a></li>
-                              {% endfor %}
-                            </ul>
+                        <div class="flex flex-wrap -mx-4 -my-8 mb-4">
+                          <div class="py-10 px-4 lg:w-1/3">
+                            <div class="h-full flex items-start">
+                              <div class="flex-grow pl-6">
+                                <h2 class="tracking-widest text-xs title-font font-medium text-indigo-500 mb-1">РЕЗУЛЬТАТЫ ПОИСКА</h2>
+                                <h1 class="title-font text-lg font-medium text-gray-900 mb-3">Возможно вы имели в виду (Фильм № 1):</h1>
+                                {% for film in films_1_query %}
+                                <a target="_blank" href="{{ film.get_absolute_url }}" class="inline-flex items-center">
+                                  <img alt="blog" src="{{ film.image.url }}" class="w-10 h-10 rounded-full flex-shrink-0 object-cover object-center">
+                                  <span class="flex-grow flex flex-col pl-3">
+                                    <span class="title-font font-base text-gray-900">{{ film.title_ru|capfirst }} ({{ film.year }})</span>
+                                  </span>
+                                </a>
+                                {% endfor %}
+                              </div>
+                            </div>
+                          </div>
+                        </div>
                         {% endif %}
 
                         {% if films_2_query and not film_1 and not films_1_query %}
-                            <p>Фильм № 1 не найден.</p>
-                            <p>Возможно вы искали (фильм № 2):</p>
-                            <ul>
-                              {% for film in films_2_query %}
-                                <li><a target="_blank" href="{{ film.get_absolute_url }}">{{ film.title_ru|capfirst }} ({{ film.year }})</a></li>
-                              {% endfor %}
-                            </ul>
+                            <div class="flex flex-wrap -mx-4 -my-8 mb-4">
+                              <div class="py-10 px-4 lg:w-1/3">
+                                <div class="h-full flex items-start">
+                                  <div class="flex-grow pl-6">
+                                    <h2 class="tracking-widest text-xs title-font font-medium text-indigo-500 mb-1">РЕЗУЛЬТАТЫ ПОИСКА</h2>
+                                    <h1 class="title-font text-lg font-medium text-gray-900 mb-4">Фильм № 1 не найден.</h1>
+                                    <h1 class="title-font text-lg font-medium text-gray-900 mb-3">Возможно вы имели в виду (Фильм № 2):</h1>
+                                    {% for film in films_2_query %}
+                                    <a target="_blank" href="{{ film.get_absolute_url }}" class="inline-flex items-center">
+                                      <img alt="blog" src="{{ film.image.url }}" class="w-10 h-10 rounded-full flex-shrink-0 object-cover object-center">
+                                      <span class="flex-grow flex flex-col pl-3">
+                                        <span class="title-font font-base text-gray-900">{{ film.title_ru|capfirst }} ({{ film.year }})</span>
+                                      </span>
+                                    </a>
+                                    {% endfor %}
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
                         {% endif %}
 
                         {% if films_2_query and film_1 %}
-                            <p>Возможно вы искали (фильм № 2):</p>
-                            <ul>
-                              {% for film in films_2_query %}
-                                <li><a target="_blank" href="{{ film.get_absolute_url }}">{{ film.title_ru|capfirst }} ({{ film.year }})</a></li>
-                              {% endfor %}
-                            </ul>
+                            <div class="flex flex-wrap -mx-4 -my-8 mb-4">
+                              <div class="py-10 px-4 lg:w-1/3">
+                                <div class="h-full flex items-start">
+                                  <div class="flex-grow pl-6">
+                                    <h2 class="tracking-widest text-xs title-font font-medium text-indigo-500 mb-1">РЕЗУЛЬТАТЫ ПОИСКА</h2>
+                                    <h1 class="title-font text-lg font-medium text-gray-900 mb-3">Возможно вы имели в виду (Фильм № 2):</h1>
+                                    {% for film in films_2_query %}
+                                    <a target="_blank" href="{{ film.get_absolute_url }}" class="inline-flex items-center">
+                                      <img alt="blog" src="{{ film.image.url }}" class="w-10 h-10 rounded-full flex-shrink-0 object-cover object-center">
+                                      <span class="flex-grow flex flex-col pl-3">
+                                        <span class="title-font font-base text-gray-900">{{ film.title_ru|capfirst }} ({{ film.year }})</span>
+                                      </span>
+                                    </a>
+                                    {% endfor %}
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
                         {% endif %}
 
                         {% if films_1_query and films_2_query %}
-                            <p>Возможно вы искали (фильм № 1):</p>
-                            <ul>
-                              {% for film in films_1_query %}
-                                <li><a target="_blank" href="{{ film.get_absolute_url }}">{{ film.title_ru|capfirst }} ({{ film.year }})</a></li>
-                              {% endfor %}
-                            </ul>
-                            <p>Возможно вы искали (фильм № 2):</p>
-                            <ul>
-                              {% for film in films_2_query %}
-                                <li><a target="_blank" href="{{ film.get_absolute_url }}">{{ film.title_ru|capfirst }} ({{ film.year }})</a></li>
-                              {% endfor %}
-                            </ul>
+                            <div class="flex flex-wrap -mx-4 -my-8 mb-4">
+                              <div class="py-10 px-4 lg:w-1/3">
+                                <div class="h-full flex items-start">
+                                  <div class="flex-grow pl-6">
+                                    <h2 class="tracking-widest text-xs title-font font-medium text-indigo-500 mb-1">РЕЗУЛЬТАТЫ ПОИСКА</h2>
+                                    <h1 class="title-font text-lg font-medium text-gray-900 mb-3">Возможно вы имели в виду (Фильм № 1):</h1>
+                                    {% for film in films_1_query %}
+                                    <a target="_blank" href="{{ film.get_absolute_url }}" class="inline-flex items-center">
+                                      <img alt="blog" src="{{ film.image.url }}" class="w-10 h-10 rounded-full flex-shrink-0 object-cover object-center">
+                                      <span class="flex-grow flex flex-col pl-3">
+                                        <span class="title-font font-base text-gray-900">{{ film.title_ru|capfirst }} ({{ film.year }})</span>
+                                      </span>
+                                    </a>
+                                    {% endfor %}
+                                    <h1 class="title-font text-lg font-medium text-gray-900 mb-3">Возможно вы имели в виду (Фильм № 2):</h1>
+                                    {% for film in films_2_query %}
+                                    <a target="_blank" href="{{ film.get_absolute_url }}" class="inline-flex items-center">
+                                      <img alt="blog" src="{{ film.image.url }}" class="w-10 h-10 rounded-full flex-shrink-0 object-cover object-center">
+                                      <span class="flex-grow flex flex-col pl-3">
+                                        <span class="title-font font-base text-gray-900">{{ film.title_ru|capfirst }} ({{ film.year }})</span>
+                                      </span>
+                                    </a>
+                                    {% endfor %}
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
                         {% endif %}
 
                     {% elif film_1 and not film_2 %}
                         <hr class="mt-8 mb-4">
-                        <p>Фильм № 2 не найден.</p>
+                        <div class="flex flex-wrap -mx-4 -my-8 mb-4">
+                          <div class="py-10 px-4 lg:w-1/3">
+                            <div class="h-full flex items-start">
+                              <div class="flex-grow pl-6">
+                                <h2 class="tracking-widest text-xs title-font font-medium text-indigo-500 mb-1">РЕЗУЛЬТАТЫ ПОИСКА</h2>
+                                <h1 class="title-font text-lg font-medium text-gray-900 mb-3">Фильм № 2 не найден.</h1>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
 
                     {% elif film_2 and not film_1 %}
                         <hr class="mt-8 mb-4">
-                        <p>Фильм № 1 не найден.</p>
-
+                        <div class="flex flex-wrap -mx-4 -my-8 mb-4">
+                          <div class="py-10 px-4 lg:w-1/3">
+                            <div class="h-full flex items-start">
+                              <div class="flex-grow pl-6">
+                                <h2 class="tracking-widest text-xs title-font font-medium text-indigo-500 mb-1">РЕЗУЛЬТАТЫ ПОИСКА</h2>
+                                <h1 class="title-font text-lg font-medium text-gray-900 mb-3">Фильм № 1 не найден.</h1>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
                     {% elif request.method == 'POST' and not film_1 and not film_2 %}
                         <hr class="mt-8 mb-4">
-                        <p>Фильмы не найдены. Попробуйте найти названия фильмов через <a class="text-indigo-500" href="#">поиск</a></p>
+                        <div class="flex flex-wrap -mx-4 -my-8 mb-4">
+                          <div class="py-10 px-4 lg:w-2/3">
+                            <div class="h-full flex items-start">
+                              <div class="flex-grow pl-6">
+                                <h2 class="tracking-widest text-xs title-font font-medium text-indigo-500 mb-1">РЕЗУЛЬТАТЫ ПОИСКА</h2>
+                                <p>По вашему запросу фильмы не найдены. Попробуйте найти названия фильмов через <a class="text-indigo-500" href="#">поиск</a></p>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
                     {% endif %}
                 {% endif %}
         </div>
@@ -143,7 +241,8 @@
 
 <!--Результаты поиска-->
     {% if top_ten %}
-    <hr class="mt-8">
+    <hr class="mt-8 mb-6">
+    <h2 class="tracking-widest text-xs title-font font-medium text-indigo-500 text-center sm:text-left md:ml-3 xl:ml-0">РЕЗУЛЬТАТЫ ПОИСКА</h2>
         <div class="grid grid-cols-2 sm:grid-cols-5 xl:grid-cols-10 gap-x-4 gap-y-4 sm:gap-x-10 sm:gap-y-10 mt-10 text-sm sm:text-xs md:text-sm mb-8">
                 {% for film in top_ten %}
                     {% include 'includes/card_for_top_ten.html' %}
