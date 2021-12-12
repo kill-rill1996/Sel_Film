@@ -1,5 +1,5 @@
-from django.conf.urls.static import static
-from django.urls import path, include
+from django.urls import path
+from django.views.decorators.cache import cache_page
 
 from django.conf import settings
 from .views import index_page, FilmListView, FilmDetailView, search_films,search

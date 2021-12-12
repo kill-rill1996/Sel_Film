@@ -1,12 +1,10 @@
-from django.http import HttpResponse, HttpResponseRedirect
-from django.core.paginator import Paginator
-from django.shortcuts import render, redirect, get_object_or_404
-from django.urls import reverse
+from django.shortcuts import render
 from django.views import generic
 from string import ascii_lowercase
+from django.views.decorators.cache import cache_page
 
 from serials.models import Serial
-from .models import Film, Actor, Director, Country, Genre
+from .models import Film
 from .forms import Film1FindForm, Film2FindForm
 from .service import find_films
 

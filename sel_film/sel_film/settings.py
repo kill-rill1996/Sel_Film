@@ -27,6 +27,9 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
 
+    # debug_toolbar
+    "debug_toolbar",
+
     'films',
     'serials',
 
@@ -40,6 +43,10 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+
+    # debug_toolbar
+    "debug_toolbar.middleware.DebugToolbarMiddleware",
+
 ]
 
 ROOT_URLCONF = 'sel_film.urls'
@@ -131,3 +138,20 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media/')
+
+# debug_toolbar
+INTERNAL_IPS = [
+    "127.0.0.1",
+]
+#
+# CACHES = {
+#     'default': {
+#         'BACKEND': 'django.core.cache.backends.filebased.FileBasedCache',
+#         # 'LOCATION': '/var/tmp/django_cache',
+#         'LOCATION': os.path.join(BASE_DIR, 'selfilm_cache'),
+#         'TIMEOUT': 600,
+#         'OPTIONS': {
+#             'MAX_ENTRIES': 1000
+#         }
+#     }
+# }

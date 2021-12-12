@@ -1,4 +1,6 @@
-from django.urls import path, include
+from django.urls import path
+from django.views.decorators.cache import cache_page
+
 
 from .views import SerialListView, search_serials, SerialDetailView
 
