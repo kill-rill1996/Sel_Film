@@ -42,7 +42,7 @@
           </div>
           <div class="flex-grow text-center sm:text-left">
             <a href="{{ film.get_absolute_url }}">
-              <h2 class="text-gray-900 text-lg title-font font-medium mb-3">{{ film.title_ru|capfirst }} {% if film.title_en %}/ {{ film.title_en|truncatechars:10 }}{% endif %}</h2>
+              <h2 class="text-gray-900 text-lg title-font font-medium mb-3">{{ film.title_ru|capfirst|truncatechars:32 }} {% if film.title_en %}/ {{ film.title_en|truncatechars:8 }}{% endif %}</h2>
             </a>
             <p class="leading-relaxed text-base"><b>Жанры:</b> {% for genre in film.genres.all|split_genres %}{{ genre }}{% endfor %}</p>
             <p class="leading-relaxed text-base"><b>Год:</b> {% block year %}{{ film.year }}{% endblock year %}</p>
