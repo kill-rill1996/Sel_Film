@@ -8,6 +8,7 @@
 
 <section class="text-gray-600 body-font">
   <div class="container px-5 py-20 mx-auto flex flex-wrap">
+    {% block searching %}
     <div class="flex sm:flex-wrap mb-10 space-x-6 sm:-mx-0 mx-auto">
       <a href="{% url 'film-list' %}" class="bg-gray-100 inline-flex py-3 px-5 rounded-lg items-center hover:bg-gray-200 focus:outline-none w-36">
         <div class="text-xl w-6 h-6">
@@ -27,7 +28,9 @@
           <span class="title-font font-medium">Сериалов</span>
         </span>
       </a>
-    </div>        
+    </div>
+    {% endblock searching %}
+
     <div class="flex flex-wrap -m-4">
     {% for film in films %}
       <div class="p-4 lg:w-1/2 md:w-full">

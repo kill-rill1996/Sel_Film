@@ -1,10 +1,10 @@
-{% extends 'base.html' %}
+{% extends 'films/film_list.html' %}
 
-{% block content%}
-    {% if films %}
-        {% for film in films %}
-            <a href="{{ film.get_absolute_url }}">{{ film.title_ru }}</a>
-        {% endfor %}
+{% block searching %}
 
+    {% if request.method == 'POST' %}
+        Результаты поиска по запросу: "<b>{{ search_data }}</b>"
+        <hr class="mt-8 mb-4">
     {% endif %}
-{% endblock %}
+
+{% endblock searching %}

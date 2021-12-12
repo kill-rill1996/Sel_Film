@@ -50,14 +50,14 @@ def search_films(request):
                 film_1 = Film.objects.get(title_ru__iexact=form_1.cleaned_data['film_1_title_ru'])
                 context['film_1'] = film_1
             except Film.DoesNotExist:
-                context['films_1_query'] = Film.objects.filter(title_ru__icontains=form_1.cleaned_data['film_1_title_ru'])[:5]
+                context['films_1_query'] = Film.objects.filter(title_ru__icontains=form_1.cleaned_data['film_1_title_ru']).order_by('-rating')[:5]
 
         if form_2.is_valid():
             try:
                 film_2 = Film.objects.get(title_ru__iexact=form_2.cleaned_data['film_2_title_ru'])
                 context['film_2'] = film_2
             except Film.DoesNotExist:
-                context['films_2_query'] = Film.objects.filter(title_ru__icontains=form_2.cleaned_data['film_2_title_ru'])[:5]
+                context['films_2_query'] = Film.objects.filter(title_ru__icontains=form_2.cleaned_data['film_2_title_ru']).order_by('-rating')[:5]
 
         if film_1 and film_2 and film_1 == film_2:
             context['films_duplicate'] = True
@@ -81,8 +81,9 @@ def search(request):
     if request.method == "POST":
         context = {}
         search_data = request.POST['search_data']
-        films = Film.objects.filter(title_ru__icontains=search_data)
+        films = Film.objects.filter(title_ru__icontains=search_data).order_by('-rating')[:20]
         context['films'] = films
+        context['search_data'] = search_data
         return render(request, 'search_results.html', context)
     else:
         return render(request, 'search_results.html')
