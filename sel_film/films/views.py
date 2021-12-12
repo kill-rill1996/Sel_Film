@@ -3,6 +3,7 @@ from django.core.paginator import Paginator
 from django.shortcuts import render, redirect, get_object_or_404
 from django.urls import reverse
 from django.views import generic
+from string import ascii_lowercase
 
 from serials.models import Serial
 from .models import Film, Actor, Director, Country, Genre
@@ -87,9 +88,21 @@ def search(request):
         model_type = request.POST['currency']
 
         if model_type == 'FILMS':
-            films_list = Film.objects.filter(title_ru__icontains=search_data_lower).order_by('-rating')[:20]
+            try:
+                if search_data_lower[0] in ascii_lowercase:
+                    films_list = Film.objects.filter(title_en__icontains=search_data_lower).order_by('-rating')[:20]
+                else:
+                    films_list = Film.objects.filter(title_ru__icontains=search_data_lower).order_by('-rating')[:20]
+            except IndexError:
+                films_list = []
         else:
-            films_list = Serial.objects.filter(title_ru__icontains=search_data_lower).order_by('-rating')[:20]
+            try:
+                if search_data_lower[0] in ascii_lowercase:
+                    films_list = Serial.objects.filter(title_en__icontains=search_data_lower).order_by('-rating')[:20]
+                else:
+                    films_list = Serial.objects.filter(title_ru__icontains=search_data_lower).order_by('-rating')[:20]
+            except IndexError:
+                films_list = []
 
         context['films'] = films_list
         context['search_data'] = search_data
