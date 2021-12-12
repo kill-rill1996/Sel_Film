@@ -53,10 +53,10 @@
                    <form method="post"  action="{% block action_form %}{% url 'search-films' %}{% endblock action_form %}">
                         {% csrf_token %}
                         <div class="grid grid-cols-1 sm:grid-cols-2 justify-items-center">
-                            <div class="w-44 mb-4 sm:mb-0 md:w-44 lg:w-56 xl:w-80">
+                            <div class="w-44 mb-4 sm:mb-0 md:w-44 lg:w-56 xl:w-80 text-red-400">
                                 {{ form_1 }}
                             </div>
-                            <div class="w-44 mb-4 sm:mb-0 md:w-44 lg:w-56 xl:w-80">
+                            <div class="w-44 mb-4 sm:mb-0 md:w-44 lg:w-56 xl:w-80 text-red-400">
                                 {{ form_2 }}
                             </div>
                         </div>
@@ -228,7 +228,7 @@
                             <div class="h-full flex items-start">
                               <div class="flex-grow pl-6">
                                 <h2 class="tracking-widest text-xs title-font font-medium text-indigo-500 mb-1">РЕЗУЛЬТАТЫ ПОИСКА</h2>
-                                <p>По вашему запросу фильмы не найдены. Попробуйте найти названия фильмов через <a class="text-indigo-500" href="#">поиск</a></p>
+                                <p>По вашему запросу фильмы не найдены. Попробуйте найти названия фильмов через <a class="text-indigo-500" href="#search">поиск</a></p>
                               </div>
                             </div>
                           </div>
