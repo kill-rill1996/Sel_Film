@@ -82,6 +82,7 @@ def search_films(request):
 def search(request):
     if request.method == "POST":
         context = {}
+        print(request.POST)
         search_data = request.POST['search_data']
         search_data_lower = request.POST['search_data'].lower()
         films_list = Film.objects.filter(title_ru__icontains=search_data_lower).order_by('-rating')[:20]
