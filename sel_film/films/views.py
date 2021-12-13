@@ -1,3 +1,4 @@
+from django.db.models import Prefetch
 from django.shortcuts import render
 from django.views import generic
 from string import ascii_lowercase
@@ -5,7 +6,7 @@ from django.views.decorators.cache import cache_page
 import logging
 
 from serials.models import Serial
-from .models import Film
+from .models import Film, Genre, Actor, Director, Country
 from .forms import Film1FindForm, Film2FindForm
 from .service import find_films
 
@@ -24,7 +25,10 @@ class FilmListView(generic.ListView):
     paginate_by = 6
 
     def get_queryset(self):
-        return Film.objects.all().order_by('-rating')
+        genres = Genre.objects.only('title')
+        films = Film.objects.only('title_ru', 'title_en', 'year', 'image', 'plot')\
+            .prefetch_related(Prefetch('genres', queryset=genres)).order_by('-rating')
+        return films
 
 
 class FilmDetailView(generic.DetailView):
@@ -32,7 +36,14 @@ class FilmDetailView(generic.DetailView):
     context_object_name = 'film'
 
     def get_context_data(self, **kwargs):
-        film = Film.objects.get(id=self.kwargs['pk'])
+        genres = Genre.objects.only('title')
+        actors = Actor.objects.only('first_name', 'last_name')
+        directors = Director.objects.only('first_name', 'last_name')
+        countries = Country.objects.only('title')
+        film = Film.objects.filter(id=self.kwargs['pk']).prefetch_related(Prefetch('genres', queryset=genres))\
+            .prefetch_related(Prefetch('actors', queryset=actors))\
+            .prefetch_related(Prefetch('directors', queryset=directors))\
+            .prefetch_related(Prefetch('countries', queryset=countries))[0]
         context = super().get_context_data(**kwargs)
         context['actors'] = ', '.join([a.first_name + ' ' + a.last_name for a in film.actors.all()[:5]])
         context['countries'] = ', '.join([c.title for c in film.countries.all()])
