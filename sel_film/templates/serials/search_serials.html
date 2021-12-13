@@ -31,4 +31,8 @@
 ({{ film.start_year }}{% if film.end_year %} - {{ film.end_year }}{% endif %})
 {% endblock year_q1q2 %}
 
+{% block year_q2q1 %}
+({{ film.start_year }}{% if film.end_year %} - {{ film.end_year }}{% endif %})
+{% endblock year_q2q1 %}
+
 {% block action_form %}{% url 'search-serials' %}{% endblock action_form %}

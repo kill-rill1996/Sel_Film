@@ -179,7 +179,7 @@
                                     <a target="_blank" href="{{ film.get_absolute_url }}" class="inline-flex items-center">
                                       <img alt="blog" src="{{ film.image.url }}" class="w-10 h-10 rounded-full flex-shrink-0 object-cover object-center">
                                       <span class="flex-grow flex flex-col pl-3">
-                                        <span class="title-font font-base text-gray-900">{{ film.title_ru|capfirst }} {% block year_q1q2 %}({{ film.year }}){% endblock year_q1q2 %}</span>
+                                        <span class="title-font font-base text-gray-900">{{ film.title_ru|capfirst }} {% block year_q2q1 %}({{ film.year }}){% endblock year_q2q1 %}</span>
                                       </span>
                                     </a>
                                     {% endfor %}
@@ -188,7 +188,7 @@
                                     <a target="_blank" href="{{ film.get_absolute_url }}" class="inline-flex items-center">
                                       <img alt="blog" src="{{ film.image.url }}" class="w-10 h-10 rounded-full flex-shrink-0 object-cover object-center">
                                       <span class="flex-grow flex flex-col pl-3">
-                                        <span class="title-font font-base text-gray-900">{{ film.title_ru|capfirst }} ({{ film.year }})</span>
+                                        <span class="title-font font-base text-gray-900">{{ film.title_ru|capfirst }} {% block year_q1q2 %}({{ film.year }}){% endblock year_q1q2 %}</span>
                                       </span>
                                     </a>
                                     {% endfor %}
