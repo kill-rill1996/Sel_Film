@@ -154,9 +154,9 @@ def about_page(request):
             try:
                 send_mail(
                     message_name,
-                    message_text,
+                    message_text + f'\n\nMessage from: {message_email}',
                     message_email,
-                    ['w3qxnkst1ck@gmail.com', 'hizenberg2282@gmail.com']
+                    ['w3qxnkst1ck@gmail.com', 'hizenberg228@mail.ru', '1996sasha2507@mail.ru']
                 )
                 return render(request, 'about.html', {'message_name': message_name})
             except BadHeaderError:
