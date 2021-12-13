@@ -51,7 +51,11 @@ def search_serials(request):
                 context['film_2'] = film_2
             except Serial.DoesNotExist:
                 context['films_2_query'] = Serial.objects.filter(title_ru__icontains=form_2.cleaned_data['film_2_title_ru']).order_by('-rating')[:5]
-        if film_1 and film_2:
+
+        if film_1 and film_2 and film_1 == film_2:
+            context['films_duplicate'] = True
+
+        elif film_1 and film_2:
             top_ten_points = find_serials(id_1=film_1.id, id_2=film_2.id)
             context['top_ten'] = [Serial.objects.get(id=id) for id, _ in top_ten_points]
 

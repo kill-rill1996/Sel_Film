@@ -80,6 +80,7 @@ def search_films(request):
         if film_1 and film_2 and film_1 == film_2:
             logger.info('В подборку включены два одиннаковых фильма')
             context['films_duplicate'] = True
+
         elif film_1 and film_2:
             top_ten_points = find_films(id_1=film_1.id, id_2=film_2.id)
             context['top_ten'] = [Film.objects.get(id=id) for id, _ in top_ten_points]
