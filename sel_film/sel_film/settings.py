@@ -191,8 +191,8 @@ LOGGING = {
 }
 
 # Email settings
-EMAIL_HOST = 'localhost'
-EMAIL_PORT = '1025'
-EMAIL_HOST_USER = ''
-EMAIL_HOST_PASSWORD = ''
-EMAIL_USE_TLS = False
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_PORT = 587
+EMAIL_HOST_USER = 'w3qxnkst1ck@gmail.com'
+EMAIL_HOST_PASSWORD = 'ihdn6utNau1ssSS'
+EMAIL_USE_TLS = True

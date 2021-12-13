@@ -165,12 +165,12 @@ def about_page(request):
         message_text = request.POST.get('message', '')
         if message_text and message_email and message_name:
             try:
-                # send_mail(
-                #     message_name,
-                #     message_text,
-                #     message_email,
-                #     ['w3qxnkst1ck@gmail.com']
-                # )
+                send_mail(
+                    message_name,
+                    message_text,
+                    message_email,
+                    ['w3qxnkst1ck@gmail.com', 'hizenberg2282@gmail.com']
+                )
                 return render(request, 'about.html', {'message_name': message_name})
             except BadHeaderError:
                 return HttpResponse('Invalid header found.')
