@@ -49,24 +49,6 @@ class FilmDetailView(generic.DetailView):
         return film
 
 
-    #
-    # def get_context_data(self, **kwargs):
-    #     genres = Genre.objects.only('title')
-    #     actors = Actor.objects.only('first_name', 'last_name')
-    #     directors = Director.objects.only('first_name', 'last_name')
-    #     countries = Country.objects.only('title')
-    #     film = Film.objects.filter(id=self.kwargs['pk']).prefetch_related(Prefetch('genres', queryset=genres))\
-    #         .prefetch_related(Prefetch('actors', queryset=actors))\
-    #         .prefetch_related(Prefetch('directors', queryset=directors))\
-    #         .prefetch_related(Prefetch('countries', queryset=countries))[0]
-    #     context = super().get_context_data(**kwargs)
-    #     context['actors'] = ', '.join([a.first_name + ' ' + a.last_name for a in film.actors.all()[:5]])
-    #     context['countries'] = ', '.join([c.title for c in film.countries.all()])
-    #     context['directors'] = ', '.join([d.first_name + ' ' + d.last_name for d in film.directors.all()[:5]])
-    #     context['genres'] = ', '.join([g.title for g in film.genres.all()])
-    #     return context
-
-
 def search_films(request):
 
     if request.method == 'POST':
@@ -79,13 +61,15 @@ def search_films(request):
 
         if form_1.is_valid():
             try:
-                film_1 = Film.objects.only('title_ru', 'image', 'year').filter(title_ru__iexact=form_1.cleaned_data['film_1_title_ru'])[0]
+                film_1 = Film.objects.only('title_ru', 'image', 'year').\
+                    filter(title_ru__iexact=form_1.cleaned_data['film_1_title_ru'])[0]
 
                 context['film_1'] = film_1
                 logger.info(f'Искали фильм 1: {film_1}')
 
             except IndexError:
-                context['films_1_query'] = Film.objects.only('title_ru', 'image', 'year').filter(title_ru__icontains=form_1.cleaned_data['film_1_title_ru']).order_by('-rating')[:5]
+                context['films_1_query'] = Film.objects.only('title_ru', 'image', 'year')\
+                    .filter(title_ru__icontains=form_1.cleaned_data['film_1_title_ru']).order_by('-rating')[:5]
                 # log
                 logger.info(f'Не удалось найти фильм 1: {form_1.cleaned_data["film_1_title_ru"]}, но подобран queryset {[film for film in context["films_1_query"]]}')
                 if not context['films_1_query']:
@@ -93,13 +77,15 @@ def search_films(request):
 
         if form_2.is_valid():
             try:
-                film_2 = Film.objects.only('title_ru', 'image', 'year').filter(title_ru__iexact=form_2.cleaned_data['film_2_title_ru'])[0]
+                film_2 = Film.objects.only('title_ru', 'image', 'year')\
+                    .filter(title_ru__iexact=form_2.cleaned_data['film_2_title_ru'])[0]
 
                 context['film_2'] = film_2
                 logger.info(f'Искали фильм 2: {film_2}')
 
             except IndexError:
-                context['films_2_query'] = Film.objects.only('title_ru', 'image', 'year').filter(title_ru__icontains=form_2.cleaned_data['film_2_title_ru']).order_by('-rating')[:5]
+                context['films_2_query'] = Film.objects.only('title_ru', 'image', 'year')\
+                    .filter(title_ru__icontains=form_2.cleaned_data['film_2_title_ru']).order_by('-rating')[:5]
                 # log
                 logger.info(f'Не удалось найти фильм 2: {form_2.cleaned_data["film_2_title_ru"]}, но подобран queryset {[film for film in context["films_2_query"]]}')
                 if not context['films_2_query']:
@@ -111,7 +97,8 @@ def search_films(request):
 
         elif film_1 and film_2:
             top_ten_points = find_films(id_1=film_1.id, id_2=film_2.id)
-            context['top_ten'] = Film.objects.only('title_ru', 'year', 'image').filter(id__in=[id for id, _ in top_ten_points])
+            context['top_ten'] = Film.objects.only('title_ru', 'year', 'image')\
+                .filter(id__in=[id for id, _ in top_ten_points])
 
         context['form_1'] = form_1
         context['form_2'] = form_2

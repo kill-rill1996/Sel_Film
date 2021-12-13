@@ -45,24 +45,27 @@ def search_serials(request):
 
         if form_1.is_valid():
             try:
-                film_1 = Serial.objects.get(title_ru__iexact=form_1.cleaned_data['film_1_title_ru'])
+                film_1 = Serial.objects.only('title_ru', 'image', 'start_year', 'end_year').filter(title_ru__iexact=form_1.cleaned_data['film_1_title_ru'])[0]
                 context['film_1'] = film_1
-            except Serial.DoesNotExist:
-                context['films_1_query'] = Serial.objects.filter(title_ru__icontains=form_1.cleaned_data['film_1_title_ru']).order_by('-rating')[:5]
+
+            except IndexError:
+                context['films_1_query'] = Serial.objects.only('title_ru', 'image', 'start_year', 'end_year').filter(title_ru__icontains=form_1.cleaned_data['film_1_title_ru']).order_by('-rating')[:5]
 
         if form_2.is_valid():
             try:
-                film_2 = Serial.objects.get(title_ru__iexact=form_2.cleaned_data['film_2_title_ru'])
+                film_2 = Serial.objects.only('title_ru', 'image', 'start_year', 'end_year').filter(title_ru__iexact=form_2.cleaned_data['film_2_title_ru'])[0]
                 context['film_2'] = film_2
-            except Serial.DoesNotExist:
-                context['films_2_query'] = Serial.objects.filter(title_ru__icontains=form_2.cleaned_data['film_2_title_ru']).order_by('-rating')[:5]
+
+            except IndexError:
+                context['films_2_query'] = Serial.objects.only('title_ru', 'image', 'start_year', 'end_year').filter(title_ru__icontains=form_2.cleaned_data['film_2_title_ru']).order_by('-rating')[:5]
 
         if film_1 and film_2 and film_1 == film_2:
             context['films_duplicate'] = True
 
         elif film_1 and film_2:
             top_ten_points = find_serials(id_1=film_1.id, id_2=film_2.id)
-            context['top_ten'] = [Serial.objects.get(id=id) for id, _ in top_ten_points]
+            context['top_ten'] = Serial.objects.only('title_ru', 'image', 'start_year', 'end_year')\
+                .filter(id__in=[id for id, _ in top_ten_points])
 
         context['form_1'] = form_1
         context['form_2'] = form_2
