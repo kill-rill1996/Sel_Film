@@ -64,13 +64,13 @@ def search_films(request):
 
         if form_1.is_valid():
             try:
-                film_1 = Film.objects.get(title_ru__iexact=form_1.cleaned_data['film_1_title_ru'])
+                film_1 = Film.objects.only('title_ru', 'image', 'year').filter(title_ru__iexact=form_1.cleaned_data['film_1_title_ru'])[0]
 
                 context['film_1'] = film_1
                 logger.info(f'Искали фильм 1: {film_1}')
 
-            except Film.DoesNotExist:
-                context['films_1_query'] = Film.objects.filter(title_ru__icontains=form_1.cleaned_data['film_1_title_ru']).order_by('-rating')[:5]
+            except IndexError:
+                context['films_1_query'] = Film.objects.only('title_ru', 'image', 'year').filter(title_ru__icontains=form_1.cleaned_data['film_1_title_ru']).order_by('-rating')[:5]
                 # log
                 logger.info(f'Не удалось найти фильм 1: {form_1.cleaned_data["film_1_title_ru"]}, но подобран queryset {[film for film in context["films_1_query"]]}')
                 if not context['films_1_query']:
@@ -78,15 +78,15 @@ def search_films(request):
 
         if form_2.is_valid():
             try:
-                film_2 = Film.objects.get(title_ru__iexact=form_2.cleaned_data['film_2_title_ru'])
+                film_2 = Film.objects.only('title_ru', 'image', 'year').filter(title_ru__iexact=form_2.cleaned_data['film_2_title_ru'])[0]
 
                 context['film_2'] = film_2
                 logger.info(f'Искали фильм 2: {film_2}')
 
-            except Film.DoesNotExist:
-                context['films_2_query'] = Film.objects.filter(title_ru__icontains=form_2.cleaned_data['film_2_title_ru']).order_by('-rating')[:5]
+            except IndexError:
+                context['films_2_query'] = Film.objects.only('title_ru', 'image', 'year').filter(title_ru__icontains=form_2.cleaned_data['film_2_title_ru']).order_by('-rating')[:5]
                 # log
-                logger.info(f'Не удалось найти фильм 2: {form_2.cleaned_data["film_2_title_ru"]}, но подобран queryset {context["films_2_query"]}')
+                logger.info(f'Не удалось найти фильм 2: {form_2.cleaned_data["film_2_title_ru"]}, но подобран queryset {[film for film in context["films_2_query"]]}')
                 if not context['films_2_query']:
                     logger.warning(f'Не найдет film и queryset по запросу фильма 2: {form_2.cleaned_data["film_2_title_ru"]}')
 
@@ -96,7 +96,7 @@ def search_films(request):
 
         elif film_1 and film_2:
             top_ten_points = find_films(id_1=film_1.id, id_2=film_2.id)
-            context['top_ten'] = [Film.objects.get(id=id) for id, _ in top_ten_points]
+            context['top_ten'] = Film.objects.filter(id__in=[id for id, _ in top_ten_points])
 
         context['form_1'] = form_1
         context['form_2'] = form_2
