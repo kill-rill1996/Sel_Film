@@ -1,4 +1,6 @@
+from django.core.mail import send_mail, BadHeaderError
 from django.db.models import Prefetch
+from django.http import HttpResponse
 from django.shortcuts import render
 from django.views import generic
 from string import ascii_lowercase
@@ -141,3 +143,23 @@ def search(request):
         return render(request, 'search_results.html', context)
     else:
         return render(request, 'search_results.html')
+
+
+def about_page(request):
+    if request.method == 'POST':
+        message_name = request.POST.get('name', '')
+        message_email = request.POST.get('email', '')
+        message_text = request.POST.get('message', '')
+        if message_text and message_email and message_name:
+            try:
+                # send_mail(
+                #     message_name,
+                #     message_text,
+                #     message_email,
+                #     ['w3qxnkst1ck@gmail.com']
+                # )
+                return render(request, 'about.html', {'message_name': message_name})
+            except BadHeaderError:
+                return HttpResponse('Invalid header found.')
+    else:
+        return render(request, 'about.html')

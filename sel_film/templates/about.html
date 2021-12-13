@@ -1,0 +1,44 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<section class="text-gray-600 body-font relative">
+  <div class="container px-5 py-10 mx-auto flex sm:flex-nowrap flex-wrap">
+    	{% if message_name %}
+    	<div class="p-8 sm:p-0 md:w-1/2 flex flex-col items-start">
+    		<h2 class="sm:text-3xl text-2xl title-font font-medium text-gray-900 mt-4 mb-4">Спасибо за ваше сообщение, {{ message_name }}!</h2>
+	  		<p class="leading-relaxed mb-8">Мы вам обязательно ответим в ближайшее время.</p>
+	  	</div>
+    	{% else %}
+ 	<div class="p-8 sm:p-12 md:w-1/2 flex flex-col items-start">
+	  <span class="inline-block py-1 px-2 rounded bg-indigo-50 text-indigo-500 text-xs font-medium tracking-widest">INSTRUCTION</span>
+	  <h2 class="sm:text-3xl text-2xl title-font font-medium text-gray-900 mt-4 mb-4">Как правильно пользоваться сайтом.</h2>
+	  <p class="leading-relaxed mb-8">1. Для подбора фильмов (сериалов) необходимо перейти в соответствующую вкладку (подбора фильмов или сериалов), расположенную в верхней панели сайта.</p>
+	  <p class="leading-relaxed mb-8">2. На <a class="text-indigo-500" href="{% url 'search-films' %}">странице подбора фильмов</a> <a class="text-indigo-500" href="{% url 'search-serials' %}">(сериалов)</a> необходимо заполнить два поля ввода полными русскими названиями фильмов. Если один из фильмов будет введен неполностью, ниже будет приведена подборка возможных вариантов. В случае, если один из фильмов введен некорректно, результаты поиска будут отсутствовать совсем. Для уточнения названия фильма можно воспользоваться строкой <a class="text-indigo-500" href="#search">поиска</a>, поддерживающей как русские так и английские названия, расположенной в правой части навигационной панели.</p>
+	  <p class="leading-relaxed mb-8">3. Если оба поля ввода фильма заполнены правильно, то вам будет предложена подборка десяти фильмов, которые вам обязательно понравятся. Всю библиотеку фильмов и сериалов, имеющихся на сайте, можно посмотреть по <a class="text-indigo-500" href="{% url 'film-list' %}">вкладке</a> в навигационной панели.</p>
+	  <p class="leading-relaxed mb-8">4. Если у вас все еще остались вопросы или есть предложения по улучшению работы сайта, вы можете связаться с нами.</p>
+	 </div>
+
+    <div class="p-8 sm:p-0 lg:w-1/3 md:w-1/2 bg-white flex flex-col md:ml-auto w-full md:py-8 mt-8 md:mt-14">
+      <h2 class="text-gray-900 text-lg mb-1 font-medium title-font">Feedback</h2>
+      <p class="leading-relaxed mb-5 text-gray-600">Напишите нам на email, и мы обязательно ответим.</p>
+      <form method="POST" action="{% url 'about-page' %}">
+      	{% csrf_token %}
+	      <div class="relative mb-4">
+	        <label for="name" class="leading-7 text-sm text-gray-600">Имя</label>
+	        <input type="text" id="name" name="name" class="w-full bg-white rounded border border-gray-300 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-200 text-base outline-none text-gray-700 py-1 px-3 leading-8 transition-colors duration-200 ease-in-out">
+	      </div>
+	      <div class="relative mb-4">
+	        <label for="email" class="leading-7 text-sm text-gray-600">Email</label>
+	        <input type="email" id="email" name="email" class="w-full bg-white rounded border border-gray-300 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-200 text-base outline-none text-gray-700 py-1 px-3 leading-8 transition-colors duration-200 ease-in-out">
+	      </div>
+	      <div class="relative mb-4">
+	        <label for="message" class="leading-7 text-sm text-gray-600">Сообщение</label>
+	        <textarea id="message" name="message" class="w-full bg-white rounded border border-gray-300 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-200 h-32 text-base outline-none text-gray-700 py-1 px-3 resize-none leading-6 transition-colors duration-200 ease-in-out"></textarea>
+	      </div>
+	      <button class="text-white bg-indigo-500 border-0 py-2 px-6 focus:outline-none hover:bg-indigo-600 rounded text-lg">Отправить</button>
+      </form>
+    </div>
+    {% endif %}
+  </div>
+</section>
+{% endblock %}
