@@ -3,4 +3,32 @@
 {% block title_1 %}Сериал 1{% endblock title_1 %}
 {% block title_2 %}Сериал 2{% endblock title_2 %}
 
+{% block year_1 %}
+({{ film_1.start_year }}{% if film_1.end_year %} - {{ film_1.end_year }}{% endif %})
+{% endblock year_1 %}
+
+{% block year_2 %}
+({{ film_1.start_year }}{% if film_2.end_year %} - {{ film_2.end_year }}{% endif %})
+{% endblock year_2 %}
+
+{% block year_q1 %}
+({{ film.start_year }}{% if film.end_year %} - {{ film.end_year }}{% endif %})
+{% endblock year_q1 %}
+
+{% block year_q1f2 %}
+({{ film.start_year }}{% if film.end_year %} - {{ film.end_year }}{% endif %})
+{% endblock year_q1f2 %}
+
+{% block year_q2 %}
+({{ film.start_year }}{% if film.end_year %} - {{ film.end_year }}{% endif %})
+{% endblock year_q2 %}
+
+{% block year_q2f1 %}
+({{ film.start_year }}{% if film.end_year %} - {{ film.end_year }}{% endif %})
+{% endblock year_q2f1 %}
+
+{% block year_q1q2 %}
+({{ film.start_year }}{% if film.end_year %} - {{ film.end_year }}{% endif %})
+{% endblock year_q1q2 %}
+
 {% block action_form %}{% url 'search-serials' %}{% endblock action_form %}
