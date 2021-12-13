@@ -65,6 +65,7 @@ def search_films(request):
         if form_1.is_valid():
             try:
                 film_1 = Film.objects.get(title_ru__iexact=form_1.cleaned_data['film_1_title_ru'])
+
                 context['film_1'] = film_1
                 logger.info(f'Искали фильм 1: {film_1}')
 
@@ -78,6 +79,7 @@ def search_films(request):
         if form_2.is_valid():
             try:
                 film_2 = Film.objects.get(title_ru__iexact=form_2.cleaned_data['film_2_title_ru'])
+
                 context['film_2'] = film_2
                 logger.info(f'Искали фильм 2: {film_2}')
 
