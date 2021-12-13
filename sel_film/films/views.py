@@ -35,7 +35,7 @@ class FilmDetailView(generic.DetailView):
     model = Film
     context_object_name = 'film'
 
-    def get_context_data(self, **kwargs):
+    def get_object(self, queryset=None):
         genres = Genre.objects.only('title')
         actors = Actor.objects.only('first_name', 'last_name')
         directors = Director.objects.only('first_name', 'last_name')
@@ -44,12 +44,25 @@ class FilmDetailView(generic.DetailView):
             .prefetch_related(Prefetch('actors', queryset=actors))\
             .prefetch_related(Prefetch('directors', queryset=directors))\
             .prefetch_related(Prefetch('countries', queryset=countries))[0]
-        context = super().get_context_data(**kwargs)
-        context['actors'] = ', '.join([a.first_name + ' ' + a.last_name for a in film.actors.all()[:5]])
-        context['countries'] = ', '.join([c.title for c in film.countries.all()])
-        context['directors'] = ', '.join([d.first_name + ' ' + d.last_name for d in film.directors.all()[:5]])
-        context['genres'] = ', '.join([g.title for g in film.genres.all()])
-        return context
+        return film
+
+
+    #
+    # def get_context_data(self, **kwargs):
+    #     genres = Genre.objects.only('title')
+    #     actors = Actor.objects.only('first_name', 'last_name')
+    #     directors = Director.objects.only('first_name', 'last_name')
+    #     countries = Country.objects.only('title')
+    #     film = Film.objects.filter(id=self.kwargs['pk']).prefetch_related(Prefetch('genres', queryset=genres))\
+    #         .prefetch_related(Prefetch('actors', queryset=actors))\
+    #         .prefetch_related(Prefetch('directors', queryset=directors))\
+    #         .prefetch_related(Prefetch('countries', queryset=countries))[0]
+    #     context = super().get_context_data(**kwargs)
+    #     context['actors'] = ', '.join([a.first_name + ' ' + a.last_name for a in film.actors.all()[:5]])
+    #     context['countries'] = ', '.join([c.title for c in film.countries.all()])
+    #     context['directors'] = ', '.join([d.first_name + ' ' + d.last_name for d in film.directors.all()[:5]])
+    #     context['genres'] = ', '.join([g.title for g in film.genres.all()])
+    #     return context
 
 
 def search_films(request):

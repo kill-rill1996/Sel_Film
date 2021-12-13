@@ -1,7 +1,8 @@
+from django.db.models import Prefetch
 from django.shortcuts import render
 from django.views import generic
 
-from .models import Serial
+from .models import Serial, Genre, Actor, Director, Country
 from films.forms import Film1FindForm, Film2FindForm
 from .service import find_serials
 
@@ -12,21 +13,25 @@ class SerialListView(generic.ListView):
     paginate_by = 6
 
     def get_queryset(self):
-        return Serial.objects.all().order_by('-rating')
+        genres = Genre.objects.only('title')
+        return Serial.objects.only('title_ru', 'title_en', 'image', 'plot', 'start_year', 'end_year').\
+            prefetch_related(Prefetch('genres', queryset=genres)).order_by('-rating')
 
 
 class SerialDetailView(generic.DetailView):
     model = Serial
     context_object_name = 'film'
 
-    def get_context_data(self, **kwargs):
-        serial = Serial.objects.get(id=self.kwargs['pk'])
-        context = super().get_context_data(**kwargs)
-        context['actors'] = ', '.join([a.first_name + ' ' + a.last_name for a in serial.actors.all()[:5]])
-        context['countries'] = ', '.join([c.title for c in serial.countries.all()])
-        context['directors'] = ', '.join([d.first_name + ' ' + d.last_name for d in serial.directors.all()[:5]])
-        context['genres'] = ', '.join([g.title for g in serial.genres.all()])
-        return context
+    def get_object(self, queryset=None):
+        genres = Genre.objects.only('title')
+        actors = Actor.objects.only('first_name', 'last_name')
+        directors = Director.objects.only('first_name', 'last_name')
+        countries = Country.objects.only('title')
+        serial = Serial.objects.filter(id=self.kwargs['pk']).prefetch_related(Prefetch('genres', queryset=genres))\
+            .prefetch_related(Prefetch('actors', queryset=actors))\
+            .prefetch_related(Prefetch('directors', queryset=directors))\
+            .prefetch_related(Prefetch('countries', queryset=countries))[0]
+        return serial
 
 
 def search_serials(request):
