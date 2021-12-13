@@ -96,7 +96,7 @@ def search_films(request):
 
         elif film_1 and film_2:
             top_ten_points = find_films(id_1=film_1.id, id_2=film_2.id)
-            context['top_ten'] = Film.objects.filter(id__in=[id for id, _ in top_ten_points])
+            context['top_ten'] = Film.objects.only('title_ru', 'year', 'image').filter(id__in=[id for id, _ in top_ten_points])
 
         context['form_1'] = form_1
         context['form_2'] = form_2
