@@ -194,5 +194,5 @@ LOGGING = {
 EMAIL_HOST = 'smtp.gmail.com'
 EMAIL_PORT = 587
 EMAIL_HOST_USER = 'w3qxnkst1ck@gmail.com'
-EMAIL_HOST_PASSWORD = 'ihdn6utNau1ssSS'
+EMAIL_HOST_PASSWORD = ''
 EMAIL_USE_TLS = True
