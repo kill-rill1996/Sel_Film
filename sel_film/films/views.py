@@ -11,7 +11,7 @@ from serials.models import Serial
 from .models import Film, Genre, Actor, Director, Country
 from .forms import Film1FindForm, Film2FindForm
 from .service import find_films
-
+from serials.models import Genre as Serial_Genre
 
 logger = logging.getLogger(__name__)
 
@@ -124,17 +124,21 @@ def search(request):
         if model_type == 'Films':
             try:
                 if search_data_lower[0] in ascii_lowercase:
-                    films_list = Film.objects.filter(title_en__icontains=search_data_lower).order_by('-rating')[:20]
+                    films_list = Film.objects.only('title_ru', 'title_en', 'year', 'plot', 'image')\
+                        .filter(title_en__icontains=search_data_lower).prefetch_related(Prefetch('genres', queryset=Genre.objects.all())).order_by('-rating')[:20]
                 else:
-                    films_list = Film.objects.filter(title_ru__icontains=search_data_lower).order_by('-rating')[:20]
+                    films_list = Film.objects.only('title_ru', 'title_en', 'year', 'plot', 'image')\
+                        .filter(title_ru__icontains=search_data_lower).prefetch_related(Prefetch('genres', queryset=Genre.objects.all())).order_by('-rating')[:20]
             except IndexError:
                 films_list = []
         else:
             try:
                 if search_data_lower[0] in ascii_lowercase:
-                    films_list = Serial.objects.filter(title_en__icontains=search_data_lower).order_by('-rating')[:20]
+                    films_list = Serial.objects.only('title_ru', 'title_en', 'start_year', 'end_year', 'plot', 'image')\
+                        .filter(title_en__icontains=search_data_lower).prefetch_related(Prefetch('genres', queryset=Serial_Genre.objects.all())).order_by('-rating')[:20]
                 else:
-                    films_list = Serial.objects.filter(title_ru__icontains=search_data_lower).order_by('-rating')[:20]
+                    films_list = Serial.objects.only('title_ru', 'title_en', 'start_year', 'end_year', 'plot', 'image')\
+                        .filter(title_ru__icontains=search_data_lower).prefetch_related(Prefetch('genres', queryset=Serial_Genre.objects.all())).order_by('-rating')[:20]
             except IndexError:
                 films_list = []
 
