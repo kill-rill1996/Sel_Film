@@ -7,7 +7,7 @@ from string import ascii_lowercase
 from django.views.decorators.cache import cache_page
 import logging
 
-from serials.models import Serial
+from serials.models import Serial, Country as CountrySerial
 from .models import Film, Genre, Actor, Director, Country
 from .forms import Film1FindForm, Film2FindForm
 from .service import find_films
@@ -28,8 +28,10 @@ class FilmListView(generic.ListView):
 
     def get_queryset(self):
         genres = Genre.objects.only('title')
-        films = Film.objects.only('title_ru', 'title_en', 'year', 'image', 'plot')\
-            .prefetch_related(Prefetch('genres', queryset=genres)).order_by('-rating')
+        countries = Country.objects.only('title')
+        films = Film.objects.only('title_ru', 'title_en', 'year', 'image', 'plot').order_by('-rating')\
+            .prefetch_related(Prefetch('genres', queryset=genres))\
+            .prefetch_related(Prefetch('countries', queryset=countries))
         return films
 
 
@@ -125,20 +127,28 @@ def search(request):
             try:
                 if search_data_lower[0] in ascii_lowercase:
                     films_list = Film.objects.only('title_ru', 'title_en', 'year', 'plot', 'image')\
-                        .filter(title_en__icontains=search_data_lower).prefetch_related(Prefetch('genres', queryset=Genre.objects.all())).order_by('-rating')[:20]
+                        .filter(title_en__icontains=search_data_lower)\
+                        .prefetch_related(Prefetch('genres', queryset=Genre.objects.all()))\
+                        .prefetch_related(Prefetch('countries', queryset=Country.objects.all())).order_by('-rating')[:20]
                 else:
                     films_list = Film.objects.only('title_ru', 'title_en', 'year', 'plot', 'image')\
-                        .filter(title_ru__icontains=search_data_lower).prefetch_related(Prefetch('genres', queryset=Genre.objects.all())).order_by('-rating')[:20]
+                        .filter(title_ru__icontains=search_data_lower)\
+                        .prefetch_related(Prefetch('genres', queryset=Genre.objects.all()))\
+                        .prefetch_related(Prefetch('countries', queryset=Country.objects.all())).order_by('-rating')[:20]
             except IndexError:
                 films_list = []
         else:
             try:
                 if search_data_lower[0] in ascii_lowercase:
                     films_list = Serial.objects.only('title_ru', 'title_en', 'start_year', 'end_year', 'plot', 'image')\
-                        .filter(title_en__icontains=search_data_lower).prefetch_related(Prefetch('genres', queryset=Serial_Genre.objects.all())).order_by('-rating')[:20]
+                        .filter(title_en__icontains=search_data_lower)\
+                        .prefetch_related(Prefetch('genres', queryset=Serial_Genre.objects.all()))\
+                        .prefetch_related(Prefetch('countries', queryset=CountrySerial.objects.all())).order_by('-rating')[:20]
                 else:
                     films_list = Serial.objects.only('title_ru', 'title_en', 'start_year', 'end_year', 'plot', 'image')\
-                        .filter(title_ru__icontains=search_data_lower).prefetch_related(Prefetch('genres', queryset=Serial_Genre.objects.all())).order_by('-rating')[:20]
+                        .filter(title_ru__icontains=search_data_lower)\
+                        .prefetch_related(Prefetch('genres', queryset=Serial_Genre.objects.all()))\
+                        .prefetch_related(Prefetch('countries', queryset=CountrySerial.objects.all())).order_by('-rating')[:20]
             except IndexError:
                 films_list = []
 

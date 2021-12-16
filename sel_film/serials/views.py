@@ -14,8 +14,10 @@ class SerialListView(generic.ListView):
 
     def get_queryset(self):
         genres = Genre.objects.only('title')
+        countries = Country.objects.only('title')
         return Serial.objects.only('title_ru', 'title_en', 'image', 'plot', 'start_year', 'end_year').\
-            prefetch_related(Prefetch('genres', queryset=genres)).order_by('-rating')
+            prefetch_related(Prefetch('genres', queryset=genres)).order_by('-rating') \
+            .prefetch_related(Prefetch('countries', queryset=countries))
 
 
 class SerialDetailView(generic.DetailView):

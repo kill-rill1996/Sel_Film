@@ -11,7 +11,7 @@ class Command(BaseCommand):
     def handle(self, *args, **kwargs):
         serials = self.get_all_serials_from_json()
 
-        for serial in serials[:50]:
+        for serial in serials[:1_000]:
             f = Serial.objects.create(
                 title_ru=serial['title_ru'],
                 title_en=serial['title_en'],
