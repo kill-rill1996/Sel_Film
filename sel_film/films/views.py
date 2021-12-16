@@ -93,7 +93,6 @@ def search_films(request):
                     logger.warning(f'Не найдет фильм и queryset по запросу фильма 2: \"{form_2.cleaned_data["film_2_title_ru"]}\"')
 
         if film_1 and film_2 and film_1 == film_2:
-            logger.info('В подборку включены два одиннаковых фильма')
             context['films_duplicate'] = True
             logger.info(f'Введены одиннаковые фильмы: "{film_1}" и "{film_2}"')
 
