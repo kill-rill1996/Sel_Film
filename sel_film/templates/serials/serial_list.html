@@ -3,4 +3,8 @@
 
 {% block title %} Serials {% endblock %}
 
-{% block year %}{{ film.start_year }}{% if film.end_year %} - {{ film.end_year }}{% endif %}{% endblock year %}
+{% block year %}
+    {{ film.start_year }}{% if film.end_year and film.end_year != film.start_year%} - {{ film.end_year }}{% endif %}
+
+
+{% endblock year %}

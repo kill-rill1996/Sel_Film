@@ -6,7 +6,7 @@
 {% block title %} {{ film.title_ru|capfirst }} {% if film.title_en %}/ {{ film.title_en }} {% endif %} {% endblock %}
 
 {% block obj_info %}
-<p class="text-base"><b>Год выпуска:</b> {{ film.start_year }}{% if film.end_year %} - {{ film.end_year }} (сериал закончился){% endif %}</p>
+<p class="text-base"><b>Год выпуска:</b> {{ film.start_year }}{% if film.end_year and film.end_year != film.start_year%} - {{ film.end_year }}{% endif %} {% if not film.end_status %} - по н.в. {% else %} (сериал закончился){% endif %}</p>
 <p class="text-base"><b>Страна: </b>{{ film.countries.all|object_list }}</p>
 <p class="text-base"><b>Жанр: </b> {{ film.genres.all|object_list }}</p>
 <p class="text-base"><b>Продолжительность серии:</b> {{ film.duration }} минут</p>

@@ -37,7 +37,7 @@
             </a>
             <p class="leading-relaxed text-base"><b>Жанры:</b> {% for genre in film.genres.all|split_genres %}{{ genre }}{% endfor %}</p>
             {% if film.start_year %}
-  	            <p class="leading-relaxed text-base"><b>Год:</b> {{ film.start_year }}{% if film.end_year %} - {{ film.end_year }}{% endif %}</p>
+  	            <p class="leading-relaxed text-base"><b>Год:</b> {{ film.start_year }}{% if film.end_year and film.end_year != film.start_year%} - {{ film.end_year }}{% endif %} {% if not film.end_status %}- по н.в. {% endif %}</p>
   	         {% else %}
             	<p class="leading-relaxed text-base"><b>Год:</b> {{ film.year }}</p>
             {% endif %}
