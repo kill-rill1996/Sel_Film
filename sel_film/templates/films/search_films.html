@@ -90,12 +90,14 @@
                                     <h2 class="tracking-widest text-xs title-font font-medium text-indigo-500 mb-1">РЕЗУЛЬТАТЫ ПОИСКА</h2>
                                     <h1 class="title-font text-lg font-medium text-gray-900 mb-3">Возможно вы имели в виду (Фильм № 1):</h1>
                                     {% for film in films_1_query %}
-                                    <a target="_blank" href="{{ film.get_absolute_url }}" class="inline-flex items-center mb-4">
-                                      <img alt="blog" src="{{ film.image.url }}" class="w-10 h-10 rounded-full flex-shrink-0 object-cover object-center">
-                                      <span class="flex-grow flex flex-col pl-3">
-                                        <span class="title-font font-base text-gray-900">{{ film.title_ru|capfirst }} {% block year_q1 %}({{ film.year }}){% endblock year_q1 %}</span>
-                                      </span>
-                                    </a>
+                                    <div>
+                                      <a target="_blank" href="{{ film.get_absolute_url }}" class="inline-flex items-center mb-4">
+                                        <img alt="blog" src="{{ film.image.url }}" class="w-10 h-10 rounded-full flex-shrink-0 object-cover object-center">
+                                        <span class="flex-grow flex flex-col pl-3">
+                                          <span class="title-font font-base text-gray-900">{{ film.title_ru|capfirst }} {% block year_q1 %}({{ film.year }}){% endblock year_q1 %}</span>
+                                        </span>
+                                      </a>
+                                    </div>
                                     {% endfor %}
                                     <h1 class="title-font text-lg font-medium text-gray-900 mb-3">Фильм № 2 не найден.</h1>
                                   </div>
@@ -112,12 +114,14 @@
                                 <h2 class="tracking-widest text-xs title-font font-medium text-indigo-500 mb-1">РЕЗУЛЬТАТЫ ПОИСКА</h2>
                                 <h1 class="title-font text-lg font-medium text-gray-900 mb-3">Возможно вы имели в виду (Фильм № 1):</h1>
                                 {% for film in films_1_query %}
-                                <a target="_blank" href="{{ film.get_absolute_url }}" class="inline-flex items-center">
-                                  <img alt="blog" src="{{ film.image.url }}" class="w-10 h-10 rounded-full flex-shrink-0 object-cover object-center">
-                                  <span class="flex-grow flex flex-col pl-3">
-                                    <span class="title-font font-base text-gray-900">{{ film.title_ru|capfirst }} {% block year_q1f2 %}({{ film.year }}){% endblock year_q1f2 %}</span>
-                                  </span>
-                                </a>
+                                <div>
+                                  <a target="_blank" href="{{ film.get_absolute_url }}" class="inline-flex items-center">
+                                    <img alt="blog" src="{{ film.image.url }}" class="w-10 h-10 rounded-full flex-shrink-0 object-cover object-center">
+                                    <span class="flex-grow flex flex-col pl-3">
+                                      <span class="title-font font-base text-gray-900">{{ film.title_ru|capfirst }} {% block year_q1f2 %}({{ film.year }}){% endblock year_q1f2 %}</span>
+                                    </span>
+                                  </a>
+                                </div>
                                 {% endfor %}
                               </div>
                             </div>
@@ -134,12 +138,14 @@
                                     <h1 class="title-font text-lg font-medium text-gray-900 mb-4">Фильм № 1 не найден.</h1>
                                     <h1 class="title-font text-lg font-medium text-gray-900 mb-3">Возможно вы имели в виду (Фильм № 2):</h1>
                                     {% for film in films_2_query %}
-                                    <a target="_blank" href="{{ film.get_absolute_url }}" class="inline-flex items-center">
-                                      <img alt="blog" src="{{ film.image.url }}" class="w-10 h-10 rounded-full flex-shrink-0 object-cover object-center">
-                                      <span class="flex-grow flex flex-col pl-3">
-                                        <span class="title-font font-base text-gray-900">{{ film.title_ru|capfirst }} {% block year_q2 %}({{ film.year }}){% endblock year_q2 %}</span>
-                                      </span>
-                                    </a>
+                                    <div>
+                                      <a target="_blank" href="{{ film.get_absolute_url }}" class="inline-flex items-center">
+                                        <img alt="blog" src="{{ film.image.url }}" class="w-10 h-10 rounded-full flex-shrink-0 object-cover object-center">
+                                        <span class="flex-grow flex flex-col pl-3">
+                                          <span class="title-font font-base text-gray-900">{{ film.title_ru|capfirst }} {% block year_q2 %}({{ film.year }}){% endblock year_q2 %}</span>
+                                        </span>
+                                      </a>
+                                    </div>
                                     {% endfor %}
                                   </div>
                                 </div>
@@ -155,12 +161,14 @@
                                     <h2 class="tracking-widest text-xs title-font font-medium text-indigo-500 mb-1">РЕЗУЛЬТАТЫ ПОИСКА</h2>
                                     <h1 class="title-font text-lg font-medium text-gray-900 mb-3">Возможно вы имели в виду (Фильм № 2):</h1>
                                     {% for film in films_2_query %}
-                                    <a target="_blank" href="{{ film.get_absolute_url }}" class="inline-flex items-center">
-                                      <img alt="blog" src="{{ film.image.url }}" class="w-10 h-10 rounded-full flex-shrink-0 object-cover object-center">
-                                      <span class="flex-grow flex flex-col pl-3">
-                                        <span class="title-font font-base text-gray-900">{{ film.title_ru|capfirst }} {% block year_q2f1 %}({{ film.year }}){% endblock year_q2f1 %}</span>
-                                      </span>
-                                    </a>
+                                    <div>
+                                      <a target="_blank" href="{{ film.get_absolute_url }}" class="inline-flex items-center">
+                                        <img alt="blog" src="{{ film.image.url }}" class="w-10 h-10 rounded-full flex-shrink-0 object-cover object-center">
+                                        <span class="flex-grow flex flex-col pl-3">
+                                          <span class="title-font font-base text-gray-900">{{ film.title_ru|capfirst }} {% block year_q2f1 %}({{ film.year }}){% endblock year_q2f1 %}</span>
+                                        </span>
+                                      </a>
+                                    </div>
                                     {% endfor %}
                                   </div>
                                 </div>
@@ -176,21 +184,25 @@
                                     <h2 class="tracking-widest text-xs title-font font-medium text-indigo-500 mb-1">РЕЗУЛЬТАТЫ ПОИСКА</h2>
                                     <h1 class="title-font text-lg font-medium text-gray-900 mb-3">Возможно вы имели в виду (Фильм № 1):</h1>
                                     {% for film in films_1_query %}
-                                    <a target="_blank" href="{{ film.get_absolute_url }}" class="inline-flex items-center">
-                                      <img alt="blog" src="{{ film.image.url }}" class="w-10 h-10 rounded-full flex-shrink-0 object-cover object-center">
-                                      <span class="flex-grow flex flex-col pl-3">
-                                        <span class="title-font font-base text-gray-900">{{ film.title_ru|capfirst }} {% block year_q2q1 %}({{ film.year }}){% endblock year_q2q1 %}</span>
-                                      </span>
-                                    </a>
+                                    <div>
+                                      <a target="_blank" href="{{ film.get_absolute_url }}" class="inline-flex items-center">
+                                        <img alt="blog" src="{{ film.image.url }}" class="w-10 h-10 rounded-full flex-shrink-0 object-cover object-center">
+                                        <span class="flex-grow flex flex-col pl-3">
+                                          <span class="title-font font-base text-gray-900">{{ film.title_ru|capfirst }} {% block year_q2q1 %}({{ film.year }}){% endblock year_q2q1 %}</span>
+                                        </span>
+                                      </a>
+                                    </div>
                                     {% endfor %}
                                     <h1 class="title-font text-lg font-medium text-gray-900 mb-3">Возможно вы имели в виду (Фильм № 2):</h1>
                                     {% for film in films_2_query %}
-                                    <a target="_blank" href="{{ film.get_absolute_url }}" class="inline-flex items-center">
-                                      <img alt="blog" src="{{ film.image.url }}" class="w-10 h-10 rounded-full flex-shrink-0 object-cover object-center">
-                                      <span class="flex-grow flex flex-col pl-3">
-                                        <span class="title-font font-base text-gray-900">{{ film.title_ru|capfirst }} {% block year_q1q2 %}({{ film.year }}){% endblock year_q1q2 %}</span>
-                                      </span>
-                                    </a>
+                                    <div>
+                                      <a target="_blank" href="{{ film.get_absolute_url }}" class="inline-flex items-center">
+                                        <img alt="blog" src="{{ film.image.url }}" class="w-10 h-10 rounded-full flex-shrink-0 object-cover object-center">
+                                        <span class="flex-grow flex flex-col pl-3">
+                                          <span class="title-font font-base text-gray-900">{{ film.title_ru|capfirst }} {% block year_q1q2 %}({{ film.year }}){% endblock year_q1q2 %}</span>
+                                        </span>
+                                      </a>
+                                    </div>
                                     {% endfor %}
                                   </div>
                                 </div>

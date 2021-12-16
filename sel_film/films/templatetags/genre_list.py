@@ -13,3 +13,16 @@ def split_genres(genre_list):
         if genre_titles.index(title) + 1 != len(genre_titles):
             genres.append(title + ', ')
     return genres + [genre_titles.pop()]
+
+
+@register.filter(name='split_countries')
+def split_countries(country_list):
+    countries_titles = [g.title for g in country_list]
+    countries = []
+    if len(countries_titles) > 3:
+        countries_titles = countries_titles[:3]
+    for title in countries_titles:
+        if countries_titles.index(title) + 1 != len(countries_titles):
+            countries.append(title + ', ')
+    return countries + [countries_titles.pop()]
+
