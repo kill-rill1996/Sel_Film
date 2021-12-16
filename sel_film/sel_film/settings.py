@@ -1,6 +1,8 @@
 import os
 from pathlib import Path
 
+from loguru import logger as loguru_logger
+
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -157,39 +159,46 @@ INTERNAL_IPS = [
 # }
 
 # logging
-LOGGING = {
-    'version': 1,
-    'disable_existing_loggers': False,
-    'formatters': {
-        'verbose': {
-            'format': '%(levelname)s %(asctime)s %(filename)s %(funcName)s %(message)s'
-        },
-        'simple': {
-            'format': '%(levelname)s %(asctime)s %(filename)s %(funcName)s %(message)s'
-        },
-    },
-    'handlers': {
-        'file_info': {
-            'level': 'INFO',
-            'class': 'logging.FileHandler',
-            'filename': os.path.join(BASE_DIR, 'logs/films/info.log'),
-            'formatter': 'simple',
-        },
-        'file_warning': {
-            'level': 'WARNING',
-            'class': 'logging.FileHandler',
-            'filename': os.path.join(BASE_DIR, 'logs/films/warning.log'),
-            'formatter': 'verbose',
-        },
-    },
-    'loggers': {
-        'films': {
-            'handlers': ['file_info', 'file_warning'],
-            'level': 'INFO',
-            'propagate': True,
-        },
-    },
-}
+# LOGGING = {
+#     'version': 1,
+#     'disable_existing_loggers': False,
+#     'formatters': {
+#         'verbose': {
+#             'format': '%(levelname)s %(asctime)s %(filename)s %(funcName)s %(message)s'
+#         },
+#         'simple': {
+#             'format': '%(levelname)s %(asctime)s %(filename)s %(funcName)s %(message)s'
+#         },
+#     },
+#     'handlers': {
+#         'file_info': {
+#             'level': 'INFO',
+#             'class': 'logging.FileHandler',
+#             'filename': os.path.join(BASE_DIR, 'logs/films/info.log'),
+#             'formatter': 'simple',
+#         },
+#         'file_warning': {
+#             'level': 'WARNING',
+#             'class': 'logging.FileHandler',
+#             'filename': os.path.join(BASE_DIR, 'logs/films/warning.log'),
+#             'formatter': 'verbose',
+#         },
+#     },
+#     'loggers': {
+#         'films': {
+#             'handlers': ['file_info', 'file_warning'],
+#             'level': 'INFO',
+#             'propagate': True,
+#         },
+#     },
+# }
+
+# Loguru
+# films
+loguru_logger.add(os.path.join(BASE_DIR, 'logs/films/all_logs.log'), format='{level} {time: HH:mm.ss DD.MM.YYYY} {name} ({function}) {message}', level='INFO', filter="films.views")
+loguru_logger.add(os.path.join(BASE_DIR, 'logs/serials/all_logs.log'), format='{level} {time: HH:mm.ss DD.MM.YYYY} {name} ({function}) {message}', level='INFO', filter="serials.views")
+loguru_logger.add(os.path.join(BASE_DIR, 'logs/warning.log'), format='{level} {time: HH:mm.ss DD.MM.YYYY} {name} ({function}) {message}', level='WARNING')
+
 
 # Email settings
 EMAIL_HOST = 'smtp.gmail.com'

@@ -6,14 +6,13 @@ from django.views import generic
 from string import ascii_lowercase
 from django.views.decorators.cache import cache_page
 import logging
+from loguru import logger
 
 from serials.models import Serial, Country as CountrySerial
 from .models import Film, Genre, Actor, Director, Country
 from .forms import Film1FindForm, Film2FindForm
 from .service import find_films
 from serials.models import Genre as Serial_Genre
-
-logger = logging.getLogger(__name__)
 
 
 def index_page(request):
@@ -73,9 +72,9 @@ def search_films(request):
                 context['films_1_query'] = Film.objects.only('title_ru', 'image', 'year')\
                     .filter(title_ru__icontains=form_1.cleaned_data['film_1_title_ru']).order_by('-rating')[:5]
                 # log
-                logger.info(f'Не удалось найти фильм 1: {form_1.cleaned_data["film_1_title_ru"]}, но подобран queryset {[film for film in context["films_1_query"]]}')
+                logger.info(f'Не удалось найти фильм 1: \"{form_1.cleaned_data["film_1_title_ru"]}\", но подобран queryset {[f"{film.id}. {film.title_ru}" for film in context["films_1_query"]]}')
                 if not context['films_1_query']:
-                    logger.warning(f'Не найдет film и queryset по запросу фильма 1: {form_1.cleaned_data["film_1_title_ru"]}')
+                    logger.warning(f'Не найдет фильм и queryset по запросу фильма 1: \"{form_1.cleaned_data["film_1_title_ru"]}\"')
 
         if form_2.is_valid():
             try:
@@ -89,18 +88,21 @@ def search_films(request):
                 context['films_2_query'] = Film.objects.only('title_ru', 'image', 'year')\
                     .filter(title_ru__icontains=form_2.cleaned_data['film_2_title_ru']).order_by('-rating')[:5]
                 # log
-                logger.info(f'Не удалось найти фильм 2: {form_2.cleaned_data["film_2_title_ru"]}, но подобран queryset {[film for film in context["films_2_query"]]}')
+                logger.info(f'Не удалось найти фильм 2: \"{form_2.cleaned_data["film_2_title_ru"]}\", но подобран queryset {[f"{film.id}. {film.title_ru}" for film in context["films_2_query"]]}')
                 if not context['films_2_query']:
-                    logger.warning(f'Не найдет film и queryset по запросу фильма 2: {form_2.cleaned_data["film_2_title_ru"]}')
+                    logger.warning(f'Не найдет фильм и queryset по запросу фильма 2: \"{form_2.cleaned_data["film_2_title_ru"]}\"')
 
         if film_1 and film_2 and film_1 == film_2:
             logger.info('В подборку включены два одиннаковых фильма')
             context['films_duplicate'] = True
+            logger.info(f'Введены одиннаковые фильмы: "{film_1}" и "{film_2}"')
+
 
         elif film_1 and film_2:
             top_ten_points = find_films(id_1=film_1.id, id_2=film_2.id)
             context['top_ten'] = Film.objects.only('title_ru', 'year', 'image')\
                 .filter(id__in=[id for id, _ in top_ten_points])
+            logger.info('Подборка сделана')
 
         context['form_1'] = form_1
         context['form_2'] = form_2
