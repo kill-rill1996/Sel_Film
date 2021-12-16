@@ -195,8 +195,8 @@ INTERNAL_IPS = [
 
 # Loguru
 # films
-loguru_logger.add(os.path.join(BASE_DIR, 'logs/films/all_logs.log'), format='{level} {time: HH:mm.ss DD.MM.YYYY} {name} ({function}) {message}', level='INFO', filter="films.views")
-loguru_logger.add(os.path.join(BASE_DIR, 'logs/serials/all_logs.log'), format='{level} {time: HH:mm.ss DD.MM.YYYY} {name} ({function}) {message}', level='INFO', filter="serials.views")
+loguru_logger.add(os.path.join(BASE_DIR, 'logs/films/logs.log'), format='{level} {time: HH:mm.ss DD.MM.YYYY} {name} ({function}) {message}', level='INFO', filter="films.views")
+loguru_logger.add(os.path.join(BASE_DIR, 'logs/serials/logs.log'), format='{level} {time: HH:mm.ss DD.MM.YYYY} {name} ({function}) {message}', level='INFO', filter="serials.views")
 loguru_logger.add(os.path.join(BASE_DIR, 'logs/warning.log'), format='{level} {time: HH:mm.ss DD.MM.YYYY} {name} ({function}) {message}', level='WARNING')
 
 
