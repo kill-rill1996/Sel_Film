@@ -27,7 +27,7 @@ class FilmListView(generic.ListView):
     def get_queryset(self):
         genres = Genre.objects.only('title')
         countries = Country.objects.only('title')
-        films = Film.objects.only('title_ru', 'title_en', 'year', 'image', 'plot').order_by('-rating')\
+        films = Film.objects.only('title_ru', 'title_en', 'year', 'image', 'plot')\
             .prefetch_related(Prefetch('genres', queryset=genres))\
             .prefetch_related(Prefetch('countries', queryset=countries))
         return films
