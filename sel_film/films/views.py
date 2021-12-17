@@ -4,17 +4,18 @@ from django.http import HttpResponse
 from django.shortcuts import render
 from django.views import generic
 from string import ascii_lowercase
-from django.views.decorators.cache import cache_page
 from loguru import logger
 
 from serials.models import Serial, Country as CountrySerial
 from .models import Film, Genre, Actor, Director, Country
 from .forms import Film1FindForm, Film2FindForm
-from .service import find_films
+from films.services.service import find_films
+from films.services.index_films import read_id_from_log
 from serials.models import Genre as Serial_Genre
 
 
 def index_page(request):
+    read_id_from_log()
     logger.info('Запущена index page')
     return render(request, 'films/index.html')
 
