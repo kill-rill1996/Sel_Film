@@ -5,7 +5,6 @@ from django.shortcuts import render
 from django.views import generic
 from string import ascii_lowercase
 from django.views.decorators.cache import cache_page
-import logging
 from loguru import logger
 
 from serials.models import Serial, Country as CountrySerial
@@ -74,7 +73,7 @@ def search_films(request):
                 # log
                 logger.info(f'Не удалось найти фильм 1: \"{form_1.cleaned_data["film_1_title_ru"]}\", но подобран queryset {[f"{film.id}. {film.title_ru}" for film in context["films_1_query"]]}')
                 if not context['films_1_query']:
-                    logger.warning(f'Не найдет фильм и queryset по запросу фильма 1: \"{form_1.cleaned_data["film_1_title_ru"]}\"')
+                    logger.warning(f'Не найден фильм и queryset по запросу фильма 1: \"{form_1.cleaned_data["film_1_title_ru"]}\"')
 
         if form_2.is_valid():
             try:
@@ -90,7 +89,7 @@ def search_films(request):
                 # log
                 logger.info(f'Не удалось найти фильм 2: \"{form_2.cleaned_data["film_2_title_ru"]}\", но подобран queryset {[f"{film.id}. {film.title_ru}" for film in context["films_2_query"]]}')
                 if not context['films_2_query']:
-                    logger.warning(f'Не найдет фильм и queryset по запросу фильма 2: \"{form_2.cleaned_data["film_2_title_ru"]}\"')
+                    logger.warning(f'Не найден фильм и queryset по запросу фильма 2: \"{form_2.cleaned_data["film_2_title_ru"]}\"')
 
         if film_1 and film_2 and film_1 == film_2:
             context['films_duplicate'] = True
@@ -125,33 +124,59 @@ def search(request):
         model_type = request.POST['currency']
 
         if model_type == 'Films':
+            logger.info(f'Через поиск искали фильм \"{search_data}\"')
             try:
                 if search_data_lower[0] in ascii_lowercase:
                     films_list = Film.objects.only('title_ru', 'title_en', 'year', 'plot', 'image')\
                         .filter(title_en__icontains=search_data_lower)\
                         .prefetch_related(Prefetch('genres', queryset=Genre.objects.all()))\
                         .prefetch_related(Prefetch('countries', queryset=Country.objects.all())).order_by('-rating')[:20]
+                    # log
+                    if films_list:
+                        logger.info(f'Найден список фильмов (англ. запрос): {[f"{film.id}. {film.title_ru}" for film in films_list]}')
+                    else:
+                        logger.warning(f'Фильмы по запросу: \"{search_data}\" не найдены {films_list}')
                 else:
                     films_list = Film.objects.only('title_ru', 'title_en', 'year', 'plot', 'image')\
                         .filter(title_ru__icontains=search_data_lower)\
                         .prefetch_related(Prefetch('genres', queryset=Genre.objects.all()))\
                         .prefetch_related(Prefetch('countries', queryset=Country.objects.all())).order_by('-rating')[:20]
+                    # log
+                    if films_list:
+                        logger.info(f'Найден список фильмов (рус. запрос): {[f"{film.id}. {film.title_ru}" for film in films_list]}')
+                    else:
+                        logger.warning(f'Фильмы по запросу: \"{search_data}\" не найдены {films_list}')
+
             except IndexError:
                 films_list = []
+                logger.warning(f'Сраблотала IndexError при поиске фильмов')
         else:
+            logger.info(f'Через поиск искали сериал \"{search_data}\"')
             try:
                 if search_data_lower[0] in ascii_lowercase:
                     films_list = Serial.objects.only('title_ru', 'title_en', 'start_year', 'end_year', 'plot', 'image')\
                         .filter(title_en__icontains=search_data_lower)\
                         .prefetch_related(Prefetch('genres', queryset=Serial_Genre.objects.all()))\
                         .prefetch_related(Prefetch('countries', queryset=CountrySerial.objects.all())).order_by('-rating')[:20]
+                    # log
+                    if films_list:
+                        logger.info(f'Найден список сериалов (англ. запрос): {[f"{film.id}. {film.title_ru}" for film in films_list]}')
+                    else:
+                        logger.warning(f'Сериалы по запросу: \"{search_data}\" не найдены {films_list}')
                 else:
                     films_list = Serial.objects.only('title_ru', 'title_en', 'start_year', 'end_year', 'plot', 'image')\
                         .filter(title_ru__icontains=search_data_lower)\
                         .prefetch_related(Prefetch('genres', queryset=Serial_Genre.objects.all()))\
                         .prefetch_related(Prefetch('countries', queryset=CountrySerial.objects.all())).order_by('-rating')[:20]
+                    # log
+                    if films_list:
+                        logger.info(f'Найден список сериалов (русс. запрос): {[f"{film.id}. {film.title_ru}" for film in films_list]}')
+                    else:
+                        logger.warning(f'Сериалы по запросу: \"{search_data}\" не найдены {films_list}')
+
             except IndexError:
                 films_list = []
+                logger.warning(f'Сраблотала IndexError при поиске сериалов')
 
         context['films'] = films_list
         context['search_data'] = search_data
@@ -173,8 +198,10 @@ def about_page(request):
                     message_email,
                     ['w3qxnkst1ck@gmail.com', 'hizenberg228@mail.ru', '1996sasha2507@mail.ru']
                 )
+                logger.info(f'Отправлено сообщение от {message_name} {message_email} \"{message_text}\" ')
                 return render(request, 'about.html', {'message_name': message_name})
             except BadHeaderError:
+                logger.error(f'Сообщение от {message_name} {message_email} \"{message_text}\" не отправлено BadHeaderError')
                 return HttpResponse('Invalid header found.')
     else:
         return render(request, 'about.html')
