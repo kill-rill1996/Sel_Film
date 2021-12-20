@@ -1,4 +1,5 @@
 from django.http import HttpResponse
+from django.shortcuts import render
 from loguru import logger
 
 
@@ -13,6 +14,7 @@ class ErrorLogMiddleware:
     # TO DO: page for exceptions
     def process_exception(self, request, exception):
         logger.error(f'Error middleware: {exception}')
-        return HttpResponse('<h1>Что-то пошло не так...</h1>')
+        return HttpResponse('Что-то пошло не так')
+
 
 

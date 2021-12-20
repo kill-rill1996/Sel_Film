@@ -164,6 +164,7 @@ INTERNAL_IPS = [
 # Loguru
 from datetime import timedelta
 td = timedelta(10)
+
 def search_only(record):
     return record['function'] == 'search'
 
