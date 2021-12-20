@@ -14,11 +14,6 @@ class ErrorLogMiddleware:
     # TO DO: page for exceptions
     def process_exception(self, request, exception):
         logger.error(f'Error middleware: {exception}')
-<<<<<<< HEAD
-        return HttpResponse('Что-то пошло не так')
-
-=======
         return render(request, 'error_page/index.html')
->>>>>>> 693321860bf81158170e8bcc27abacfeb302c396
 
 
