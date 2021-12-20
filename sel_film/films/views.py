@@ -51,7 +51,6 @@ class FilmDetailView(generic.DetailView):
 
 
 def search_films(request):
-
     if request.method == 'POST':
         context = {}
         form_1 = Film1FindForm(request.POST)

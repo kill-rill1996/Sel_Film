@@ -49,6 +49,9 @@ MIDDLEWARE = [
     # debug_toolbar
     "debug_toolbar.middleware.DebugToolbarMiddleware",
 
+    # error log
+    "sel_film.middleware.ErrorLogMiddleware",
+
 ]
 
 ROOT_URLCONF = 'sel_film.urls'
@@ -156,41 +159,6 @@ INTERNAL_IPS = [
 #             'MAX_ENTRIES': 1000
 #         }
 #     }
-# }
-
-# logging
-# LOGGING = {
-#     'version': 1,
-#     'disable_existing_loggers': False,
-#     'formatters': {
-#         'verbose': {
-#             'format': '%(levelname)s %(asctime)s %(filename)s %(funcName)s %(message)s'
-#         },
-#         'simple': {
-#             'format': '%(levelname)s %(asctime)s %(filename)s %(funcName)s %(message)s'
-#         },
-#     },
-#     'handlers': {
-#         'file_info': {
-#             'level': 'INFO',
-#             'class': 'logging.FileHandler',
-#             'filename': os.path.join(BASE_DIR, 'logs/films/info.log'),
-#             'formatter': 'simple',
-#         },
-#         'file_warning': {
-#             'level': 'WARNING',
-#             'class': 'logging.FileHandler',
-#             'filename': os.path.join(BASE_DIR, 'logs/films/warning.log'),
-#             'formatter': 'verbose',
-#         },
-#     },
-#     'loggers': {
-#         'films': {
-#             'handlers': ['file_info', 'file_warning'],
-#             'level': 'INFO',
-#             'propagate': True,
-#         },
-#     },
 # }
 
 # Loguru
