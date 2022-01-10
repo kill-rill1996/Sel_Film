@@ -1,5 +1,6 @@
 import datetime as dt
 
+
 def read_id_from_log():
     log_id = {}
 
@@ -18,6 +19,7 @@ def is_it_time():
     now = dt.datetime.now()
     if now.timetuple()[3:7] == (10, 00, 00, 0):
         return True
+
 
 def count_of_films(log):
     pass

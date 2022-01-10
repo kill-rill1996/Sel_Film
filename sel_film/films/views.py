@@ -16,8 +16,10 @@ from serials.models import Genre as Serial_Genre
 
 def index_page(request):
     read_id_from_log()
+    ten_films = Film.objects.all()[:6]
+    ten_serials = Serial.objects.all()[:18]
     logger.info('Запущена index page')
-    return render(request, 'films/index.html')
+    return render(request, 'index2.html', context={'ten_films': ten_films, 'ten_serials': ten_serials})
 
 
 class FilmListView(generic.ListView):
@@ -51,7 +53,6 @@ class FilmDetailView(generic.DetailView):
 
 
 def search_films(request):
-    a = 1 / 0
     if request.method == 'POST':
         context = {}
         form_1 = Film1FindForm(request.POST)
