@@ -217,3 +217,14 @@ def about_page(request):
                 return HttpResponse('Invalid header found.')
     else:
         return render(request, 'about.html')
+
+
+class CatalogFilmListView(generic.ListView):
+    model = Film
+    context_object_name = 'films'
+    paginate_by = 8
+    template_name = 'catalog2.html'
+
+    def get_queryset(self):
+        films = Film.objects.all()
+        return films
