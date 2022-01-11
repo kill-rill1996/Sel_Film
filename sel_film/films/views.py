@@ -17,9 +17,13 @@ from serials.models import Genre as Serial_Genre
 def index_page(request):
     read_id_from_log()
     ten_films = Film.objects.all()[:6]
-    ten_serials = Serial.objects.all()[:18]
+    ten_serials = Serial.objects.all()[:6]
+    header_films = Film.objects.all()[7:14]
     logger.info('Запущена index page')
-    return render(request, 'index2.html', context={'ten_films': ten_films, 'ten_serials': ten_serials})
+    return render(request, 'index.html', context={'ten_films': ten_films,
+                                                  'ten_serials': ten_serials,
+                                                  'header_films': header_films,
+                                                  })
 
 
 class FilmListView(generic.ListView):

@@ -23,3 +23,4 @@ def is_it_time():
 
 def count_of_films(log):
     pass
+
