@@ -32,3 +32,4 @@ def split_countries(country_list):
     else:
         return ''
 
+
