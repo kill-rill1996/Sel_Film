@@ -242,4 +242,5 @@ class CatalogFilmListView(generic.ListView):
         data = super().get_context_data(**kwargs)
         data['genres'] = Genre.objects.all()
         data['countries'] = Country.objects.all()
+        data['recommended_films'] = Film.objects.filter(id__in=(31, 1010, 97, 122, 147, 109))
         return data
