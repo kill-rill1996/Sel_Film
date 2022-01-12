@@ -223,8 +223,14 @@ class CatalogFilmListView(generic.ListView):
     model = Film
     context_object_name = 'films'
     paginate_by = 8
-    template_name = 'catalog2.html'
+    template_name = 'film_list.html'
 
     def get_queryset(self):
         films = Film.objects.all()
         return films
+
+    def get_context_data(self, **kwargs):
+        data = super().get_context_data(**kwargs)
+        data['genres'] = Genre.objects.all()
+        data['countries'] = Country.objects.all()
+        return data
