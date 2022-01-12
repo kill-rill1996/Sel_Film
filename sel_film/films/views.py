@@ -13,16 +13,25 @@ from films.services.service import find_films
 from films.services.index_films import read_id_from_log
 from serials.models import Genre as Serial_Genre
 
+# 31
+# 1010
+# 97
+# 122
+# 147
+# 109
+
 
 def index_page(request):
     read_id_from_log()
     ten_films = Film.objects.all()[:6]
     ten_serials = Serial.objects.all()[:6]
     header_films = Film.objects.all()[7:14]
+    recommended_films = Film.objects.filter(id__in=(31, 1010, 97, 122, 147, 109))
     logger.info('Запущена index page')
     return render(request, 'index.html', context={'ten_films': ten_films,
                                                   'ten_serials': ten_serials,
                                                   'header_films': header_films,
+                                                  'recommended_films': recommended_films,
                                                   })
 
 

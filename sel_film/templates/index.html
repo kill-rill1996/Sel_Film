@@ -28,6 +28,7 @@
 </head>
 <body class="body">
 
+{% block header %}
 <!-- header -->
 <header class="header">
 	<div class="header__wrap">
@@ -36,7 +37,7 @@
 				<div class="col-12">
 					<div class="header__content">
 						<!-- header logo -->
-						<a href="index.html" class="header__logo">
+						<a href="{% url 'index-page' %}" class="header__logo">
 							<img src="{% static 'img/logo.svg' %} " alt="">
 						</a>
 						<!-- end header logo -->
@@ -45,12 +46,12 @@
 						<ul class="header__nav">
 
 							<li class="header__nav-item">
-								<a href="pricing.html" class="header__nav-link">Главная</a>
+								<a href="{% url 'index-page' %}" class="header__nav-link">Главная</a>
 							</li>
 
 
 							<li class="header__nav-item">
-								<a href="pricing.html" class="header__nav-link">Подобрать фильм</a>
+								<a href="{% url 'search-films' %}" class="header__nav-link">Подобрать фильм</a>
 							</li>
 
 							<!-- dropdown -->
@@ -59,13 +60,13 @@
 
 								<ul class="dropdown-menu header__dropdown-menu" aria-labelledby="dropdownMenuCatalog">
 									<li><a href="{% url 'film-list' %}">Список Фильмов</a></li>
-									<li><a href="catalog2.html">Список Сериалов</a></li>
+									<li><a href="{% url 'serial-list' %}">Список Сериалов</a></li>
 								</ul>
 							</li>
 							<!-- end dropdown -->
 
 							<li class="header__nav-item">
-								<a href="faq.html" class="header__nav-link">Help</a>
+								<a href="{% url 'about-page' %}" class="header__nav-link">Help</a>
 							</li>
 
 							<!-- dropdown -->
@@ -144,6 +145,7 @@
 	<!-- end header search -->
 </header>
 <!-- end header -->
+{% endblock header %}
 
 {% block content %}
 <!-- home -->
@@ -273,7 +275,7 @@
 								</a>
 
 								<div class="card__content">
-									<h3 class="card__title"><a href="#">{{ film.title_ru }}</a></h3>
+									<h3 class="card__title"><a href="#">{{ film.title_ru | capfirst }}</a></h3>
 									<span class="card__category">
 										{% for genre in film.genres.all %}
 										<a href="#">{{ genre }}</a>
@@ -314,7 +316,7 @@
 								</a>
 
 								<div class="card__content">
-									<h3 class="card__title"><a href="#">{{ serial.title_ru }}</a></h3>
+									<h3 class="card__title"><a href="#">{{ serial.title_ru | capfirst }}</a></h3>
 									<span class="card__category">
 										{% for genre in serial.genres.all %}
 										<a href="#">{{ genre }}</a>
@@ -341,522 +343,75 @@
 				</div>
 			</div>
 
+			<!-- cartoon -->
 			<div class="tab-pane fade" id="tab-3" role="tabpanel" aria-labelledby="3-tab">
 				<div class="row row--grid">
 					<!-- card -->
-					<div class="col-6 col-sm-4 col-lg-3 col-xl-2">
-						<div class="card">
-							<a href="details1.html" class="card__cover">
-								<img src="img/covers/cover2.jpg" alt="">
-								<span class="card__play">
-									<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M18.54,9,8.88,3.46a3.42,3.42,0,0,0-5.13,3V17.58A3.42,3.42,0,0,0,7.17,21a3.43,3.43,0,0,0,1.71-.46L18.54,15a3.42,3.42,0,0,0,0-5.92Zm-1,4.19L7.88,18.81a1.44,1.44,0,0,1-1.42,0,1.42,1.42,0,0,1-.71-1.23V6.42a1.42,1.42,0,0,1,.71-1.23A1.51,1.51,0,0,1,7.17,5a1.54,1.54,0,0,1,.71.19l9.66,5.58a1.42,1.42,0,0,1,0,2.46Z"/></svg>
-								</span>
-							</a>
-							<div class="card__content">
-								<h3 class="card__title"><a href="#">Benched</a></h3>
-								<span class="card__category">
-									<a href="#">Comedy</a>
-								</span>
-								<span class="card__rate">7.1</span>
-							</div>
-						</div>
-					</div>
-					<!-- end card -->
-
-					<!-- card -->
-					<div class="col-6 col-sm-4 col-lg-3 col-xl-2">
-						<div class="card">
-							<a href="details1.html" class="card__cover">
-								<img src="img/covers/cover3.jpg" alt="">
-								<span class="card__play">
-									<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M18.54,9,8.88,3.46a3.42,3.42,0,0,0-5.13,3V17.58A3.42,3.42,0,0,0,7.17,21a3.43,3.43,0,0,0,1.71-.46L18.54,15a3.42,3.42,0,0,0,0-5.92Zm-1,4.19L7.88,18.81a1.44,1.44,0,0,1-1.42,0,1.42,1.42,0,0,1-.71-1.23V6.42a1.42,1.42,0,0,1,.71-1.23A1.51,1.51,0,0,1,7.17,5a1.54,1.54,0,0,1,.71.19l9.66,5.58a1.42,1.42,0,0,1,0,2.46Z"/></svg>
-								</span>
-							</a>
-							<div class="card__content">
-								<h3 class="card__title"><a href="#">Whitney</a></h3>
-								<span class="card__category">
-									<a href="#">Romance</a>
-									<a href="#">Drama</a>
-									<a href="#">Music</a>
-								</span>
-								<span class="card__rate">6.3</span>
-							</div>
-						</div>
-					</div>
-					<!-- end card -->
-
-					<!-- card -->
-					<div class="col-6 col-sm-4 col-lg-3 col-xl-2">
-						<div class="card">
-							<a href="details1.html" class="card__cover">
-								<img src="img/covers/cover4.jpg" alt="">
-								<span class="card__play">
-									<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M18.54,9,8.88,3.46a3.42,3.42,0,0,0-5.13,3V17.58A3.42,3.42,0,0,0,7.17,21a3.43,3.43,0,0,0,1.71-.46L18.54,15a3.42,3.42,0,0,0,0-5.92Zm-1,4.19L7.88,18.81a1.44,1.44,0,0,1-1.42,0,1.42,1.42,0,0,1-.71-1.23V6.42a1.42,1.42,0,0,1,.71-1.23A1.51,1.51,0,0,1,7.17,5a1.54,1.54,0,0,1,.71.19l9.66,5.58a1.42,1.42,0,0,1,0,2.46Z"/></svg>
-								</span>
-							</a>
-							<div class="card__content">
-								<h3 class="card__title"><a href="#">Blindspotting</a></h3>
-								<span class="card__category">
-									<a href="#">Comedy</a>
-									<a href="#">Drama</a>
-								</span>
-								<span class="card__rate">7.9</span>
-							</div>
-						</div>
-					</div>
-					<!-- end card -->
-
-					<!-- card -->
-					<div class="col-6 col-sm-4 col-lg-3 col-xl-2">
-						<div class="card">
-							<a href="details1.html" class="card__cover">
-								<img src="img/covers/cover5.jpg" alt="">
-								<span class="card__play">
-									<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M18.54,9,8.88,3.46a3.42,3.42,0,0,0-5.13,3V17.58A3.42,3.42,0,0,0,7.17,21a3.43,3.43,0,0,0,1.71-.46L18.54,15a3.42,3.42,0,0,0,0-5.92Zm-1,4.19L7.88,18.81a1.44,1.44,0,0,1-1.42,0,1.42,1.42,0,0,1-.71-1.23V6.42a1.42,1.42,0,0,1,.71-1.23A1.51,1.51,0,0,1,7.17,5a1.54,1.54,0,0,1,.71.19l9.66,5.58a1.42,1.42,0,0,1,0,2.46Z"/></svg>
-								</span>
-							</a>
-							<div class="card__content">
-								<h3 class="card__title"><a href="#">I Dream in Another Language</a></h3>
-								<span class="card__category">
-									<a href="#">Action</a>
-									<a href="#">Triler</a>
-								</span>
-								<span class="card__rate">8.4</span>
-							</div>
-						</div>
-					</div>
-					<!-- end card -->
-
-					<!-- card -->
-					<div class="col-6 col-sm-4 col-lg-3 col-xl-2">
-						<div class="card">
-							<a href="details1.html" class="card__cover">
-								<img src="img/covers/cover6.jpg" alt="">
-								<span class="card__play">
-									<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M18.54,9,8.88,3.46a3.42,3.42,0,0,0-5.13,3V17.58A3.42,3.42,0,0,0,7.17,21a3.43,3.43,0,0,0,1.71-.46L18.54,15a3.42,3.42,0,0,0,0-5.92Zm-1,4.19L7.88,18.81a1.44,1.44,0,0,1-1.42,0,1.42,1.42,0,0,1-.71-1.23V6.42a1.42,1.42,0,0,1,.71-1.23A1.51,1.51,0,0,1,7.17,5a1.54,1.54,0,0,1,.71.19l9.66,5.58a1.42,1.42,0,0,1,0,2.46Z"/></svg>
-								</span>
-							</a>
-							<div class="card__content">
-								<h3 class="card__title"><a href="#">Benched</a></h3>
-								<span class="card__category">
-									<a href="#">Comedy</a>
-								</span>
-								<span class="card__rate">7.1</span>
-							</div>
-						</div>
-					</div>
-					<!-- end card -->
-
-					<!-- card -->
-					<div class="col-6 col-sm-4 col-lg-3 col-xl-2">
-						<div class="card">
-							<a href="details1.html" class="card__cover">
-								<img src="img/covers/cover.jpg" alt="">
-								<span class="card__play">
-									<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M18.54,9,8.88,3.46a3.42,3.42,0,0,0-5.13,3V17.58A3.42,3.42,0,0,0,7.17,21a3.43,3.43,0,0,0,1.71-.46L18.54,15a3.42,3.42,0,0,0,0-5.92Zm-1,4.19L7.88,18.81a1.44,1.44,0,0,1-1.42,0,1.42,1.42,0,0,1-.71-1.23V6.42a1.42,1.42,0,0,1,.71-1.23A1.51,1.51,0,0,1,7.17,5a1.54,1.54,0,0,1,.71.19l9.66,5.58a1.42,1.42,0,0,1,0,2.46Z"/></svg>
-								</span>
-							</a>
-							<div class="card__content">
-								<h3 class="card__title"><a href="#">I Dream in Another Language</a></h3>
-								<span class="card__category">
-									<a href="#">Action</a>
-									<a href="#">Triler</a>
-								</span>
-								<span class="card__rate">8.4</span>
-							</div>
-						</div>
-					</div>
-					<!-- end card -->
-
-					<!-- card -->
-					<div class="col-6 col-sm-4 col-lg-3 col-xl-2">
-						<div class="card">
-							<a href="details1.html" class="card__cover">
-								<img src="img/covers/cover.jpg" alt="">
-								<span class="card__play">
-									<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M18.54,9,8.88,3.46a3.42,3.42,0,0,0-5.13,3V17.58A3.42,3.42,0,0,0,7.17,21a3.43,3.43,0,0,0,1.71-.46L18.54,15a3.42,3.42,0,0,0,0-5.92Zm-1,4.19L7.88,18.81a1.44,1.44,0,0,1-1.42,0,1.42,1.42,0,0,1-.71-1.23V6.42a1.42,1.42,0,0,1,.71-1.23A1.51,1.51,0,0,1,7.17,5a1.54,1.54,0,0,1,.71.19l9.66,5.58a1.42,1.42,0,0,1,0,2.46Z"/></svg>
-								</span>
-							</a>
-							<div class="card__content">
-								<h3 class="card__title"><a href="#">Blindspotting</a></h3>
-								<span class="card__category">
-									<a href="#">Comedy</a>
-									<a href="#">Drama</a>
-								</span>
-								<span class="card__rate">7.9</span>
-							</div>
-						</div>
-					</div>
-					<!-- end card -->
-
-					<!-- card -->
-					<div class="col-6 col-sm-4 col-lg-3 col-xl-2">
-						<div class="card">
-							<a href="details1.html" class="card__cover">
-								<img src="img/covers/cover6.jpg" alt="">
-								<span class="card__play">
-									<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M18.54,9,8.88,3.46a3.42,3.42,0,0,0-5.13,3V17.58A3.42,3.42,0,0,0,7.17,21a3.43,3.43,0,0,0,1.71-.46L18.54,15a3.42,3.42,0,0,0,0-5.92Zm-1,4.19L7.88,18.81a1.44,1.44,0,0,1-1.42,0,1.42,1.42,0,0,1-.71-1.23V6.42a1.42,1.42,0,0,1,.71-1.23A1.51,1.51,0,0,1,7.17,5a1.54,1.54,0,0,1,.71.19l9.66,5.58a1.42,1.42,0,0,1,0,2.46Z"/></svg>
-								</span>
-							</a>
-							<div class="card__content">
-								<h3 class="card__title"><a href="#">Whitney</a></h3>
-								<span class="card__category">
-									<a href="#">Romance</a>
-									<a href="#">Drama</a>
-									<a href="#">Music</a>
-								</span>
-								<span class="card__rate">6.3</span>
-							</div>
-						</div>
-					</div>
-					<!-- end card -->
-
-					<!-- card -->
-					<div class="col-6 col-sm-4 col-lg-3 col-xl-2">
-						<div class="card">
-							<a href="details1.html" class="card__cover">
-								<img src="img/covers/cover5.jpg" alt="">
-								<span class="card__play">
-									<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M18.54,9,8.88,3.46a3.42,3.42,0,0,0-5.13,3V17.58A3.42,3.42,0,0,0,7.17,21a3.43,3.43,0,0,0,1.71-.46L18.54,15a3.42,3.42,0,0,0,0-5.92Zm-1,4.19L7.88,18.81a1.44,1.44,0,0,1-1.42,0,1.42,1.42,0,0,1-.71-1.23V6.42a1.42,1.42,0,0,1,.71-1.23A1.51,1.51,0,0,1,7.17,5a1.54,1.54,0,0,1,.71.19l9.66,5.58a1.42,1.42,0,0,1,0,2.46Z"/></svg>
-								</span>
-							</a>
-							<div class="card__content">
-								<h3 class="card__title"><a href="#">Blindspotting</a></h3>
-								<span class="card__category">
-									<a href="#">Comedy</a>
-									<a href="#">Drama</a>
-								</span>
-								<span class="card__rate">7.9</span>
-							</div>
-						</div>
-					</div>
-					<!-- end card -->
-
-					<!-- card -->
-					<div class="col-6 col-sm-4 col-lg-3 col-xl-2">
-						<div class="card">
-							<a href="details1.html" class="card__cover">
-								<img src="img/covers/cover4.jpg" alt="">
-								<span class="card__play">
-									<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M18.54,9,8.88,3.46a3.42,3.42,0,0,0-5.13,3V17.58A3.42,3.42,0,0,0,7.17,21a3.43,3.43,0,0,0,1.71-.46L18.54,15a3.42,3.42,0,0,0,0-5.92Zm-1,4.19L7.88,18.81a1.44,1.44,0,0,1-1.42,0,1.42,1.42,0,0,1-.71-1.23V6.42a1.42,1.42,0,0,1,.71-1.23A1.51,1.51,0,0,1,7.17,5a1.54,1.54,0,0,1,.71.19l9.66,5.58a1.42,1.42,0,0,1,0,2.46Z"/></svg>
-								</span>
-							</a>
-							<div class="card__content">
-								<h3 class="card__title"><a href="#">I Dream in Another Language</a></h3>
-								<span class="card__category">
-									<a href="#">Action</a>
-									<a href="#">Triler</a>
-								</span>
-								<span class="card__rate">8.4</span>
-							</div>
-						</div>
-					</div>
-					<!-- end card -->
-
-					<!-- card -->
-					<div class="col-6 col-sm-4 col-lg-3 col-xl-2">
-						<div class="card">
-							<a href="details1.html" class="card__cover">
-								<img src="img/covers/cover3.jpg" alt="">
-								<span class="card__play">
-									<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M18.54,9,8.88,3.46a3.42,3.42,0,0,0-5.13,3V17.58A3.42,3.42,0,0,0,7.17,21a3.43,3.43,0,0,0,1.71-.46L18.54,15a3.42,3.42,0,0,0,0-5.92Zm-1,4.19L7.88,18.81a1.44,1.44,0,0,1-1.42,0,1.42,1.42,0,0,1-.71-1.23V6.42a1.42,1.42,0,0,1,.71-1.23A1.51,1.51,0,0,1,7.17,5a1.54,1.54,0,0,1,.71.19l9.66,5.58a1.42,1.42,0,0,1,0,2.46Z"/></svg>
-								</span>
-							</a>
-							<div class="card__content">
-								<h3 class="card__title"><a href="#">Benched</a></h3>
-								<span class="card__category">
-									<a href="#">Comedy</a>
-								</span>
-								<span class="card__rate">7.1</span>
-							</div>
-						</div>
-					</div>
-					<!-- end card -->
-
-					<!-- card -->
-					<div class="col-6 col-sm-4 col-lg-3 col-xl-2">
-						<div class="card">
-							<a href="details1.html" class="card__cover">
-								<img src="img/covers/cover2.jpg" alt="">
-								<span class="card__play">
-									<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M18.54,9,8.88,3.46a3.42,3.42,0,0,0-5.13,3V17.58A3.42,3.42,0,0,0,7.17,21a3.43,3.43,0,0,0,1.71-.46L18.54,15a3.42,3.42,0,0,0,0-5.92Zm-1,4.19L7.88,18.81a1.44,1.44,0,0,1-1.42,0,1.42,1.42,0,0,1-.71-1.23V6.42a1.42,1.42,0,0,1,.71-1.23A1.51,1.51,0,0,1,7.17,5a1.54,1.54,0,0,1,.71.19l9.66,5.58a1.42,1.42,0,0,1,0,2.46Z"/></svg>
-								</span>
-							</a>
-							<div class="card__content">
-								<h3 class="card__title"><a href="#">Whitney</a></h3>
-								<span class="card__category">
-									<a href="#">Romance</a>
-									<a href="#">Drama</a>
-									<a href="#">Music</a>
-								</span>
-								<span class="card__rate">6.3</span>
-							</div>
-						</div>
-					</div>
 					<!-- end card -->
 				</div>
 			</div>
+			<!-- end cartoon -->
 
+			<!-- anime -->
 			<div class="tab-pane fade" id="tab-4" role="tabpanel" aria-labelledby="4-tab">
 				<div class="row row--grid">
 					<!-- card -->
-					<div class="col-6 col-sm-4 col-lg-3 col-xl-2">
-						<div class="card">
-							<a href="details1.html" class="card__cover">
-								<img src="img/covers/cover3.jpg" alt="">
-								<span class="card__play">
-									<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M18.54,9,8.88,3.46a3.42,3.42,0,0,0-5.13,3V17.58A3.42,3.42,0,0,0,7.17,21a3.43,3.43,0,0,0,1.71-.46L18.54,15a3.42,3.42,0,0,0,0-5.92Zm-1,4.19L7.88,18.81a1.44,1.44,0,0,1-1.42,0,1.42,1.42,0,0,1-.71-1.23V6.42a1.42,1.42,0,0,1,.71-1.23A1.51,1.51,0,0,1,7.17,5a1.54,1.54,0,0,1,.71.19l9.66,5.58a1.42,1.42,0,0,1,0,2.46Z"/></svg>
-								</span>
-							</a>
-							<div class="card__content">
-								<h3 class="card__title"><a href="#">Whitney</a></h3>
-								<span class="card__category">
-									<a href="#">Romance</a>
-									<a href="#">Drama</a>
-									<a href="#">Music</a>
-								</span>
-								<span class="card__rate">6.3</span>
-							</div>
-						</div>
-					</div>
-					<!-- end card -->
-
-					<!-- card -->
-					<div class="col-6 col-sm-4 col-lg-3 col-xl-2">
-						<div class="card">
-							<a href="details1.html" class="card__cover">
-								<img src="img/covers/cover4.jpg" alt="">
-								<span class="card__play">
-									<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M18.54,9,8.88,3.46a3.42,3.42,0,0,0-5.13,3V17.58A3.42,3.42,0,0,0,7.17,21a3.43,3.43,0,0,0,1.71-.46L18.54,15a3.42,3.42,0,0,0,0-5.92Zm-1,4.19L7.88,18.81a1.44,1.44,0,0,1-1.42,0,1.42,1.42,0,0,1-.71-1.23V6.42a1.42,1.42,0,0,1,.71-1.23A1.51,1.51,0,0,1,7.17,5a1.54,1.54,0,0,1,.71.19l9.66,5.58a1.42,1.42,0,0,1,0,2.46Z"/></svg>
-								</span>
-							</a>
-							<div class="card__content">
-								<h3 class="card__title"><a href="#">Blindspotting</a></h3>
-								<span class="card__category">
-									<a href="#">Comedy</a>
-									<a href="#">Drama</a>
-								</span>
-								<span class="card__rate">7.9</span>
-							</div>
-						</div>
-					</div>
-					<!-- end card -->
-
-					<!-- card -->
-					<div class="col-6 col-sm-4 col-lg-3 col-xl-2">
-						<div class="card">
-							<a href="details1.html" class="card__cover">
-								<img src="img/covers/cover5.jpg" alt="">
-								<span class="card__play">
-									<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M18.54,9,8.88,3.46a3.42,3.42,0,0,0-5.13,3V17.58A3.42,3.42,0,0,0,7.17,21a3.43,3.43,0,0,0,1.71-.46L18.54,15a3.42,3.42,0,0,0,0-5.92Zm-1,4.19L7.88,18.81a1.44,1.44,0,0,1-1.42,0,1.42,1.42,0,0,1-.71-1.23V6.42a1.42,1.42,0,0,1,.71-1.23A1.51,1.51,0,0,1,7.17,5a1.54,1.54,0,0,1,.71.19l9.66,5.58a1.42,1.42,0,0,1,0,2.46Z"/></svg>
-								</span>
-							</a>
-							<div class="card__content">
-								<h3 class="card__title"><a href="#">I Dream in Another Language</a></h3>
-								<span class="card__category">
-									<a href="#">Action</a>
-									<a href="#">Triler</a>
-								</span>
-								<span class="card__rate">8.4</span>
-							</div>
-						</div>
-					</div>
-					<!-- end card -->
-
-					<!-- card -->
-					<div class="col-6 col-sm-4 col-lg-3 col-xl-2">
-						<div class="card">
-							<a href="details1.html" class="card__cover">
-								<img src="img/covers/cover6.jpg" alt="">
-								<span class="card__play">
-									<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M18.54,9,8.88,3.46a3.42,3.42,0,0,0-5.13,3V17.58A3.42,3.42,0,0,0,7.17,21a3.43,3.43,0,0,0,1.71-.46L18.54,15a3.42,3.42,0,0,0,0-5.92Zm-1,4.19L7.88,18.81a1.44,1.44,0,0,1-1.42,0,1.42,1.42,0,0,1-.71-1.23V6.42a1.42,1.42,0,0,1,.71-1.23A1.51,1.51,0,0,1,7.17,5a1.54,1.54,0,0,1,.71.19l9.66,5.58a1.42,1.42,0,0,1,0,2.46Z"/></svg>
-								</span>
-							</a>
-							<div class="card__content">
-								<h3 class="card__title"><a href="#">Benched</a></h3>
-								<span class="card__category">
-									<a href="#">Comedy</a>
-								</span>
-								<span class="card__rate">7.1</span>
-							</div>
-						</div>
-					</div>
-					<!-- end card -->
-
-					<!-- card -->
-					<div class="col-6 col-sm-4 col-lg-3 col-xl-2">
-						<div class="card">
-							<a href="details1.html" class="card__cover">
-								<img src="img/covers/cover.jpg" alt="">
-								<span class="card__play">
-									<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M18.54,9,8.88,3.46a3.42,3.42,0,0,0-5.13,3V17.58A3.42,3.42,0,0,0,7.17,21a3.43,3.43,0,0,0,1.71-.46L18.54,15a3.42,3.42,0,0,0,0-5.92Zm-1,4.19L7.88,18.81a1.44,1.44,0,0,1-1.42,0,1.42,1.42,0,0,1-.71-1.23V6.42a1.42,1.42,0,0,1,.71-1.23A1.51,1.51,0,0,1,7.17,5a1.54,1.54,0,0,1,.71.19l9.66,5.58a1.42,1.42,0,0,1,0,2.46Z"/></svg>
-								</span>
-							</a>
-							<div class="card__content">
-								<h3 class="card__title"><a href="#">I Dream in Another Language</a></h3>
-								<span class="card__category">
-									<a href="#">Action</a>
-									<a href="#">Triler</a>
-								</span>
-								<span class="card__rate">8.4</span>
-							</div>
-						</div>
-					</div>
-					<!-- end card -->
-
-					<!-- card -->
-					<div class="col-6 col-sm-4 col-lg-3 col-xl-2">
-						<div class="card">
-							<a href="details1.html" class="card__cover">
-								<img src="img/covers/cover2.jpg" alt="">
-								<span class="card__play">
-									<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M18.54,9,8.88,3.46a3.42,3.42,0,0,0-5.13,3V17.58A3.42,3.42,0,0,0,7.17,21a3.43,3.43,0,0,0,1.71-.46L18.54,15a3.42,3.42,0,0,0,0-5.92Zm-1,4.19L7.88,18.81a1.44,1.44,0,0,1-1.42,0,1.42,1.42,0,0,1-.71-1.23V6.42a1.42,1.42,0,0,1,.71-1.23A1.51,1.51,0,0,1,7.17,5a1.54,1.54,0,0,1,.71.19l9.66,5.58a1.42,1.42,0,0,1,0,2.46Z"/></svg>
-								</span>
-							</a>
-							<div class="card__content">
-								<h3 class="card__title"><a href="#">Benched</a></h3>
-								<span class="card__category">
-									<a href="#">Comedy</a>
-								</span>
-								<span class="card__rate">7.1</span>
-							</div>
-						</div>
-					</div>
-					<!-- end card -->
-
-					<!-- card -->
-					<div class="col-6 col-sm-4 col-lg-3 col-xl-2">
-						<div class="card">
-							<a href="details1.html" class="card__cover">
-								<img src="img/covers/cover6.jpg" alt="">
-								<span class="card__play">
-									<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M18.54,9,8.88,3.46a3.42,3.42,0,0,0-5.13,3V17.58A3.42,3.42,0,0,0,7.17,21a3.43,3.43,0,0,0,1.71-.46L18.54,15a3.42,3.42,0,0,0,0-5.92Zm-1,4.19L7.88,18.81a1.44,1.44,0,0,1-1.42,0,1.42,1.42,0,0,1-.71-1.23V6.42a1.42,1.42,0,0,1,.71-1.23A1.51,1.51,0,0,1,7.17,5a1.54,1.54,0,0,1,.71.19l9.66,5.58a1.42,1.42,0,0,1,0,2.46Z"/></svg>
-								</span>
-							</a>
-							<div class="card__content">
-								<h3 class="card__title"><a href="#">Whitney</a></h3>
-								<span class="card__category">
-									<a href="#">Romance</a>
-									<a href="#">Drama</a>
-									<a href="#">Music</a>
-								</span>
-								<span class="card__rate">6.3</span>
-							</div>
-						</div>
-					</div>
-					<!-- end card -->
-
-					<!-- card -->
-					<div class="col-6 col-sm-4 col-lg-3 col-xl-2">
-						<div class="card">
-							<a href="details1.html" class="card__cover">
-								<img src="img/covers/cover5.jpg" alt="">
-								<span class="card__play">
-									<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M18.54,9,8.88,3.46a3.42,3.42,0,0,0-5.13,3V17.58A3.42,3.42,0,0,0,7.17,21a3.43,3.43,0,0,0,1.71-.46L18.54,15a3.42,3.42,0,0,0,0-5.92Zm-1,4.19L7.88,18.81a1.44,1.44,0,0,1-1.42,0,1.42,1.42,0,0,1-.71-1.23V6.42a1.42,1.42,0,0,1,.71-1.23A1.51,1.51,0,0,1,7.17,5a1.54,1.54,0,0,1,.71.19l9.66,5.58a1.42,1.42,0,0,1,0,2.46Z"/></svg>
-								</span>
-							</a>
-							<div class="card__content">
-								<h3 class="card__title"><a href="#">Blindspotting</a></h3>
-								<span class="card__category">
-									<a href="#">Comedy</a>
-									<a href="#">Drama</a>
-								</span>
-								<span class="card__rate">7.9</span>
-							</div>
-						</div>
-					</div>
-					<!-- end card -->
-
-					<!-- card -->
-					<div class="col-6 col-sm-4 col-lg-3 col-xl-2">
-						<div class="card">
-							<a href="details1.html" class="card__cover">
-								<img src="img/covers/cover2.jpg" alt="">
-								<span class="card__play">
-									<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M18.54,9,8.88,3.46a3.42,3.42,0,0,0-5.13,3V17.58A3.42,3.42,0,0,0,7.17,21a3.43,3.43,0,0,0,1.71-.46L18.54,15a3.42,3.42,0,0,0,0-5.92Zm-1,4.19L7.88,18.81a1.44,1.44,0,0,1-1.42,0,1.42,1.42,0,0,1-.71-1.23V6.42a1.42,1.42,0,0,1,.71-1.23A1.51,1.51,0,0,1,7.17,5a1.54,1.54,0,0,1,.71.19l9.66,5.58a1.42,1.42,0,0,1,0,2.46Z"/></svg>
-								</span>
-							</a>
-							<div class="card__content">
-								<h3 class="card__title"><a href="#">Whitney</a></h3>
-								<span class="card__category">
-									<a href="#">Romance</a>
-									<a href="#">Drama</a>
-									<a href="#">Music</a>
-								</span>
-								<span class="card__rate">6.3</span>
-							</div>
-						</div>
-					</div>
-					<!-- end card -->
-
-					<!-- card -->
-					<div class="col-6 col-sm-4 col-lg-3 col-xl-2">
-						<div class="card">
-							<a href="details1.html" class="card__cover">
-								<img src="img/covers/cover.jpg" alt="">
-								<span class="card__play">
-									<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M18.54,9,8.88,3.46a3.42,3.42,0,0,0-5.13,3V17.58A3.42,3.42,0,0,0,7.17,21a3.43,3.43,0,0,0,1.71-.46L18.54,15a3.42,3.42,0,0,0,0-5.92Zm-1,4.19L7.88,18.81a1.44,1.44,0,0,1-1.42,0,1.42,1.42,0,0,1-.71-1.23V6.42a1.42,1.42,0,0,1,.71-1.23A1.51,1.51,0,0,1,7.17,5a1.54,1.54,0,0,1,.71.19l9.66,5.58a1.42,1.42,0,0,1,0,2.46Z"/></svg>
-								</span>
-							</a>
-							<div class="card__content">
-								<h3 class="card__title"><a href="#">Blindspotting</a></h3>
-								<span class="card__category">
-									<a href="#">Comedy</a>
-									<a href="#">Drama</a>
-								</span>
-								<span class="card__rate">7.9</span>
-							</div>
-						</div>
-					</div>
-					<!-- end card -->
-
-					<!-- card -->
-					<div class="col-6 col-sm-4 col-lg-3 col-xl-2">
-						<div class="card">
-							<a href="details1.html" class="card__cover">
-								<img src="img/covers/cover4.jpg" alt="">
-								<span class="card__play">
-									<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M18.54,9,8.88,3.46a3.42,3.42,0,0,0-5.13,3V17.58A3.42,3.42,0,0,0,7.17,21a3.43,3.43,0,0,0,1.71-.46L18.54,15a3.42,3.42,0,0,0,0-5.92Zm-1,4.19L7.88,18.81a1.44,1.44,0,0,1-1.42,0,1.42,1.42,0,0,1-.71-1.23V6.42a1.42,1.42,0,0,1,.71-1.23A1.51,1.51,0,0,1,7.17,5a1.54,1.54,0,0,1,.71.19l9.66,5.58a1.42,1.42,0,0,1,0,2.46Z"/></svg>
-								</span>
-							</a>
-							<div class="card__content">
-								<h3 class="card__title"><a href="#">I Dream in Another Language</a></h3>
-								<span class="card__category">
-									<a href="#">Action</a>
-									<a href="#">Triler</a>
-								</span>
-								<span class="card__rate">8.4</span>
-							</div>
-						</div>
-					</div>
-					<!-- end card -->
-
-					<!-- card -->
-					<div class="col-6 col-sm-4 col-lg-3 col-xl-2">
-						<div class="card">
-							<a href="details1.html" class="card__cover">
-								<img src="img/covers/cover3.jpg" alt="">
-								<span class="card__play">
-									<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M18.54,9,8.88,3.46a3.42,3.42,0,0,0-5.13,3V17.58A3.42,3.42,0,0,0,7.17,21a3.43,3.43,0,0,0,1.71-.46L18.54,15a3.42,3.42,0,0,0,0-5.92Zm-1,4.19L7.88,18.81a1.44,1.44,0,0,1-1.42,0,1.42,1.42,0,0,1-.71-1.23V6.42a1.42,1.42,0,0,1,.71-1.23A1.51,1.51,0,0,1,7.17,5a1.54,1.54,0,0,1,.71.19l9.66,5.58a1.42,1.42,0,0,1,0,2.46Z"/></svg>
-								</span>
-							</a>
-							<div class="card__content">
-								<h3 class="card__title"><a href="#">Benched</a></h3>
-								<span class="card__category">
-									<a href="#">Comedy</a>
-								</span>
-								<span class="card__rate">7.1</span>
-							</div>
-						</div>
-					</div>
 					<!-- end card -->
 				</div>
 			</div>
+			<!-- end anime -->
+
 		</div>
 		<!-- end content tabs -->
+
+			<!-- section btn -->
+			<div class="col-12">
+				<a href="#" class="section__btn">Show more</a>
+			</div>
+			<!-- end section btn -->
 	</div>
 </section>
 <!-- end content -->
+
+<!-- recommended_films -->
+<section class="section section--bg" data-bg="{% static 'img/section/section.jpeg' %}">
+	<div class="container">
+		<div class="row">
+			<!-- section title -->
+			<div class="col-12">
+				<h2 class="section__title">Рекомендации от SelFilm</h2>
+			</div>
+			<!-- end section title -->
+		</div>
+
+		<div class="row row--grid">
+			{% for film in recommended_films %}
+			<!-- card -->
+			<div class="col-6 col-sm-4 col-lg-3 col-xl-2">
+				<div class="card">
+					<a href="details1.html" class="card__cover">
+						<img src="{{ film.image.url }}" alt="">
+						<span class="card__play">
+							<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M18.54,9,8.88,3.46a3.42,3.42,0,0,0-5.13,3V17.58A3.42,3.42,0,0,0,7.17,21a3.43,3.43,0,0,0,1.71-.46L18.54,15a3.42,3.42,0,0,0,0-5.92Zm-1,4.19L7.88,18.81a1.44,1.44,0,0,1-1.42,0,1.42,1.42,0,0,1-.71-1.23V6.42a1.42,1.42,0,0,1,.71-1.23A1.51,1.51,0,0,1,7.17,5a1.54,1.54,0,0,1,.71.19l9.66,5.58a1.42,1.42,0,0,1,0,2.46Z"/></svg>
+						</span>
+					</a>
+					<div class="card__content">
+						<h3 class="card__title"><a href="#">{{ film.title_ru|capfirst }}</a></h3>
+						<span class="card__category">
+							{% for genre in film.genres.all %}
+							<a href="#">{{ genre }}</a>
+							{% endfor %}
+						</span>
+						<span class="card__rate">{{ film.rating }}</span>
+					</div>
+				</div>
+			</div>
+			<!-- end card -->
+			{% endfor %}
+		</div>
+	</div>
+</section>
+<!-- end recommended_films -->
 
 <!-- partners -->
 <section class="section">
@@ -923,6 +478,7 @@
 <!-- end partners -->
 {% endblock content %}
 
+{% block footer %}
 <!-- footer -->
 <footer class="footer">
 	<div class="container">
@@ -991,6 +547,7 @@
 	</div>
 </footer>
 <!-- end footer -->
+{% endblock footer %}
 
 <!-- JS -->
 <script src="{% static 'js/jquery-3.6.0.min.js' %}"></script>
