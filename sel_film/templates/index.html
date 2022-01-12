@@ -5,6 +5,8 @@
 	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
 	{% load static %}
+	{% load to_int %}
+
 	<!-- CSS -->
 	<link rel="stylesheet" href="{% static 'css/bootstrap-reboot.min.css' %}">
 	<link rel="stylesheet" href="{% static 'css/bootstrap-grid.min.css' %}">
@@ -287,7 +289,7 @@
 
 										<ul class="card__list">
 											<li>{{ film.year }}</li>
-											<li>16+</li>
+												{% if film.rating|to_int >= 80 %}<li>🌶</li>{% endif %}
 										</ul>
 									</div>
 
@@ -328,7 +330,7 @@
 
 										<ul class="card__list">
 											<li>{{ serial.start_year }}</li>
-											<li>16+</li>
+											{% if film.rating|to_int >= 80 %}<li>🌶</li>{% endif %}
 										</ul>
 									</div>
 
