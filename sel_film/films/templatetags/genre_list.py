@@ -33,3 +33,7 @@ def split_countries(country_list):
         return ''
 
 
+@register.filter(name='get_two_genres')
+def split_genres(genre_list):
+    return genre_list[:2]
+

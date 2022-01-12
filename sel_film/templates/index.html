@@ -6,6 +6,7 @@
 
 	{% load static %}
 	{% load to_int %}
+	{% load genre_list %}
 
 	<!-- CSS -->
 	<link rel="stylesheet" href="{% static 'css/bootstrap-reboot.min.css' %}">
@@ -179,17 +180,17 @@
 					<!-- card -->
 					{% for film in header_films %}
 						<div class="card card--big">
-							<a href="details1.html" class="card__cover">
+							<a href="{{ film.get_absolute_url }}" class="card__cover">
 								<img src="{{ film.image.url }}" alt="">
 								<span class="card__play">
 									<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M18.54,9,8.88,3.46a3.42,3.42,0,0,0-5.13,3V17.58A3.42,3.42,0,0,0,7.17,21a3.43,3.43,0,0,0,1.71-.46L18.54,15a3.42,3.42,0,0,0,0-5.92Zm-1,4.19L7.88,18.81a1.44,1.44,0,0,1-1.42,0,1.42,1.42,0,0,1-.71-1.23V6.42a1.42,1.42,0,0,1,.71-1.23A1.51,1.51,0,0,1,7.17,5a1.54,1.54,0,0,1,.71.19l9.66,5.58a1.42,1.42,0,0,1,0,2.46Z"/></svg>
 								</span>
 							</a>
 							<div class="card__content">
-								<h3 class="card__title"><a href="#">{{ film.title_ru }}</a></h3>
+								<h3 class="card__title"><a href="{{ film.get_absolute_url }}">{{ film.title_ru|capfirst }}</a></h3>
 								<span class="card__category">
-									{% for genre in film.genres.all %}
-										<a href="#">{{ genre }}</a>
+									{% for genre in film.genres.all|get_two_genres %}
+										<a>{{ genre.title }}</a>
 									{% endfor %}
 								</span>
 								<span class="card__rate"> 8.4</span>
@@ -243,13 +244,13 @@
 
 						<div class="content__mobile-tabs-menu dropdown-menu" aria-labelledby="mobile-tabs">
 							<ul class="nav nav-tabs" role="tablist">
-								<li class="nav-item"><a class="nav-link active" id="1-tab" data-toggle="tab" href="#tab-1" role="tab" aria-controls="tab-1" aria-selected="true">NEW RELEASES</a></li>
+								<li class="nav-item"><a class="nav-link active" id="1-tab" data-toggle="tab" href="#tab-1" role="tab" aria-controls="tab-1" aria-selected="true">ФИЛЬМЫ</a></li>
 
-								<li class="nav-item"><a class="nav-link" id="2-tab" data-toggle="tab" href="#tab-2" role="tab" aria-controls="tab-2" aria-selected="false">MOVIES</a></li>
+								<li class="nav-item"><a class="nav-link" id="2-tab" data-toggle="tab" href="#tab-2" role="tab" aria-controls="tab-2" aria-selected="false">СЕРИАЛЫ</a></li>
 
-								<li class="nav-item"><a class="nav-link" id="3-tab" data-toggle="tab" href="#tab-3" role="tab" aria-controls="tab-3" aria-selected="false">TV SERIES</a></li>
+								<li class="nav-item"><a class="nav-link" id="3-tab" data-toggle="tab" href="#tab-3" role="tab" aria-controls="tab-3" aria-selected="false">МУЛЬТФИЛЬМЫ</a></li>
 
-								<li class="nav-item"><a class="nav-link" id="4-tab" data-toggle="tab" href="#tab-4" role="tab" aria-controls="tab-4" aria-selected="false">CARTOONS</a></li>
+								<li class="nav-item"><a class="nav-link" id="4-tab" data-toggle="tab" href="#tab-4" role="tab" aria-controls="tab-4" aria-selected="false">АНИМЭ</a></li>
 							</ul>
 						</div>
 					</div>
@@ -302,6 +303,12 @@
 					{% endfor %}
 					<!-- end card -->
 				</div>
+
+				<!-- section btn -->
+				<div class="col-12">
+					<a href="{% url 'film-list' %}" class="section__btn">Все фильмы</a>
+				</div>
+				<!-- end section btn -->
 			</div>
 
 			<div class="tab-pane fade" id="tab-2" role="tabpanel" aria-labelledby="2-tab">
@@ -343,6 +350,12 @@
 					{% endfor %}
 					<!-- end card -->
 				</div>
+
+				<!-- section btn -->
+				<div class="col-12">
+					<a href="#" class="section__btn">Все сериалы</a>
+				</div>
+				<!-- end section btn -->
 			</div>
 
 			<!-- cartoon -->
@@ -351,6 +364,12 @@
 					<!-- card -->
 					<!-- end card -->
 				</div>
+
+				<!-- section btn -->
+				<div class="col-12">
+					<a href="#" class="section__btn">Все м/фильмы</a>
+				</div>
+				<!-- end section btn -->
 			</div>
 			<!-- end cartoon -->
 
@@ -360,17 +379,18 @@
 					<!-- card -->
 					<!-- end card -->
 				</div>
+
+				<!-- section btn -->
+				<div class="col-12">
+					<a href="#" class="section__btn">Все анимэ</a>
+				</div>
+				<!-- end section btn -->
 			</div>
 			<!-- end anime -->
 
 		</div>
 		<!-- end content tabs -->
 
-			<!-- section btn -->
-			<div class="col-12">
-				<a href="#" class="section__btn">Show more</a>
-			</div>
-			<!-- end section btn -->
 	</div>
 </section>
 <!-- end content -->
@@ -549,18 +569,10 @@
 <!-- end footer -->
 {% endblock footer %}
 
+{% block scripts %}
 <!-- JS -->
-<script src="{% static 'js/jquery-3.6.0.min.js' %}"></script>
-<script src="{% static 'js/bootstrap.bundle.min.js' %}"></script>
-<script src="{% static 'js/owl.carousel.min.js' %}"></script>
-<script src="{% static 'js/jquery.mousewheel.min.js' %}"></script>
-<script src="{% static 'js/jquery.mCustomScrollbar.min.js' %}"></script>
-<script src="{% static 'js/wNumb.js' %}"></script>
-<script src="{% static 'js/nouislider.min.js' %}"></script>
-<script src="{% static 'js/plyr.min.js' %}"></script>
-<script src="{% static 'js/jquery.morelines.min.js' %}"></script>
-<script src="{% static 'js/photoswipe.min.js' %}"></script>
-<script src="{% static 'js/photoswipe-ui-default.min.js' %}"></script>
-<script src="{% static 'js/main.js' %}"></script>
+{% include 'includes/scripts.html' %}
+{% endblock scripts %}
+
 </body>
 </html>
