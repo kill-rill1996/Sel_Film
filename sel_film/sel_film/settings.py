@@ -188,7 +188,7 @@ loguru_logger.add(os.path.join(BASE_DIR, 'logs/films/about_page.log'), format='{
 EMAIL_HOST = 'smtp.gmail.com'
 EMAIL_PORT = 587
 EMAIL_HOST_USER = 'selfilm.devs@gmail.com'
-EMAIL_HOST_PASSWORD = ''
+EMAIL_HOST_PASSWORD = '6wopnL4WRfZcllkl'
 EMAIL_USE_TLS = True
 
 # Sentry monitoring

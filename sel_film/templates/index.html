@@ -69,7 +69,7 @@
 							<!-- end dropdown -->
 
 							<li class="header__nav-item">
-								<a href="{% url 'about-page' %}" class="header__nav-link">Help</a>
+								<a href="{% url 'about-page' %}" class="header__nav-link">FAQ</a>
 							</li>
 
 							<!-- dropdown -->
@@ -79,14 +79,7 @@
 								</a>
 
 								<ul class="dropdown-menu header__dropdown-menu" aria-labelledby="dropdownMenuMore">
-									<li><a href="about.html">About</a></li>
-									<li><a href="profile.html">Profile</a></li>
-									<li><a href="signin.html">Sign In</a></li>
-									<li><a href="signup.html">Sign Up</a></li>
-									<li><a href="forgot.html">Forgot password</a></li>
-									<li><a href="privacy.html">Privacy Policy</a></li>
-									<li><a href="contacts.html">Contacts</a></li>
-									<li><a href="404.html">404 Page</a></li>
+									<li><a href="{% url 'about-page' %}">Contacts</a></li>
 								</ul>
 							</li>
 							<!-- end dropdown -->

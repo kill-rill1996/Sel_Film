@@ -210,22 +210,23 @@ def about_page(request):
     if request.method == 'POST':
         message_name = request.POST.get('name', '')
         message_email = request.POST.get('email', '')
+        message_subject = request.POST.get('subject', '')
         message_text = request.POST.get('message', '')
-        if message_text and message_email and message_name:
+        if message_text and message_email and message_name and message_subject:
             try:
                 send_mail(
                     message_name,
-                    message_text + f'\n\nMessage from: {message_email}',
+                    message_subject + '\n' + message_text + f'\n\nMessage from: {message_email}',
                     message_email,
                     ['w3qxnkst1ck@gmail.com', 'hizenberg228@mail.ru', '1996sasha2507@mail.ru']
                 )
-                logger.info(f'Отправлено сообщение от {message_name} {message_email} \"{message_text}\" ')
-                return render(request, 'about.html', {'message_name': message_name})
+                logger.info(f'Отправлено сообщение от {message_name} {message_email} на тему {message_subject} \"{message_text}\" ')
+                return render(request, 'contacts.html', {'message_name': message_name})
             except BadHeaderError:
-                logger.error(f'Сообщение от {message_name} {message_email} \"{message_text}\" не отправлено BadHeaderError')
+                logger.error(f'Сообщение от {message_name} {message_email} на тему {message_subject} \"{message_text}\" не отправлено BadHeaderError')
                 return HttpResponse('Invalid header found.')
     else:
-        return render(request, 'about.html')
+        return render(request, 'contacts.html')
 
 
 class CatalogFilmListView(generic.ListView):
