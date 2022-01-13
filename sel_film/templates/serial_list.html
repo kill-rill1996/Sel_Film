@@ -12,13 +12,13 @@
 			<div class="col-12">
 				<div class="section__wrap">
 					<!-- section title -->
-					<h1 class="section__title">Список фильмов</h1>
+					<h1 class="section__title">Список сериалов</h1>
 					<!-- end section title -->
 
 					<!-- breadcrumb -->
 					<ul class="breadcrumb">
 						<li class="breadcrumb__item"><a href="{% url 'index-page' %}">Главная</a></li>
-						<li class="breadcrumb__item breadcrumb__item--active">Список фильмов</li>
+						<li class="breadcrumb__item breadcrumb__item--active">Список сериалов</li>
 					</ul>
 					<!-- end breadcrumb -->
 				</div>
@@ -140,10 +140,13 @@
 						</span>
 
 						<div class="card__wrap">
-							<span class="card__rate"> {{ film.rating }}</span>
-
-							<ul class="card__list">
-								<li>{{ film.year }}</li>
+							{% if film.rating %}
+								<span class="card__rate"> {{ film.rating }}</span>
+							{% endif %}
+							<ul class="card__list {% if not film.rating %} ml-0 {% endif %}">
+								{% if film.start_year %}
+									<li>{{ film.start_year }}{% if film.end_year %} - {{ film.end_year }}{% endif %}</li>
+								{% endif %}
 								{% if film.rating|to_int >= 80 %}<li>🌶</li>{% endif %}
 							</ul>
 						</div>
