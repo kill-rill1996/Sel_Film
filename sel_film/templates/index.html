@@ -402,106 +402,60 @@
 <!-- end content -->
 
 <!-- recommended_films -->
-<section class="section section--bg" data-bg="{% static 'img/section/section.jpeg' %}">
-	<div class="container">
-		<div class="row">
-			<!-- section title -->
-			<div class="col-12">
-				<h2 class="section__title">Рекомендации от SelFilm</h2>
-			</div>
-			<!-- end section title -->
-		</div>
-
-		<div class="row row--grid">
-			{% for film in recommended_films %}
-			<!-- card -->
-			<div class="col-6 col-sm-4 col-lg-3 col-xl-2">
-				<div class="card">
-					<a href="{{ film.get_absolute_url }}" class="card__cover">
-						<img src="{{ film.image.url }}" alt="">
-						<span class="card__play">
-							<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M18.54,9,8.88,3.46a3.42,3.42,0,0,0-5.13,3V17.58A3.42,3.42,0,0,0,7.17,21a3.43,3.43,0,0,0,1.71-.46L18.54,15a3.42,3.42,0,0,0,0-5.92Zm-1,4.19L7.88,18.81a1.44,1.44,0,0,1-1.42,0,1.42,1.42,0,0,1-.71-1.23V6.42a1.42,1.42,0,0,1,.71-1.23A1.51,1.51,0,0,1,7.17,5a1.54,1.54,0,0,1,.71.19l9.66,5.58a1.42,1.42,0,0,1,0,2.46Z"/></svg>
-						</span>
-					</a>
-					<div class="card__content">
-						<h3 class="card__title"><a href="{{ film.get_absolute_url }}">{{ film.title_ru|capfirst }}</a></h3>
-						<span class="card__category">
-							<a>{{ film.genres.all|first }}</a>
-						</span>
-						<span class="card__rate">{{ film.rating }}</span>
-					</div>
-				</div>
-			</div>
-			<!-- end card -->
-			{% endfor %}
-		</div>
-	</div>
-</section>
+	{% include 'includes/recommended_films.html' %}
 <!-- end recommended_films -->
 
-<!-- partners -->
+<!-- instruction -->
 <section class="section">
 	<div class="container">
 		<div class="row">
+
 			<!-- section title -->
 			<div class="col-12">
-				<h2 class="section__title">Our Partners</h2>
-
-				<p class="section__text">It is a long <b>established</b> fact that a reader will be distracted by the readable content of a page when looking at its layout. The point of using Lorem Ipsum is that it has a more-or-less normal distribution of letters, as opposed to using.</p>
+				<h2 class="section__title">Подбор фильмов с помощью SelFilm</h2>
+				<p class="section__text">Не можете решить какой фильм посмотреть вечером? В решении этой проблемы поможет сервис подбора фильмов для совместного просмотра от <a href="{% url 'search-films' %}">SelFilm</a>. Ниже представлена краткая инструкция по использованию данного сервиса (если у вас остались вопросы или вы хотите оставить отзыв о работе сайта перейдите по <a href="{% url 'about-page' %}">ссылке</a>).</p>
 			</div>
 			<!-- end section text -->
 
-			<!-- partner -->
-			<div class="col-6 col-sm-4 col-lg-2">
-				<a href="#" class="partner">
-					<img src="img/partners/partner.png" alt="" class="partner__img">
-				</a>
+			<!-- feature -->
+			<div class="col-12 col-md-6 col-lg-4">
+				<div class="feature">
+					<span class="feature__icon">
+						<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M21.41,8.64s0,0,0-.05a10,10,0,0,0-18.78,0s0,0,0,.05a9.86,9.86,0,0,0,0,6.72s0,0,0,.05a10,10,0,0,0,18.78,0s0,0,0-.05a9.86,9.86,0,0,0,0-6.72ZM4.26,14a7.82,7.82,0,0,1,0-4H6.12a16.73,16.73,0,0,0,0,4Zm.82,2h1.4a12.15,12.15,0,0,0,1,2.57A8,8,0,0,1,5.08,16Zm1.4-8H5.08A8,8,0,0,1,7.45,5.43,12.15,12.15,0,0,0,6.48,8ZM11,19.7A6.34,6.34,0,0,1,8.57,16H11ZM11,14H8.14a14.36,14.36,0,0,1,0-4H11Zm0-6H8.57A6.34,6.34,0,0,1,11,4.3Zm7.92,0h-1.4a12.15,12.15,0,0,0-1-2.57A8,8,0,0,1,18.92,8ZM13,4.3A6.34,6.34,0,0,1,15.43,8H13Zm0,15.4V16h2.43A6.34,6.34,0,0,1,13,19.7ZM15.86,14H13V10h2.86a14.36,14.36,0,0,1,0,4Zm.69,4.57a12.15,12.15,0,0,0,1-2.57h1.4A8,8,0,0,1,16.55,18.57ZM19.74,14H17.88A16.16,16.16,0,0,0,18,12a16.28,16.28,0,0,0-.12-2h1.86a7.82,7.82,0,0,1,0,4Z"/></svg>
+					</span>
+					<h3 class="feature__title">Перейти на страницу подбора</h3>
+					<p class="feature__text">Перейдите на вкладку "Подобрать фильм" в шапке страницы, либо по <a href="{% url 'search-films' %}">ссылке</a>.</p>
+				</div>
 			</div>
-			<!-- end partner -->
+			<!-- end feature -->
 
-			<!-- partner -->
-			<div class="col-6 col-sm-4 col-lg-2">
-				<a href="#" class="partner">
-					<img src="img/partners/partner.png" alt="" class="partner__img">
-				</a>
+			<!-- feature -->
+			<div class="col-12 col-md-6 col-lg-4">
+				<div class="feature">
+					<span class="feature__icon">
+						<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19,2H5A3,3,0,0,0,2,5V15a3,3,0,0,0,3,3H7.64l-.58,1a2,2,0,0,0,0,2,2,2,0,0,0,1.75,1h6.46A2,2,0,0,0,17,21a2,2,0,0,0,0-2l-.59-1H19a3,3,0,0,0,3-3V5A3,3,0,0,0,19,2ZM8.77,20,10,18H14l1.2,2ZM20,15a1,1,0,0,1-1,1H5a1,1,0,0,1-1-1V14H20Zm0-3H4V5A1,1,0,0,1,5,4H19a1,1,0,0,1,1,1Z"/></svg>
+					</span>
+					<h3 class="feature__title">Выберите два фильма</h3>
+					<p class="feature__text">Необходимо полностью ввести названия фильмов в строки поиска, либо его часть и затем выбрать фильм из предложенных вариантов.</p>
+				</div>
 			</div>
-			<!-- end partner -->
+			<!-- end feature -->
 
-			<!-- partner -->
-			<div class="col-6 col-sm-4 col-lg-2">
-				<a href="#" class="partner">
-					<img src="img/partners/partner.png" alt="" class="partner__img">
-				</a>
+			<!-- feature -->
+			<div class="col-12 col-md-6 col-lg-4">
+				<div class="feature">
+					<span class="feature__icon">
+						<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M21,2a1,1,0,0,0-1,1V5H18V3a1,1,0,0,0-2,0V4H8V3A1,1,0,0,0,6,3V5H4V3A1,1,0,0,0,2,3V21a1,1,0,0,0,2,0V19H6v2a1,1,0,0,0,2,0V20h8v1a1,1,0,0,0,2,0V19h2v2a1,1,0,0,0,2,0V3A1,1,0,0,0,21,2ZM6,17H4V15H6Zm0-4H4V11H6ZM6,9H4V7H6Zm10,9H8V13h8Zm0-7H8V6h8Zm4,6H18V15h2Zm0-4H18V11h2Zm0-4H18V7h2Z"/></svg>
+					</span>
+					<h3 class="feature__title">Воспользоваться подборкой</h3>
+					<p class="feature__text">После введения двух фильмов в поисковые строки нажмите кнопку "Подобрать". Ниже появится подборка фильмов, которые могут вам понравится.</p>
+				</div>
 			</div>
-			<!-- end partner -->
-
-			<!-- partner -->
-			<div class="col-6 col-sm-4 col-lg-2">
-				<a href="#" class="partner">
-					<img src="img/partners/partner.png" alt="" class="partner__img">
-				</a>
-			</div>
-			<!-- end partner -->
-
-			<!-- partner -->
-			<div class="col-6 col-sm-4 col-lg-2">
-				<a href="#" class="partner">
-					<img src="img/partners/partner.png" alt="" class="partner__img">
-				</a>
-			</div>
-			<!-- end partner -->
-
-			<!-- partner -->
-			<div class="col-6 col-sm-4 col-lg-2">
-				<a href="#" class="partner">
-					<img src="img/partners/partner.png" alt="" class="partner__img">
-				</a>
-			</div>
-			<!-- end partner -->
+			<!-- end feature -->
 		</div>
 	</div>
 </section>
-<!-- end partners -->
+<!-- end instruction -->
 {% endblock content %}
 
 {% block footer %}
