@@ -4,6 +4,7 @@ from django.db.models import Prefetch
 from django.shortcuts import render
 from django.views import generic
 
+from films.models import Film
 from .models import Serial, Genre, Actor, Director, Country
 from films.forms import Film1FindForm, Film2FindForm
 from .service import find_serials
@@ -91,4 +92,22 @@ def search_serials(request):
         form_1 = Film1FindForm()
         form_2 = Film2FindForm()
         return render(request, 'serials/search_serials.html', context={'form_1': form_1, 'form_2': form_2})
+
+
+class CatalogSerialListView(generic.ListView):
+    model = Serial
+    context_object_name = 'films'
+    paginate_by = 8
+    template_name = 'serial_list.html'
+
+    def get_queryset(self):
+        serials = Serial.objects.all()
+        return serials
+
+    def get_context_data(self, **kwargs):
+        data = super().get_context_data(**kwargs)
+        data['genres'] = Genre.objects.all().order_by('title')
+        data['countries'] = Country.objects.all().order_by('title')
+        data['recommended_films'] = Film.objects.filter(id__in=(31, 1010, 97, 122, 147, 109))
+        return data
 
