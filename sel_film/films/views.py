@@ -244,3 +244,9 @@ class CatalogFilmListView(generic.ListView):
         data['countries'] = Country.objects.all().order_by('title')
         data['recommended_films'] = Film.objects.filter(id__in=(31, 1010, 97, 122, 147, 109))
         return data
+
+
+def search_from_filter(request):
+    if request.method == "POST":
+        genre = request.POST.get('data_genre')
+        print(genre)
