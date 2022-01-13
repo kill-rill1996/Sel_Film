@@ -33,6 +33,8 @@
 	<div class="container">
 		<div class="row">
 			<div class="col-12">
+				<form method="post" action="{% url 'search' %}">
+				{% csrf_token %}
 				<div class="filter__content">
 					<div class="filter__items">
 						<!-- filter item -->
@@ -107,9 +109,10 @@
 					</div>
 					
 					<!-- filter btn -->
-					<button class="filter__btn" type="button">применить</button>
+					<button class="filter__btn" type="submit">применить</button>
 					<!-- end filter btn -->
 				</div>
+				</form>
 			</div>
 		</div>
 	</div>
@@ -140,7 +143,11 @@
 						</span>
 
 						<div class="card__wrap">
-							<span class="card__rate"> {{ film.rating }}</span>
+							{% if film.rating %}
+								<span class="card__rate"> {{ film.rating }}</span>
+							{% else %}
+								<span class="card__rate"> -- </span>
+							{% endif %}
 
 							<ul class="card__list">
 								<li>{{ film.year }}</li>
