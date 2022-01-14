@@ -249,5 +249,6 @@ class CatalogFilmListView(generic.ListView):
 
 def search_from_filter(request):
     if request.method == "POST":
-        genre = request.POST.get('data_genre')
-        print(genre)
+        genre = request.POST.get('genre')
+        country = request.POST.get('country')
+        print(genre, country)
