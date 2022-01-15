@@ -1,8 +1,10 @@
-{% extends 'index.html' %}
+{% extends 'base.html' %}
 {% load static %}
 {% load to_int %}
 {% load actor_list %}
 
+
+{% block title %}{{ film.title_ru|capfirst }}{% endblock title %}
 
 {% block content %}
 <!-- details -->
