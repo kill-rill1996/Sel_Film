@@ -186,7 +186,7 @@
 										<a>{{ genre.title }}</a>
 									{% endfor %}
 								</span>
-								<span class="card__rate"> 8.4</span>
+								<span class="card__rate">{{ film.rating }}</span>
 							</div>
 						</div>
 					{% endfor %}
@@ -261,38 +261,7 @@
 				<div class="row row--grid">
 					<!-- card -->
 					{% for film in ten_films %}
-						<div class="col-6 col-sm-12 col-lg-6">
-							<div class="card card--list">
-								<a href="{{ film.get_absolute_url }}" class="card__cover">
-									<img src="{{ film.image.url }}" alt="">
-									<span class="card__play">
-										<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M18.54,9,8.88,3.46a3.42,3.42,0,0,0-5.13,3V17.58A3.42,3.42,0,0,0,7.17,21a3.43,3.43,0,0,0,1.71-.46L18.54,15a3.42,3.42,0,0,0,0-5.92Zm-1,4.19L7.88,18.81a1.44,1.44,0,0,1-1.42,0,1.42,1.42,0,0,1-.71-1.23V6.42a1.42,1.42,0,0,1,.71-1.23A1.51,1.51,0,0,1,7.17,5a1.54,1.54,0,0,1,.71.19l9.66,5.58a1.42,1.42,0,0,1,0,2.46Z"/></svg>
-									</span>
-								</a>
-
-								<div class="card__content">
-									<h3 class="card__title"><a href="{{ film.get_absolute_url }}">{{ film.title_ru | capfirst }}</a></h3>
-									<span class="card__category">
-										{% for genre in film.genres.all %}
-										<a>{{ genre }}</a>
-										{% endfor %}
-									</span>
-
-									<div class="card__wrap">
-										<span class="card__rate"> {{ film.rating }}</span>
-
-										<ul class="card__list">
-											<li>{{ film.year }}</li>
-												{% if film.rating|to_int >= 80 %}<li>🌶</li>{% endif %}
-										</ul>
-									</div>
-
-									<div class="card__description">
-										<p>{{ film.plot }}</p>
-									</div>
-								</div>
-							</div>
-						</div>
+						{% include 'includes/card_film_index_page.html' %}
 					{% endfor %}
 					<!-- end card -->
 				</div>
@@ -307,45 +276,8 @@
 			<div class="tab-pane fade" id="tab-2" role="tabpanel" aria-labelledby="2-tab">
 				<div class="row row--grid">
 					<!-- card -->
-					{% for serial in ten_serials %}
-						<div class="col-6 col-sm-12 col-lg-6">
-							<div class="card card--list">
-								<a href="{{ serial.get_absolute_url }}" class="card__cover">
-									<img src="{{ serial.image.url }}" alt="">
-									<span class="card__play">
-										<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M18.54,9,8.88,3.46a3.42,3.42,0,0,0-5.13,3V17.58A3.42,3.42,0,0,0,7.17,21a3.43,3.43,0,0,0,1.71-.46L18.54,15a3.42,3.42,0,0,0,0-5.92Zm-1,4.19L7.88,18.81a1.44,1.44,0,0,1-1.42,0,1.42,1.42,0,0,1-.71-1.23V6.42a1.42,1.42,0,0,1,.71-1.23A1.51,1.51,0,0,1,7.17,5a1.54,1.54,0,0,1,.71.19l9.66,5.58a1.42,1.42,0,0,1,0,2.46Z"/></svg>
-									</span>
-								</a>
-
-								<div class="card__content">
-									<h3 class="card__title"><a href="{{ serial.get_absolute_url }}">{{ serial.title_ru | capfirst }}</a></h3>
-									<span class="card__category">
-										{% for genre in serial.genres.all %}
-										<a>{{ genre }}</a>
-										{% endfor %}
-									</span>
-
-									<div class="card__wrap">
-										{% if serial.rating %}
-											<span class="card__rate"> {{ serial.rating }}</span>
-										{% else %}
-											<span class="card__rate"> - </span>
-										{% endif %}
-
-										<ul class="card__list">
-											{% if serial.start_year %}
-												<li>{{ serial.start_year }}{% if serial.end_year %} - {{ serial.end_year }}{% endif %}</li>
-											{% endif %}
-											{% if serial.rating|to_int >= 80 %}<li>🌶</li>{% endif %}
-										</ul>
-									</div>
-
-									<div class="card__description">
-										<p>{{ serial.plot }}</p>
-									</div>
-								</div>
-							</div>
-						</div>
+					{% for film in ten_serials %}
+						{% include 'includes/card_film_index_page.html' %}
 					{% endfor %}
 					<!-- end card -->
 				</div>
@@ -361,6 +293,9 @@
 			<div class="tab-pane fade" id="tab-3" role="tabpanel" aria-labelledby="3-tab">
 				<div class="row row--grid">
 					<!-- card -->
+					{% for film in ten_cartoons %}
+						{% include 'includes/card_film_index_page.html' %}
+					{% endfor %}
 					<!-- end card -->
 				</div>
 
@@ -376,6 +311,9 @@
 			<div class="tab-pane fade" id="tab-4" role="tabpanel" aria-labelledby="4-tab">
 				<div class="row row--grid">
 					<!-- card -->
+					{% for film in ten_anime %}
+						{% include 'includes/card_film_index_page.html' %}
+					{% endfor %}
 					<!-- end card -->
 				</div>
 

@@ -26,6 +26,7 @@ class SerialListView(generic.ListView):
 class SerialDetailView(generic.DetailView):
     model = Serial
     context_object_name = 'film'
+    template_name = 'details.html'
 
     def get_object(self, queryset=None):
         genres = Genre.objects.only('title')

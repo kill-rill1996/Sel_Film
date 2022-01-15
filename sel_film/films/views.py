@@ -23,13 +23,17 @@ from serials.models import Genre as Serial_Genre
 
 def index_page(request):
     read_id_from_log()
+    header_films = Film.objects.all()[7:14]
     ten_films = Film.objects.all()[:6]
     ten_serials = Serial.objects.all()[:6]
-    header_films = Film.objects.all()[7:14]
+    ten_anime = Serial.objects.filter(genres__title='аниме')[:6]
+    ten_cartoons = Serial.objects.filter(genres__title='мультсериалы')[:6]
     recommended_films = Film.objects.filter(id__in=(31, 1010, 97, 122, 147, 109))
     logger.info('Запущена index page')
     return render(request, 'index.html', context={'ten_films': ten_films,
                                                   'ten_serials': ten_serials,
+                                                  'ten_anime': ten_anime,
+                                                  'ten_cartoons': ten_cartoons,
                                                   'header_films': header_films,
                                                   'recommended_films': recommended_films,
                                                   })
@@ -52,6 +56,7 @@ class FilmListView(generic.ListView):
 class FilmDetailView(generic.DetailView):
     model = Film
     context_object_name = 'film'
+    template_name = 'details.html'
 
     def get_object(self, queryset=None):
         genres = Genre.objects.only('title')
