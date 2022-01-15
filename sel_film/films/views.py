@@ -70,6 +70,11 @@ class FilmDetailView(generic.DetailView):
             .prefetch_related(Prefetch('countries', queryset=countries))[0]
         return film
 
+    def get_context_data(self, **kwargs):
+        data = super().get_context_data(**kwargs)
+        data['rec_films'] = Film.objects.filter(genres__in=self.object.genres.all()).exclude(id=self.object.id)[:6]
+        return data
+
 
 def search_films(request):
     if request.method == 'POST':

@@ -64,6 +64,8 @@
 								<ul class="dropdown-menu header__dropdown-menu" aria-labelledby="dropdownMenuCatalog">
 									<li><a href="{% url 'film-list' %}">Список Фильмов</a></li>
 									<li><a href="{% url 'serial-list' %}">Список Сериалов</a></li>
+									<li><a href="{% url 'cartoon-list' %}">Список Мульт-ов</a></li>
+									<li><a href="{% url 'anime-list' %}">Список Аниме</a></li>
 								</ul>
 							</li>
 							<!-- end dropdown -->
@@ -301,7 +303,7 @@
 
 				<!-- section btn -->
 				<div class="col-12">
-					<a href="#" class="section__btn">Все м/фильмы</a>
+					<a href="{% url 'cartoon-list' %}" class="section__btn">Все м/фильмы</a>
 				</div>
 				<!-- end section btn -->
 			</div>
@@ -319,7 +321,7 @@
 
 				<!-- section btn -->
 				<div class="col-12">
-					<a href="#" class="section__btn">Все анимэ</a>
+					<a href="{% url 'anime-list' %}" class="section__btn">Все анимэ</a>
 				</div>
 				<!-- end section btn -->
 			</div>

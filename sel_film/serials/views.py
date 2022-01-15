@@ -10,17 +10,50 @@ from films.forms import Film1FindForm, Film2FindForm
 from .service import find_serials
 
 
-class SerialListView(generic.ListView):
+class CatalogSerialListView(generic.ListView):
     model = Serial
     context_object_name = 'films'
-    paginate_by = 6
+    paginate_by = 8
+    template_name = 'serial_list.html'
 
     def get_queryset(self):
-        genres = Genre.objects.only('title')
-        countries = Country.objects.only('title')
-        return Serial.objects.only('title_ru', 'title_en', 'image', 'plot', 'start_year', 'end_year')\
-            .prefetch_related(Prefetch('genres', queryset=genres))\
-            .prefetch_related(Prefetch('countries', queryset=countries))
+        if self.request.path == '/serials/anime/':
+            searched_type = 'аниме'
+        elif self.request.path == '/serials/cartoons/':
+            searched_type = 'мультсериалы'
+        else:
+            searched_type = None
+        if searched_type:
+            return Serial.objects.filter(genres__title=searched_type)
+        return Serial.objects.all()
+
+    def get_context_data(self, **kwargs):
+        data = super().get_context_data(**kwargs)
+
+        data['list_type'] = 'Сериалов'
+        url_path = self.request.path.split('/')[-2]
+        if url_path == 'cartoons':
+            data['list_type'] = 'Мультфильмов'
+        elif url_path == 'anime':
+            data['list_type'] = 'Аниме'
+
+        data['genres'] = Genre.objects.all().order_by('title')
+        data['countries'] = Country.objects.all().order_by('title')
+        data['recommended_films'] = Film.objects.filter(id__in=(31, 1010, 97, 122, 147, 109))
+        return data
+
+
+# class SerialListView(generic.ListView):
+#     model = Serial
+#     context_object_name = 'films'
+#     paginate_by = 6
+#
+#     def get_queryset(self):
+#         genres = Genre.objects.only('title')
+#         countries = Country.objects.only('title')
+#         return Serial.objects.only('title_ru', 'title_en', 'image', 'plot', 'start_year', 'end_year') \
+#             .prefetch_related(Prefetch('genres', queryset=genres))\
+#             .prefetch_related(Prefetch('countries', queryset=countries))
 
 
 class SerialDetailView(generic.DetailView):
@@ -62,7 +95,6 @@ def search_serials(request):
                 if not context['films_1_query']:
                     logger.warning(f'Не найдет сериал и queryset по запросу сериала 1: \"{form_1.cleaned_data["film_1_title_ru"]}\"')
 
-
         if form_2.is_valid():
             try:
                 film_2 = Serial.objects.only('title_ru', 'image', 'start_year', 'end_year').filter(title_ru__iexact=form_2.cleaned_data['film_2_title_ru'])[0]
@@ -94,21 +126,4 @@ def search_serials(request):
         form_2 = Film2FindForm()
         return render(request, 'serials/search_serials.html', context={'form_1': form_1, 'form_2': form_2})
 
-
-class CatalogSerialListView(generic.ListView):
-    model = Serial
-    context_object_name = 'films'
-    paginate_by = 8
-    template_name = 'serial_list.html'
-
-    def get_queryset(self):
-        serials = Serial.objects.all()
-        return serials
-
-    def get_context_data(self, **kwargs):
-        data = super().get_context_data(**kwargs)
-        data['genres'] = Genre.objects.all().order_by('title')
-        data['countries'] = Country.objects.all().order_by('title')
-        data['recommended_films'] = Film.objects.filter(id__in=(31, 1010, 97, 122, 147, 109))
-        return data
 

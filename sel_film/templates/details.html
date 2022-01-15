@@ -1,6 +1,7 @@
 {% extends 'index.html' %}
 {% load static %}
 {% load to_int %}
+{% load actor_list %}
 
 
 {% block content %}
@@ -49,271 +50,39 @@
 							{% for genre in film.genres.all %}
 								<a>{{ genre }}</a>
 							{% endfor %}
-							<li><span>Год выпуска:</span>{{ film.year }}</li>
+
+							<li><span>Год выпуска:</span>{{ film.year }}
+								{% if film.start_year %}
+									{{ film.start_year }}{% if film.end_year %} - {{ film.end_year }}
+								{% endif %}
+							{% endif %}
+							</li>
+
 							{% if film.duration %}
 								<li><span>Продолжительность:</span>{{ film.duration }} мин</li>
 							{% endif %}
 							<li><span>Страна:</span>{% for country in film.countries.all %}<a>{{ country }}</a>{% endfor %}</a></li>
+							<li><span>Режиссер:</span>
+								{% for director in film.directors.all|actor_list %}
+									<a>{{ director }}</a>
+								{% endfor %}
+							</li>
+							<li>
+								<span>Актеры:</span>
+								{% for actor in film.actors.all|actor_list %}
+									<a>{{ actor }}</a>
+								{% endfor %}
+							</li>
 						</ul>
 
 						<div class="card__description card__description--details">
-							It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout. The point of using Lorem Ipsum is that it has a more-or-less normal distribution of letters, as opposed to using 'Content here, content here', making it look like readable English. Many desktop publishing packages and web page editors now use Lorem Ipsum as their default model text, and a search for 'lorem ipsum' will uncover many web sites still in their infancy. It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout. The point of using Lorem Ipsum is that it has a more-or-less normal distribution of letters, as opposed to using 'Content here, content here', making it look like readable English. Many desktop publishing packages and web page editors now use Lorem Ipsum as their default model text, and a search for 'lorem ipsum' will uncover many web sites still in their infancy.
+							{{ film.plot }}
 						</div>
 					</div>
 					<!-- end card content -->
 				</div>
 			</div>
 			<!-- end content -->
-
-			<!-- player -->
-			<div class="col-12 col-lg-6">
-				<video controls crossorigin playsinline poster="https://cdn.plyr.io/static/demo/View_From_A_Blue_Moon_Trailer-HD.jpg" id="player">
-					<!-- Video files -->
-					<source src="https://cdn.plyr.io/static/demo/View_From_A_Blue_Moon_Trailer-576p.mp4" type="video/mp4" size="576">
-					<source src="https://cdn.plyr.io/static/demo/View_From_A_Blue_Moon_Trailer-720p.mp4" type="video/mp4" size="720">
-					<source src="https://cdn.plyr.io/static/demo/View_From_A_Blue_Moon_Trailer-1080p.mp4" type="video/mp4" size="1080">
-					<source src="https://cdn.plyr.io/static/demo/View_From_A_Blue_Moon_Trailer-1440p.mp4" type="video/mp4" size="1440">
-
-					<!-- Caption files -->
-					<track kind="captions" label="English" srclang="en" src="https://cdn.plyr.io/static/demo/View_From_A_Blue_Moon_Trailer-HD.en.vtt"
-					    default>
-					<track kind="captions" label="Français" srclang="fr" src="https://cdn.plyr.io/static/demo/View_From_A_Blue_Moon_Trailer-HD.fr.vtt">
-
-					<!-- Fallback for browsers that don't support the <video> element -->
-					<a href="https://cdn.plyr.io/static/demo/View_From_A_Blue_Moon_Trailer-576p.mp4" download>Download</a>
-				</video>
-			</div>
-			<!-- end player -->
-
-			<!-- accordion -->
-			<div class="col-12 col-lg-6">
-				<div class="accordion" id="accordion">
-					<div class="accordion__card">
-						<div class="card-header" id="headingOne">
-							<button type="button" data-toggle="collapse" data-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
-								<span>Season: 1</span>
-								<span>22 Episodes from Nov, 2020 until May, 2021</span>
-							</button>
-						</div>
-
-						<div id="collapseOne" class="collapse show" aria-labelledby="headingOne" data-parent="#accordion">
-							<div class="card-body">
-								<table class="accordion__list">
-									<thead>
-										<tr>
-											<th>#</th>
-											<th>Title</th>
-											<th>Air Date</th>
-										</tr>
-									</thead>
-
-									<tbody>
-										<tr>
-											<th>1</th>
-											<td><a href="#">Pilot</a></td>
-											<td>Tuesday, November 16th, 2020</td>
-										</tr>
-										<tr>
-											<th>2</th>
-											<td><a href="#">Paternity</a></td>
-											<td>Tuesday, November 23rd, 2020</td>
-										</tr>
-										<tr>
-											<th>3</th>
-											<td><a href="#">Occam's Razor</a></td>
-											<td>Tuesday, November 30th, 2020</td>
-										</tr>
-										<tr>
-											<th>4</th>
-											<td><a href="#">Maternity</a></td>
-											<td>Tuesday, December 7th, 2020</td>
-										</tr>
-										<tr>
-											<th>5</th>
-											<td><a href="#">Damned If You Do</a></td>
-											<td>Tuesday, December 14th, 2020</td>
-										</tr>
-										<tr>
-											<th>6</th>
-											<td><a href="#">The Socratic Method</a></td>
-											<td>Tuesday, December 21st, 2020</td>
-										</tr>
-									</tbody>
-								</table>
-							</div>
-						</div>
-					</div>
-
-					<div class="accordion__card">
-						<div class="card-header" id="headingTwo">
-							<button class="collapsed" type="button" data-toggle="collapse" data-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
-								<span>Season: 2</span>
-								<span>24 Episodes from Sep, 2005 until May, 2006</span>
-							</button>
-						</div>
-
-						<div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordion">
-							<div class="card-body">
-								<table class="accordion__list">
-									<thead>
-										<tr>
-											<th>#</th>
-											<th>Title</th>
-											<th>Air Date</th>
-										</tr>
-									</thead>
-
-									<tbody>
-										<tr>
-											<th>1</th>
-											<td><a href="#">Pilot</a></td>
-											<td>Tuesday, November 16th, 2020</td>
-										</tr>
-										<tr>
-											<th>2</th>
-											<td><a href="#">Paternity</a></td>
-											<td>Tuesday, November 23rd, 2020</td>
-										</tr>
-										<tr>
-											<th>3</th>
-											<td><a href="#">Occam's Razor</a></td>
-											<td>Tuesday, November 30th, 2020</td>
-										</tr>
-										<tr>
-											<th>4</th>
-											<td><a href="#">Maternity</a></td>
-											<td>Tuesday, December 7th, 2020</td>
-										</tr>
-										<tr>
-											<th>5</th>
-											<td><a href="#">Damned If You Do</a></td>
-											<td>Tuesday, December 14th, 2020</td>
-										</tr>
-										<tr>
-											<th>6</th>
-											<td><a href="#">The Socratic Method</a></td>
-											<td>Tuesday, December 21st, 2020</td>
-										</tr>
-									</tbody>
-								</table>
-							</div>
-						</div>
-					</div>
-
-					<div class="accordion__card">
-						<div class="card-header" id="headingThree">
-							<button class="collapsed" type="button" data-toggle="collapse" data-target="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
-								<span>Season: 3</span>
-								<span>24 Episodes from Sep, 2006 until May, 2007</span>
-							</button>
-						</div>
-
-						<div id="collapseThree" class="collapse" aria-labelledby="headingThree" data-parent="#accordion">
-							<div class="card-body">
-								<table class="accordion__list">
-									<thead>
-										<tr>
-											<th>#</th>
-											<th>Title</th>
-											<th>Air Date</th>
-										</tr>
-									</thead>
-
-									<tbody>
-										<tr>
-											<th>1</th>
-											<td><a href="#">Pilot</a></td>
-											<td>Tuesday, November 16th, 2020</td>
-										</tr>
-										<tr>
-											<th>2</th>
-											<td><a href="#">Paternity</a></td>
-											<td>Tuesday, November 23rd, 2020</td>
-										</tr>
-										<tr>
-											<th>3</th>
-											<td><a href="#">Occam's Razor</a></td>
-											<td>Tuesday, November 30th, 2020</td>
-										</tr>
-										<tr>
-											<th>4</th>
-											<td><a href="#">Maternity</a></td>
-											<td>Tuesday, December 7th, 2020</td>
-										</tr>
-										<tr>
-											<th>5</th>
-											<td><a href="#">Damned If You Do</a></td>
-											<td>Tuesday, December 14th, 2020</td>
-										</tr>
-										<tr>
-											<th>6</th>
-											<td><a href="#">The Socratic Method</a></td>
-											<td>Tuesday, December 21st, 2020</td>
-										</tr>
-									</tbody>
-								</table>
-							</div>
-						</div>
-					</div>
-
-					<div class="accordion__card">
-						<div class="card-header" id="headingFour">
-							<button class="collapsed" type="button" data-toggle="collapse" data-target="#collapseFour" aria-expanded="false" aria-controls="collapseFour">
-								<span>Season: 4</span>
-								<span>16 Episodes from Sep, 2007 until May, 2008</span>
-							</button>
-						</div>
-
-						<div id="collapseFour" class="collapse" aria-labelledby="headingFour" data-parent="#accordion">
-							<div class="card-body">
-								<table class="accordion__list">
-									<thead>
-										<tr>
-											<th>#</th>
-											<th>Title</th>
-											<th>Air Date</th>
-										</tr>
-									</thead>
-
-									<tbody>
-										<tr>
-											<th>1</th>
-											<td><a href="#">Pilot</a></td>
-											<td>Tuesday, November 16th, 2020</td>
-										</tr>
-										<tr>
-											<th>2</th>
-											<td><a href="#">Paternity</a></td>
-											<td>Tuesday, November 23rd, 2020</td>
-										</tr>
-										<tr>
-											<th>3</th>
-											<td><a href="#">Occam's Razor</a></td>
-											<td>Tuesday, November 30th, 2020</td>
-										</tr>
-										<tr>
-											<th>4</th>
-											<td><a href="#">Maternity</a></td>
-											<td>Tuesday, December 7th, 2020</td>
-										</tr>
-										<tr>
-											<th>5</th>
-											<td><a href="#">Damned If You Do</a></td>
-											<td>Tuesday, December 14th, 2020</td>
-										</tr>
-										<tr>
-											<th>6</th>
-											<td><a href="#">The Socratic Method</a></td>
-											<td>Tuesday, December 21st, 2020</td>
-										</tr>
-									</tbody>
-								</table>
-							</div>
-						</div>
-					</div>
-				</div>
-			</div>
-			<!-- end accordion -->
 		</div>
 	</div>
 	<!-- end details content -->
@@ -611,134 +380,36 @@
 				<div class="row row--grid">
 					<!-- section title -->
 					<div class="col-12">
-						<h2 class="section__title section__title--sidebar">You may also like...</h2>
+						<h2 class="section__title section__title--sidebar">Вам также может понравится...</h2>
 					</div>
 					<!-- end section title -->
 
+					{% for film in rec_films %}
 					<!-- card -->
 					<div class="col-6 col-sm-4 col-lg-6">
 						<div class="card">
-							<a href="details1.html" class="card__cover">
-								<img src="img/covers/cover.jpg" alt="">
+							<a href="{{ film.get_absolute_url }}" class="card__cover">
+								<img src="{{ film.image.url }}" alt="">
 								<span class="card__play">
 									<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M18.54,9,8.88,3.46a3.42,3.42,0,0,0-5.13,3V17.58A3.42,3.42,0,0,0,7.17,21a3.43,3.43,0,0,0,1.71-.46L18.54,15a3.42,3.42,0,0,0,0-5.92Zm-1,4.19L7.88,18.81a1.44,1.44,0,0,1-1.42,0,1.42,1.42,0,0,1-.71-1.23V6.42a1.42,1.42,0,0,1,.71-1.23A1.51,1.51,0,0,1,7.17,5a1.54,1.54,0,0,1,.71.19l9.66,5.58a1.42,1.42,0,0,1,0,2.46Z"/></svg>
 								</span>
 							</a>
 							<div class="card__content">
-								<h3 class="card__title"><a href="#">I Dream in Another Language</a></h3>
+								<h3 class="card__title"><a href="{{ film.get_absolute_url }}">{{ film.title_ru }}</a></h3>
 								<span class="card__category">
-									<a href="#">Action</a>
-									<a href="#">Triler</a>
+									<a>{{ film.genres.all|first }}</a>
 								</span>
-								<span class="card__rate">8.4</span>
+								{% if film.rating %}
+									<span class="card__rate"> {{ film.rating }}</span>
+								{% else %}
+									<span class="card__rate"> -- </span>
+								{% endif %}
 							</div>
 						</div>
 					</div>
 					<!-- end card -->
+					{% endfor %}
 
-					<!-- card -->
-					<div class="col-6 col-sm-4 col-lg-6">
-						<div class="card">
-							<a href="details1.html" class="card__cover">
-								<img src="img/covers/cover3.jpg" alt="">
-								<span class="card__play">
-									<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M18.54,9,8.88,3.46a3.42,3.42,0,0,0-5.13,3V17.58A3.42,3.42,0,0,0,7.17,21a3.43,3.43,0,0,0,1.71-.46L18.54,15a3.42,3.42,0,0,0,0-5.92Zm-1,4.19L7.88,18.81a1.44,1.44,0,0,1-1.42,0,1.42,1.42,0,0,1-.71-1.23V6.42a1.42,1.42,0,0,1,.71-1.23A1.51,1.51,0,0,1,7.17,5a1.54,1.54,0,0,1,.71.19l9.66,5.58a1.42,1.42,0,0,1,0,2.46Z"/></svg>
-								</span>
-							</a>
-							<div class="card__content">
-								<h3 class="card__title"><a href="#">Benched</a></h3>
-								<span class="card__category">
-									<a href="#">Comedy</a>
-								</span>
-								<span class="card__rate">7.1</span>
-							</div>
-						</div>
-					</div>
-					<!-- end card -->
-
-					<!-- card -->
-					<div class="col-6 col-sm-4 col-lg-6">
-						<div class="card">
-							<a href="details1.html" class="card__cover">
-								<img src="img/covers/cover2.jpg" alt="">
-								<span class="card__play">
-									<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M18.54,9,8.88,3.46a3.42,3.42,0,0,0-5.13,3V17.58A3.42,3.42,0,0,0,7.17,21a3.43,3.43,0,0,0,1.71-.46L18.54,15a3.42,3.42,0,0,0,0-5.92Zm-1,4.19L7.88,18.81a1.44,1.44,0,0,1-1.42,0,1.42,1.42,0,0,1-.71-1.23V6.42a1.42,1.42,0,0,1,.71-1.23A1.51,1.51,0,0,1,7.17,5a1.54,1.54,0,0,1,.71.19l9.66,5.58a1.42,1.42,0,0,1,0,2.46Z"/></svg>
-								</span>
-							</a>
-							<div class="card__content">
-								<h3 class="card__title"><a href="#">Whitney</a></h3>
-								<span class="card__category">
-									<a href="#">Romance</a>
-									<a href="#">Drama</a>
-									<a href="#">Music</a>
-								</span>
-								<span class="card__rate">6.3</span>
-							</div>
-						</div>
-					</div>
-					<!-- end card -->
-
-					<!-- card -->
-					<div class="col-6 col-sm-4 col-lg-6">
-						<div class="card">
-							<a href="details1.html" class="card__cover">
-								<img src="img/covers/cover6.jpg" alt="">
-								<span class="card__play">
-									<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M18.54,9,8.88,3.46a3.42,3.42,0,0,0-5.13,3V17.58A3.42,3.42,0,0,0,7.17,21a3.43,3.43,0,0,0,1.71-.46L18.54,15a3.42,3.42,0,0,0,0-5.92Zm-1,4.19L7.88,18.81a1.44,1.44,0,0,1-1.42,0,1.42,1.42,0,0,1-.71-1.23V6.42a1.42,1.42,0,0,1,.71-1.23A1.51,1.51,0,0,1,7.17,5a1.54,1.54,0,0,1,.71.19l9.66,5.58a1.42,1.42,0,0,1,0,2.46Z"/></svg>
-								</span>
-							</a>
-							<div class="card__content">
-								<h3 class="card__title"><a href="#">Blindspotting</a></h3>
-								<span class="card__category">
-									<a href="#">Comedy</a>
-									<a href="#">Drama</a>
-								</span>
-								<span class="card__rate">7.9</span>
-							</div>
-						</div>
-					</div>
-					<!-- end card -->
-
-					<!-- card -->
-					<div class="col-6 col-sm-4 col-lg-6">
-						<div class="card">
-							<a href="details1.html" class="card__cover">
-								<img src="img/covers/cover4.jpg" alt="">
-								<span class="card__play">
-									<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M18.54,9,8.88,3.46a3.42,3.42,0,0,0-5.13,3V17.58A3.42,3.42,0,0,0,7.17,21a3.43,3.43,0,0,0,1.71-.46L18.54,15a3.42,3.42,0,0,0,0-5.92Zm-1,4.19L7.88,18.81a1.44,1.44,0,0,1-1.42,0,1.42,1.42,0,0,1-.71-1.23V6.42a1.42,1.42,0,0,1,.71-1.23A1.51,1.51,0,0,1,7.17,5a1.54,1.54,0,0,1,.71.19l9.66,5.58a1.42,1.42,0,0,1,0,2.46Z"/></svg>
-								</span>
-							</a>
-							<div class="card__content">
-								<h3 class="card__title"><a href="#">I Dream in Another Language</a></h3>
-								<span class="card__category">
-									<a href="#">Action</a>
-									<a href="#">Triler</a>
-								</span>
-								<span class="card__rate">8.4</span>
-							</div>
-						</div>
-					</div>
-					<!-- end card -->
-
-					<!-- card -->
-					<div class="col-6 col-sm-4 col-lg-6">
-						<div class="card">
-							<a href="details1.html" class="card__cover">
-								<img src="img/covers/cover5.jpg" alt="">
-								<span class="card__play">
-									<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M18.54,9,8.88,3.46a3.42,3.42,0,0,0-5.13,3V17.58A3.42,3.42,0,0,0,7.17,21a3.43,3.43,0,0,0,1.71-.46L18.54,15a3.42,3.42,0,0,0,0-5.92Zm-1,4.19L7.88,18.81a1.44,1.44,0,0,1-1.42,0,1.42,1.42,0,0,1-.71-1.23V6.42a1.42,1.42,0,0,1,.71-1.23A1.51,1.51,0,0,1,7.17,5a1.54,1.54,0,0,1,.71.19l9.66,5.58a1.42,1.42,0,0,1,0,2.46Z"/></svg>
-								</span>
-							</a>
-							<div class="card__content">
-								<h3 class="card__title"><a href="#">Benched</a></h3>
-								<span class="card__category">
-									<a href="#">Comedy</a>
-								</span>
-								<span class="card__rate">7.1</span>
-							</div>
-						</div>
-					</div>
-					<!-- end card -->
 				</div>
 			</div>
 			<!-- end sidebar -->
