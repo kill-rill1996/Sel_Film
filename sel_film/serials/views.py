@@ -17,12 +17,7 @@ class CatalogSerialListView(generic.ListView):
     template_name = 'serial_list.html'
 
     def get_queryset(self):
-        if self.request.path == '/serials/anime/':
-            searched_type = 'аниме'
-        elif self.request.path == '/serials/cartoons/':
-            searched_type = 'мультсериалы'
-        else:
-            searched_type = None
+        searched_type = get_serial_type(self.request)
         if searched_type:
             return Serial.objects.filter(genres__title=searched_type)
         return Serial.objects.all()
@@ -71,6 +66,11 @@ class SerialDetailView(generic.DetailView):
             .prefetch_related(Prefetch('directors', queryset=directors))\
             .prefetch_related(Prefetch('countries', queryset=countries))[0]
         return serial
+
+    def get_context_data(self, **kwargs):
+        data = super().get_context_data(**kwargs)
+        data['rec_films'] = Serial.objects.filter(genres__in=self.object.genres.all()).exclude(id=self.object.id)[:6]
+        return data
 
 
 def search_serials(request):
@@ -127,3 +127,11 @@ def search_serials(request):
         return render(request, 'serials/search_serials.html', context={'form_1': form_1, 'form_2': form_2})
 
 
+def get_serial_type(request):
+    if request.path == '/serials/anime/':
+        searched_type = 'аниме'
+    elif request.path == '/serials/cartoons/':
+        searched_type = 'мультсериалы'
+    else:
+        searched_type = None
+    return searched_type
