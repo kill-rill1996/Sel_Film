@@ -33,7 +33,7 @@
 	<div class="container">
 		<div class="row">
 			<div class="col-12">
-				<form method="post" action="{% url 'search' %}">
+				<form method="post" action="{% url 'filter-search' %}">
 				{% csrf_token %}
 				<div class="filter__content">
 					<div class="filter__items">
@@ -42,11 +42,12 @@
 							<span class="filter__item-label">ЖАНР:</span>
 
 							<div class="filter__item-btn dropdown-toggle" role="navigation" id="filter-genre" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-								<input type="button" value="Комедия/Драма">
+								<input type="button" value="Все жанры">
 								<span></span>
 							</div>
 
 							<ul class="filter__item-menu dropdown-menu scrollbar-dropdown" aria-labelledby="filter-genre">
+								<li>Все жанры</li>
 								{% for genre in genres %}
 								<li>{{ genre|capfirst }}</li>
 								{% endfor %}
@@ -59,11 +60,12 @@
 							<span class="filter__item-label">СТРАНА:</span>
 
 							<div class="filter__item-btn dropdown-toggle" role="navigation" id="filter-quality" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-								<input type="button" value="Россия">
+								<input type="button" value="Все страны">
 								<span></span>
 							</div>
 
 							<ul class="filter__item-menu dropdown-menu scrollbar-dropdown" aria-labelledby="filter-quality">
+								<li>Все страны</li>
 								{% for country in countries %}
 								<li>{{ country|capfirst }}</li>
 								{% endfor %}

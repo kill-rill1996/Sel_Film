@@ -415,7 +415,7 @@ $(document).ready(function () {
 				},
 				step: 1,
 				connect: true,
-				start: [2005, 2015],
+				start: [1950, 2021],
 				format: wNumb({
 					decimals: 0,
 				})
@@ -426,6 +426,23 @@ $(document).ready(function () {
 			];
 			firstSlider.noUiSlider.on('update', function( values, handle ) {
 				firstValues[handle].innerHTML = values[handle];
+
+				var years_start = document.getElementById('filter__years-start').innerHTML;
+				var years_end = document.getElementById('filter__years-end').innerHTML;
+
+				if ($('#years_start').length == 0) {
+					var years_start_el = $(`<input id="years_start" type="text" hidden="true" name="years_start">`).val(years_start);
+					years_start_el.insertAfter(document.getElementById('filter__years-start'));
+				} else {
+					$('#years_start').val(years_start);
+				};
+
+				if ($('#years_end').length == 0) {
+					var years_end_el = $(`<input id="years_end" type="text" hidden="true" name="years_end">`).val(years_end);
+					years_end_el.insertAfter(document.getElementById('filter__years-end'));
+				} else {
+					$('#years_end').val(years_end);
+				};
 			});
 		} else {
 			return false;
@@ -445,7 +462,7 @@ $(document).ready(function () {
 				},
 				step: 0.1,
 				connect: true,
-				start: [2.5, 8.6],
+				start: [0.1, 9.9],
 				format: wNumb({
 					decimals: 1,
 				})
@@ -458,6 +475,7 @@ $(document).ready(function () {
 
 			secondSlider.noUiSlider.on('update', function( values, handle ) {
 				secondValues[handle].innerHTML = values[handle];
+
 				var imbd_start = document.getElementById('filter__imbd-start').innerHTML;
 				var imbd_end = document.getElementById('filter__imbd-end').innerHTML;
 
@@ -474,8 +492,6 @@ $(document).ready(function () {
 				} else {
 					$('#imbd_end').val(imbd_end);
 				};
-
-				// console.log(imbd_start, imbd_end);
 			});
 
 			$('.filter__item-menu--range').on('click.bs.dropdown', function (e) {
