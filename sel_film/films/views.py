@@ -1,4 +1,5 @@
 from django.core.mail import send_mail, BadHeaderError
+from django.core.paginator import Paginator
 from django.db.models import Prefetch
 from django.http import HttpResponse
 from django.shortcuts import render
@@ -252,8 +253,21 @@ class CatalogFilmListView(generic.ListView):
         return data
 
 
-def search_from_filter(request):
+def filter_search(request):
     if request.method == "POST":
         genre = request.POST.get('genre')
         country = request.POST.get('country')
-        print(genre, country)
+        imbd_start = request.POST.get('imbd_start')
+        imbd_end = request.POST.get('imbd_end')
+        years_start = request.POST.get('years_start')
+        years_end = request.POST.get('years_end')
+        if (genre == 'Все жанры' or not genre) and (country == 'Все страны' or not country) \
+                and imbd_start == '0.1' and imbd_end == '9.9' \
+                and years_start == '1950' and years_end == '2021':
+            films = Film.objects.all()
+            paginator = Paginator(films, 8)
+            page_number = request.GET.get('page')
+            films = paginator.get_page(page_number)
+            return render(request, 'film_list.html', {'films': films})
+
+
