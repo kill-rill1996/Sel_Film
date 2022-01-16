@@ -261,21 +261,61 @@ class CatalogFilmListView(generic.ListView):
         return data
 
 
-def filter_search(request):
-    if request.method == "POST":
-        genre = request.POST.get('genre')
-        country = request.POST.get('country')
-        imbd_start = request.POST.get('imbd_start')
-        imbd_end = request.POST.get('imbd_end')
-        years_start = request.POST.get('years_start')
-        years_end = request.POST.get('years_end')
-        if (genre == 'Все жанры' or not genre) and (country == 'Все страны' or not country) \
-                and imbd_start == '0.1' and imbd_end == '9.9' \
-                and years_start == '1950' and years_end == '2021':
+class FilterFilmListView(generic.ListView):
+    model = Film
+    context_object_name = 'films'
+    paginate_by = 8
+    template_name = 'film_list.html'
+
+    def get_queryset(self):
+        if self.request.POST.get('genre'):
+            genre = self.request.POST.get('genre')
+            films = Film.objects.filter(genre__title=genre)
+        else:
             films = Film.objects.all()
-            paginator = Paginator(films, 8)
-            page_number = request.GET.get('page')
-            films = paginator.get_page(page_number)
-            return render(request, 'film_list.html', {'films': films})
+        return films
+
+    def get_context_data(self, **kwargs):
+        data = super().get_context_data(**kwargs)
+        data['genres'] = Genre.objects.all().order_by('title')
+        data['countries'] = Country.objects.all().order_by('title')
+        data['recommended_films'] = Film.objects.filter(id__in=(31, 1010, 97, 122, 147, 109))
+        return data
+
+    # def post(self, *args, **kwargs):
+    #     return render(self.request, 'film_list.html')
+
+    # if request.method == "POST":
+    #     genre_text = request.POST.get('genre')
+    #     country_text = request.POST.get('country')
+    #     imbd_start_text = request.POST.get('imbd_start')
+    #     imbd_end_text = request.POST.get('imbd_end')
+    #     years_start_text = request.POST.get('years_start')
+    #     years_end_text = request.POST.get('years_end')
+    #     request.session['genre_text'] = genre_text
+    #     request.session['country_text'] = country_text
+    #     request.session['imbd_start_text'] = imbd_start_text
+    #     request.session['imbd_end_text'] = imbd_end_text
+    #     request.session['years_start_text'] = years_start_text
+    #     request.session['years_end_text'] = years_end_text
+    #     query_set = Film.objects.all()
+    #     paginator = Paginator(query_set, 8)
+    #     page = request.GET.get('page')
+    #     filter_films = paginator.get_page(page)
+    #     return render(request, 'film_list.html', {'films': filter_films})
+    #
+    # if request.method == 'GET':
+    #     if 'genre_text' in request.session:
+    #         genre = request.session['genre_text']
+    #         query_set = Film.objects.filter(genres__title=genre)
+    #         paginator = Paginator(query_set, 8)
+    #         page = request.GET.get('page')
+    #         filter_films = paginator.get_page(page)
+    #         return render(request, 'film_list.html', {'films': filter_films})
+    #     else:
+    #         return render(request, 'film_list.html')
+
+
+
 
 
