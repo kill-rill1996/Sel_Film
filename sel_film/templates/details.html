@@ -104,11 +104,11 @@
 					<!-- content tabs nav -->
 					<ul class="nav nav-tabs content__tabs" id="content__tabs" role="tablist">
 						<li class="nav-item" role="presentation">
-							<a class="nav-link active" data-toggle="tab" href="#tab-1" role="tab" aria-controls="tab-1" aria-selected="true">Comments</a>
+							<a class="nav-link active" data-toggle="tab" href="#tab-1" role="tab" aria-controls="tab-1" aria-selected="true">Комментарии</a>
 						</li>
 
 						<li class="nav-item" role="presentation">
-							<a class="nav-link" data-toggle="tab" href="#tab-2" role="tab" aria-controls="tab-2" aria-selected="false">Reviews</a>
+							<a class="nav-link" data-toggle="tab" href="#tab-2" role="tab" aria-controls="tab-2" aria-selected="false">Рецензии</a>
 						</li>
 
 						<li class="nav-item" role="presentation">
@@ -126,9 +126,9 @@
 
 						<div class="content__mobile-tabs-menu dropdown-menu" aria-labelledby="mobile-tabs">
 							<ul class="nav nav-tabs" role="tablist">
-								<li class="nav-item"><a class="nav-link active" id="1-tab" data-toggle="tab" href="#tab-1" role="tab" aria-controls="tab-1" aria-selected="true">Comments</a></li>
+								<li class="nav-item"><a class="nav-link active" id="1-tab" data-toggle="tab" href="#tab-1" role="tab" aria-controls="tab-1" aria-selected="true">Комментарии</a></li>
 
-								<li class="nav-item"><a class="nav-link" id="2-tab" data-toggle="tab" href="#tab-2" role="tab" aria-controls="tab-2" aria-selected="false">Reviews</a></li>
+								<li class="nav-item"><a class="nav-link" id="2-tab" data-toggle="tab" href="#tab-2" role="tab" aria-controls="tab-2" aria-selected="false">Рецензии</a></li>
 
 								<li class="nav-item"><a class="nav-link" id="3-tab" data-toggle="tab" href="#tab-3" role="tab" aria-controls="tab-3" aria-selected="false">Photos</a></li>
 							</ul>
@@ -149,11 +149,15 @@
 						<div class="row">
 							<!-- comments -->
 							<div class="col-12">
+									<form action="#" class="form my-5">
+										<textarea id="text" name="text" class="form__textarea" placeholder="Оставить комментарий"></textarea>
+										<button type="button" class="form__btn">Отправить</button>
+									</form>
 								<div class="comments">
 									<ul class="comments__list">
 										<li class="comments__item">
 											<div class="comments__autor">
-												<img class="comments__avatar" src="img/user.svg" alt="">
+												<img class="comments__avatar" src="{% static 'img/user.svg' %}" alt="">
 												<span class="comments__name">John Doe</span>
 												<span class="comments__time">30.08.2018, 17:53</span>
 											</div>
@@ -246,11 +250,6 @@
 											</div>
 										</li>
 									</ul>
-
-									<form action="#" class="form">
-										<textarea id="text" name="text" class="form__textarea" placeholder="Add comment"></textarea>
-										<button type="button" class="form__btn">Send</button>
-									</form>
 								</div>
 							</div>
 							<!-- end comments -->
@@ -382,7 +381,7 @@
 				<div class="row row--grid">
 					<!-- section title -->
 					<div class="col-12">
-						<h2 class="section__title section__title--sidebar">Вам также может понравится...</h2>
+						<h2 class="section__title section__title--sidebar">Вам также может понравиться...</h2>
 					</div>
 					<!-- end section title -->
 
@@ -397,7 +396,7 @@
 								</span>
 							</a>
 							<div class="card__content">
-								<h3 class="card__title"><a href="{{ film.get_absolute_url }}">{{ film.title_ru }}</a></h3>
+								<h3 class="card__title"><a href="{{ film.get_absolute_url }}">{{ film.title_ru|capfirst }}</a></h3>
 								<span class="card__category">
 									<a>{{ film.genres.all|first }}</a>
 								</span>

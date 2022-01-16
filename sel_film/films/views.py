@@ -121,7 +121,6 @@ def search_films(request):
             context['films_duplicate'] = True
             logger.info(f'Введены одиннаковые фильмы: "{film_1}" и "{film_2}"')
 
-
         elif film_1 and film_2:
             top_ten_points = find_films(id_1=film_1.id, id_2=film_2.id)
             context['top_ten'] = Film.objects.only('title_ru', 'year', 'image')\
@@ -217,7 +216,7 @@ def search(request):
         return render(request, 'search_results.html')
 
 
-def about_page(request):
+def contact_page(request):
     if request.method == 'POST':
         message_name = request.POST.get('name', '')
         message_email = request.POST.get('email', '')
@@ -238,6 +237,10 @@ def about_page(request):
                 return HttpResponse('Invalid header found.')
     else:
         return render(request, 'contacts.html')
+
+
+def about_page(request):
+    return render(request, 'faq.html')
 
 
 class CatalogFilmListView(generic.ListView):

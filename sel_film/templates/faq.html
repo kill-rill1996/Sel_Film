@@ -1,0 +1,66 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}FAQ{% endblock %}
+
+{% block content %}
+<!-- page title -->
+<section class="section section--first section--bg" data-bg="{% static 'img/section/section.jpeg' %}">
+	<div class="container">
+		<div class="row">
+			<div class="col-12">
+				<div class="section__wrap">
+					<!-- section title -->
+					<h1 class="section__title">FAQ</h1>
+					<!-- end section title -->
+
+					<!-- breadcrumb -->
+					<ul class="breadcrumb">
+						<li class="breadcrumb__item"><a href="{% url 'index-page' %}">Главная</a></li>
+						<li class="breadcrumb__item breadcrumb__item--active">FAQ</li>
+					</ul>
+					<!-- end breadcrumb -->
+				</div>
+			</div>
+		</div>
+	</div>
+</section>
+<!-- end page title -->
+
+<!-- faq -->
+<section class="section">
+	<div class="container">
+		<div class="row">
+			<div class="col-12 col-md-6">
+				<div class="faq">
+					<h3 class="faq__title">Почему нас выбирают?</h3>
+					<p class="faq__text">Проект <a style="color: #ff55a5" target="_blank" href="{% url 'index-page' %}">SelFilm</a> является уникальным и не имеет аналогов в русскоязычном сегменте интернета.</p>
+				</div>
+
+				<div class="faq">
+					<h3 class="faq__title">Как это работает?</h3>
+					<p class="faq__text">Алгоритм подбора учитывает всю информацию о двух введенных вами фильмах (жанры, страны, актеры и т.д.) и подбирает для вас 10 самых подходящих вариантов из 59000+ фильмов и 12000+ сериалов.</p>
+				</div>
+
+				<div class="faq">
+					<h3 class="faq__title">Является ли сервис платным?</h3>
+					<p class="faq__text">Все функции сайта являются абсолютно бесплатными и не требуют от вас никаких финансовых вложений.</p>
+					<p class="faq__text">При желании поблагодарить и поддержать создателей проекта вы можете отправить донат по <a style="color: #ff55a5" target="_blank" href="#">ссылке</a>.</p>
+				</div>
+			</div>
+
+			<div class="col-12 col-md-6">
+				<div class="faq">
+					<h3 class="faq__title">Как пользоваться данным сервисом?</h3>
+					<p class="faq__text">Для подбора фильмов (сериалов) необходимо перейти в соответствующую вкладку (подбора фильмов / сериалов), расположенную в верхней панели сайта.</p>
+					<p class="faq__text">На <a style="color: #ff55a5" target="_blank" href="{% url 'search-films' %}">странице подбора фильмов</a> <a style="color: #ff55a5" target="_blank" href="{% url 'search-serials' %}">(сериалов)</a> необходимо заполнить два поля ввода полными русскими названиями фильмов. Если один из фильмов будет введен неполностью, ниже будет приведена подборка возможных вариантов. В случае, если один из фильмов введен некорректно, результаты поиска будут отсутствовать. Для уточнения названия фильма можно воспользоваться строкой поиска, поддерживающей как русские так и английские названия, расположенной в правой части навигационной панели.</p>
+					<p class="faq__text">Если оба поля ввода фильма заполнены правильно, то вам будет предложена подборка десяти фильмов, которые вам обязательно понравятся. Всю библиотеку фильмов и сериалов, имеющихся на сайте, можно посмотреть по <a style="color: #ff55a5" target="_blank" href="{% url 'film-list' %}">вкладке</a> "Каталог" в навигационной панели.</p>
+					<p class="faq__text">Если у вас все еще остались вопросы или есть предложения по улучшению работы сайта, вы можете <a style="color: #ff55a5" target="_blank" href="{% url 'contact-page' %}">связаться</a> с нами на странице с контактами.</p>
+				</div>
+			</div>
+		</div>
+	</div>
+</section>
+<!-- end faq -->
+
+{% endblock content %}

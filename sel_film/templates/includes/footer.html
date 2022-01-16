@@ -6,42 +6,42 @@
 		<div class="row">
 			<!-- footer list -->
 			<div class="col-12 col-md-3">
-				<h6 class="footer__title">Download Our App</h6>
-				<ul class="footer__app">
-					<li><a href="#"><img src="img/Download_on_the_App_Store_Badge.svg" alt=""></a></li>
-					<li><a href="#"><img src="img/google-play-badge.png" alt=""></a></li>
+				<h6 class="footer__title">Функции</h6>
+				<ul class="footer__list">
+					<li><a href="{% url 'search-films' %}">Подборка Фильмов</a></li>
+					<li><a href="{% url 'search-serials' %}">Подборка Сериалов</a></li>
 				</ul>
 			</div>
 			<!-- end footer list -->
 
 			<!-- footer list -->
 			<div class="col-6 col-sm-4 col-md-3">
-				<h6 class="footer__title">Resources</h6>
+				<h6 class="footer__title">Каталог</h6>
 				<ul class="footer__list">
-					<li><a href="about.html">About Us</a></li>
-					<li><a href="pricing.html">Pricing Plan</a></li>
-					<li><a href="faq.html">Help Center</a></li>
+					<li><a href="{% url 'film-list' %}">Фильмы</a></li>
+					<li><a href="{% url 'serial-list' %}">Сериалы</a></li>
+					<li><a href="{% url 'cartoon-list' %}">Мульфильмы</a></li>
 				</ul>
 			</div>
 			<!-- end footer list -->
 
 			<!-- footer list -->
 			<div class="col-6 col-sm-4 col-md-3">
-				<h6 class="footer__title">Legal</h6>
+				<h6 class="footer__title">Ресурсы</h6>
 				<ul class="footer__list">
-					<li><a href="privacy.html">Terms of Use</a></li>
-					<li><a href="privacy.html">Privacy Policy</a></li>
-					<li><a href="privacy.html">Security</a></li>
+					<li><a href="{% url 'about-page' %}">FAQ</a></li>
+					<li><a href="{% url 'contact-page' %}">Feedback</a></li>
+					<li><a href="#instruction">Инструкция</a></li>
 				</ul>
 			</div>
 			<!-- end footer list -->
 
 			<!-- footer list -->
 			<div class="col-12 col-sm-4 col-md-3">
-				<h6 class="footer__title">Contact</h6>
+				<h6 class="footer__title">Контакты</h6>
 				<ul class="footer__list">
-					<li><a href="tel:88002345678">8 800 234 56 78</a></li>
-					<li><a href="mailto:support@flixgo.com">support@flixgo.com</a></li>
+					<li><a href="tel:88002345678">8 969 711 84 24</a></li>
+					<li><a href="mailto:support@flixgo.com">selfilm.devs@gmail.com</a></li>
 				</ul>
 				<ul class="footer__social">
 					<li class="facebook"><a href="#"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20.9,2H3.1A1.1,1.1,0,0,0,2,3.1V20.9A1.1,1.1,0,0,0,3.1,22h9.58V14.25h-2.6v-3h2.6V9a3.64,3.64,0,0,1,3.88-4,20.26,20.26,0,0,1,2.33.12v2.7H17.3c-1.26,0-1.5.6-1.5,1.47v1.93h3l-.39,3H15.8V22h5.1A1.1,1.1,0,0,0,22,20.9V3.1A1.1,1.1,0,0,0,20.9,2Z"/></svg></a></li>
@@ -55,12 +55,8 @@
 			<!-- footer copyright -->
 			<div class="col-12">
 				<div class="footer__copyright">
-					<small>© SelFilm, 2022. Create by <a href="https://ru.dotabuff.com/players/87330906" target="_blank" rel="noopener">Team Zest</a>.</small>
+					<small>© SelFilm, 2022. Create by selfilm.devs@gmail.com.</small>
 
-					<ul>
-						<li><a href="privacy.html">Terms of Use</a></li>
-						<li><a href="privacy.html">Privacy Policy</a></li>
-					</ul>
 				</div>
 			</div>
 			<!-- end footer copyright -->
