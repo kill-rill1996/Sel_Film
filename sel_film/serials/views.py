@@ -25,12 +25,12 @@ class CatalogSerialListView(generic.ListView):
     def get_context_data(self, **kwargs):
         data = super().get_context_data(**kwargs)
 
-        data['list_type'] = 'Сериалов'
+        data['list_type'] = 'сериалов'
         url_path = self.request.path.split('/')[-2]
         if url_path == 'cartoons':
-            data['list_type'] = 'Мультфильмов'
+            data['list_type'] = 'мультфильмов'
         elif url_path == 'anime':
-            data['list_type'] = 'Аниме'
+            data['list_type'] = 'аниме'
 
         data['genres'] = Genre.objects.all().order_by('title')
         data['countries'] = Country.objects.all().order_by('title')

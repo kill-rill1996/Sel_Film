@@ -1,6 +1,7 @@
 {% extends 'base.html' %}
 {% load to_int %}
 {% load static %}
+{% load genre_list %}
 
 {% block title %}Список фильмов{% endblock title %}
 
@@ -139,7 +140,7 @@
 					<div class="card__content">
 						<h3 class="card__title"><a href="{{ film.get_absolute_url }}">{{ film.title_ru|capfirst }}</a></h3>
 						<span class="card__category">
-							{% for genre in film.genres.all %}
+							{% for genre in film.genres.all|get_four_genres %}
 							<a>{{ genre }}</a>
 							{% endfor %}
 						</span>

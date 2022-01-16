@@ -37,3 +37,8 @@ def split_countries(country_list):
 def split_genres(genre_list):
     return genre_list[:2]
 
+
+@register.filter(name='get_four_genres')
+def get_four_genres(genre_list):
+    return genre_list[:4]
+
