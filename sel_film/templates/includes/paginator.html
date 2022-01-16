@@ -11,7 +11,7 @@
         <!-- Pages -->
         <!-- Pages without 1, 2, max-1, max -->
         {% if page_obj.number|add:-1 > 1 and page_obj.number|add:2 <= page_obj.paginator.num_pages %}
-        {% for p in paginator.page_range %}
+        {% for p in page_obj.paginator.page_range %}
             {% if p == page_obj.number %}
                 <li class="paginator__item paginator__item--active"><a href="?page={{ p }}">{{ p }}</a></li>
             {% elif p >= page_obj.number|add:-1 and p <= page_obj.number|add:2 %}
@@ -20,7 +20,7 @@
         {% endfor %}
         <!-- For page number 1 -->
         {% elif page_obj.number == 1 %}
-            {% for p in paginator.page_range %}
+            {% for p in page_obj.paginator.page_range %}
             {% if p == page_obj.number %}
                 <li class="paginator__item paginator__item--active"><a href="?page={{ p }}">{{ p }}</a></li>
             {% elif p <= page_obj.number|add:3 %}
@@ -29,7 +29,7 @@
         {% endfor %}
         <!-- For page number 2 -->
         {% elif page_obj.number == 2 %}
-            {% for p in paginator.page_range %}
+            {% for p in page_obj.paginator.page_range %}
             {% if p == page_obj.number %}
                 <li class="paginator__item paginator__item--active"><a href="?page={{ p }}">{{ p }}</a></li>
             {% elif p >= page_obj.number|add:-1 and p <= page_obj.number|add:2 %}
@@ -38,7 +38,7 @@
         {% endfor %}
         <!-- For page max-1 -->
         {% elif page_obj.number == page_obj.paginator.num_pages|add:-1 %}
-            {% for p in paginator.page_range %}
+            {% for p in page_obj.paginator.page_range %}
             {% if p == page_obj.number %}
                 <li class="paginator__item paginator__item--active"><a href="?page={{ p }}">{{ p }}</a></li>
             {% elif p >= page_obj.number|add:-2 and p <= page_obj.number|add:1 %}
@@ -47,7 +47,7 @@
         {% endfor %}
         <!-- For page max -->
         {% elif page_obj.number == page_obj.paginator.num_pages %}
-            {% for p in paginator.page_range %}
+            {% for p in page_obj.paginator.page_range %}
             {% if p == page_obj.number %}
                 <li class="paginator__item paginator__item--active"><a href="?page={{ p }}">{{ p }}</a></li>
             {% elif p >= page_obj.number|add:-3 %}
