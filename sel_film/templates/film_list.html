@@ -34,7 +34,7 @@
 	<div class="container">
 		<div class="row">
 			<div class="col-12">
-				<form method="post" action="{% url 'filter-search' %}">
+				<form method="POST" action="{% url 'filter-search' %}">
 				{% csrf_token %}
 				<div class="filter__content">
 					<div class="filter__items">

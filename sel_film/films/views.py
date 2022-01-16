@@ -243,15 +243,12 @@ def about_page(request):
     return render(request, 'faq.html')
 
 
-class CatalogFilmListView(generic.ListView):
+class FilmListView(generic.ListView):
     model = Film
     context_object_name = 'films'
     paginate_by = 8
     template_name = 'film_list.html'
-
-    def get_queryset(self):
-        films = Film.objects.all()
-        return films
+    ordering = ['id']
 
     def get_context_data(self, **kwargs):
         data = super().get_context_data(**kwargs)
@@ -261,21 +258,75 @@ class CatalogFilmListView(generic.ListView):
         return data
 
 
-def filter_search(request):
-    if request.method == "POST":
-        genre = request.POST.get('genre')
-        country = request.POST.get('country')
-        imbd_start = request.POST.get('imbd_start')
-        imbd_end = request.POST.get('imbd_end')
-        years_start = request.POST.get('years_start')
-        years_end = request.POST.get('years_end')
-        if (genre == 'Все жанры' or not genre) and (country == 'Все страны' or not country) \
-                and imbd_start == '0.1' and imbd_end == '9.9' \
-                and years_start == '1950' and years_end == '2021':
-            films = Film.objects.all()
-            paginator = Paginator(films, 8)
-            page_number = request.GET.get('page')
-            films = paginator.get_page(page_number)
-            return render(request, 'film_list.html', {'films': films})
+class FilterFilmListView(generic.ListView):
+    model = Film
+    context_object_name = 'films'
+    template_name = 'film_list.html'
+    paginate_by = 8
+    ordering = ['id']
+
+    def get_queryset(self):
+        films = Film.objects.all()
+        if self.request.session.get('genre'):
+            genre = self.request.session['genre'].lower()
+            films = films.filter(genres__title=genre)
+        if self.request.session.get('country'):
+            country = self.request.session['country']
+            films = films.filter(countries__title=country)
+        if self.request.session.get('imbd_start'):
+            print(f'imbd_start {self.request.session["imbd_start"]}')
+        if self.request.session.get('imbd_end'):
+            print(f'imbd_end {self.request.session["imbd_end"]}')
+        if self.request.session.get('years_start'):
+            years_start = self.request.session['years_start']
+            years_end = self.request.session['years_end']
+            films = films.filter(year__gte=years_start, year__lte=years_end)
+        return films
+
+    def post(self, *args, **kwargs):
+        print(self.request.POST)
+        self.request.session['genre'] = self.request.POST.get('genre')
+        self.request.session['country'] = self.request.POST.get('country')
+
+        imbd_start = self.request.POST.get('imbd_start')
+        imbd_end = self.request.POST.get('imbd_end')
+        if imbd_start == '0.1' and imbd_end == '9.9':
+            try:
+                del self.request.session['imbd_start']
+                del self.request.session['imbd_end']
+            except KeyError:
+                pass
+        else:
+            self.request.session['imbd_start'] = imbd_start
+            self.request.session['imbd_end'] = imbd_end
+
+        years_start = self.request.POST.get('years_start')
+        years_end = self.request.POST.get('years_end')
+        if years_start == '1950' and years_end == '2021':
+            try:
+                del self.request.session['years_start']
+                del self.request.session['years_end']
+            except KeyError:
+                pass
+        else:
+            self.request.session['years_start'] = years_start
+            self.request.session['years_end'] = years_end
+
+        films = self.get_queryset()
+        paginator = Paginator(films, 8)
+        page_number = self.request.GET.get('page', 1)
+        page_obj = paginator.get_page(page_number)
+        return render(self.request, 'film_list.html', {'page_obj': page_obj, 'films': page_obj})
+
+    def get_context_data(self, **kwargs):
+        data = super().get_context_data(**kwargs)
+        data['genres'] = Genre.objects.all().order_by('title')
+        data['countries'] = Country.objects.all().order_by('title')
+        data['recommended_films'] = Film.objects.filter(id__in=(31, 1010, 97, 122, 147, 109))
+        return data
+
+
+
+
 
 
