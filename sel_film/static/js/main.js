@@ -136,11 +136,20 @@ $(document).ready(function () {
 
 	$('.filter__item-menu li').on('click', function() {
 		var text = $(this).text();
+		console.log(text)
 		var item = $(this);
 		var id = item.closest('.filter__item').attr('id');
 		$('#'+id).find('.filter__item-btn input').val(text);
-		var input_el = $(`<input type="text" hidden="true" name="${id.slice(8)}">`).val(text);
-		input_el.insertAfter($('#'+id).find('.filter__item-btn input'));
+
+		if ($('#'+id).find('.filter__item-btn input').val().length > 0 && $('#'+id).find('.filter__item-btn input').val() != 'Все жанры' && text != 'Все жанры' && text != 'Все страны') {
+			var input_el = $(`<input type="text" hidden="true" name="${id.slice(8)}">`).val(text);
+			input_el.insertAfter($('#'+id).find('.filter__item-btn input'));
+		} else {
+			if ($('#'+id).find('.filter__item-btn input').val().length > 0 && $('#'+id).find('.filter__item-btn input').val() != 'Все страны' && text != 'Все жанры' && text != 'Все страны') {
+				var input_el = $(`<input type="text" hidden="true" name="${id.slice(8)}">`).val(text);
+				input_el.insertAfter($('#'+id).find('.filter__item-btn input'));
+			};
+		}
 	});
 
 	/*==============================
