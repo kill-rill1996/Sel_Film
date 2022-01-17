@@ -326,30 +326,6 @@ class FilterFilmListView(generic.ListView):
         return data
 
 
-def filter_search(request):
-    context = {}
-    if request.GET.get('years_start') == '1950' and request.GET.get('years_end') == '2021':
-        films = Film.objects.all()
-    else:
-        films = Film.objects.filter(Q(year__gte=int(request.GET.get('years_start'))) &
-                                    Q(year__lte=int(request.GET.get('years_end'))))
-        context['years_start'] = f"years_start={request.GET.get('years_start')}&"
-        context['years_end'] = f"years_end={request.GET.get('years_end')}&"
-    if request.GET.get('genre'):
-        films = films.filter(genres__title=request.GET.get('genre').lower())
-        context['genre'] = f"genre={request.GET.get('genre')}&"
-    if request.GET.get('country'):
-        films = films.filter(countries__title=request.GET.get('country'))
-        context['country'] = f"country={request.GET.get('country')}&"
-
-    paginator = Paginator(films, 8)
-    page_number = request.GET.get('page', 1)
-    page_obj = paginator.get_page(page_number)
-    context['page_obj'] = page_obj
-    context['films'] = page_obj
-    return render(request, 'film_list.html', context)
-
-
 class FilterSearchListView(generic.ListView):
     paginate_by = 8
     template_name = 'film_list.html'

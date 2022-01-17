@@ -3,7 +3,7 @@ from django.views.decorators.cache import cache_page
 
 from django.conf import settings
 from .views import index_page, FilmDetailView, search_films, search, contact_page, FilmListView, \
-    FilterFilmListView, about_page, filter_search, FilterSearchListView
+    FilterFilmListView, about_page, FilterSearchListView
 
 urlpatterns = [
     path('', index_page, name='index-page'),
