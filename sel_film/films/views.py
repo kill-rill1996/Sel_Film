@@ -1,6 +1,6 @@
 from django.core.mail import send_mail, BadHeaderError
 from django.core.paginator import Paginator
-from django.db.models import Prefetch
+from django.db.models import Prefetch, Q
 from django.http import HttpResponse
 from django.shortcuts import render
 from django.views import generic
@@ -326,7 +326,63 @@ class FilterFilmListView(generic.ListView):
         return data
 
 
+def filter_search(request):
+    context = {}
+    if request.GET.get('years_start') == '1950' and request.GET.get('years_end') == '2021':
+        films = Film.objects.all()
+    else:
+        films = Film.objects.filter(Q(year__gte=int(request.GET.get('years_start'))) &
+                                    Q(year__lte=int(request.GET.get('years_end'))))
+        context['years_start'] = f"years_start={request.GET.get('years_start')}&"
+        context['years_end'] = f"years_end={request.GET.get('years_end')}&"
+    if request.GET.get('genre'):
+        films = films.filter(genres__title=request.GET.get('genre').lower())
+        context['genre'] = f"genre={request.GET.get('genre')}&"
+    if request.GET.get('country'):
+        films = films.filter(countries__title=request.GET.get('country'))
+        context['country'] = f"country={request.GET.get('country')}&"
+
+    paginator = Paginator(films, 8)
+    page_number = request.GET.get('page', 1)
+    page_obj = paginator.get_page(page_number)
+    context['page_obj'] = page_obj
+    context['films'] = page_obj
+    return render(request, 'film_list.html', context)
 
 
+class FilterSearchListView(generic.ListView):
+    paginate_by = 8
+    template_name = 'film_list.html'
+    context_object_name = 'films'
 
+    def get_queryset(self):
+        if self.request.GET.get('years_start') == '1950' and self.request.GET.get('years_end') == '2021':
+            films = Film.objects.all()
+        else:
+            films = Film.objects.filter(
+                Q(year__gte=int(self.request.GET.get('years_start'))) &
+                Q(year__lte=int(self.request.GET.get('years_end'))))
 
+        if self.request.GET.get('genre'):
+            films = films.filter(genres__title=self.request.GET.get('genre').lower())
+
+        if self.request.GET.get('country'):
+            films = films.filter(countries__title=self.request.GET.get('country'))
+        return films
+
+    def get_context_data(self, *args, **kwargs):
+        context = super().get_context_data(*args, **kwargs)
+        context['get_params'] = []
+        if self.request.GET.get('genre'):
+            context['get_params'].append(f"genre={self.request.GET.get('genre')}&")
+            context['filter_genre'] = self.request.GET.get('genre')
+        if self.request.GET.get('country'):
+            context['get_params'].append(f"country={self.request.GET.get('country')}&")
+            context['filter_country'] = self.request.GET.get('country')
+        context['get_params'].append(f"years_start={self.request.GET.get('years_start')}&")
+        context['get_params'].append(f"years_end={self.request.GET.get('years_end')}&")
+
+        context['genres'] = Genre.objects.all().order_by('title')
+        context['countries'] = Country.objects.all().order_by('title')
+        context['recommended_films'] = Film.objects.filter(id__in=(31, 1010, 97, 122, 147, 109))
+        return context

@@ -34,8 +34,8 @@
 	<div class="container">
 		<div class="row">
 			<div class="col-12">
-				<form method="POST" action="{% url 'filter-search' %}">
-				{% csrf_token %}
+				<form method="GET" action="{% url 'filter-search' %}">
+				<!-- {% csrf_token %} -->
 				<div class="filter__content">
 					<div class="filter__items">
 						<!-- filter item -->
@@ -43,7 +43,7 @@
 							<span class="filter__item-label">ЖАНР:</span>
 
 							<div class="filter__item-btn dropdown-toggle" role="navigation" id="filter-genre" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-								<input type="button" value="Все жанры">
+								<input type="button" value="{% if filter_genre %}{{ filter_genre }}{% else %}Все жанры{% endif %}">
 								<span></span>
 							</div>
 
@@ -61,7 +61,7 @@
 							<span class="filter__item-label">СТРАНА:</span>
 
 							<div class="filter__item-btn dropdown-toggle" role="navigation" id="filter-quality" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-								<input type="button" value="Все страны">
+								<input type="button" value="{% if filter_country %}{{ filter_country }}{% else %}Все страны{% endif %}">
 								<span></span>
 							</div>
 
@@ -75,7 +75,7 @@
 						<!-- end filter item -->
 
 						<!-- filter item -->
-						<div class="filter__item" id="filter__rate">
+						<!-- <div class="filter__item" id="filter__rate">
 							<span class="filter__item-label">IMBd:</span>
 
 							<div class="filter__item-btn dropdown-toggle" role="button" id="filter-rate" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
@@ -89,7 +89,7 @@
 							<div class="filter__item-menu filter__item-menu--range dropdown-menu" aria-labelledby="filter-rate">
 								<div id="filter__imbd"></div>
 							</div>
-						</div>
+						</div> -->
 						<!-- end filter item -->
 
 						<!-- filter item -->
@@ -112,7 +112,7 @@
 					</div>
 					
 					<!-- filter btn -->
-					<button class="filter__btn" type="submit">применить</button>
+					<button class="filter__btn" type="submit" id="filter_btn">применить</button>
 					<!-- end filter btn -->
 				</div>
 				</form>
