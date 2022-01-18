@@ -18,12 +18,13 @@ class Command(BaseCommand):
                 start_year=int(self.year_split(serial['year'])[0]),
                 end_year=int(self.year_split(serial['year'])[1]) if len(self.year_split(serial['year'])) > 1 else None,
                 duration=serial['duration'],
-                rating=serial['rating'],
                 plot=serial['plot'],
                 seasons=self.get_seasons(serial['seasons']),
                 series=self.get_series(serial['series']),
                 end_status=self.get_end_status(serial['end_status']),
             )
+            if serial['rating']:
+                f.rating = float(serial['rating'])
 
             # adding poster
             f.image.save(f'film_{serial["id"]}.jpeg', self.get_image(serial["id"]))
