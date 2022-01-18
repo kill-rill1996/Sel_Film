@@ -1,5 +1,4 @@
 {% extends 'base.html' %}
-{% load to_int %}
 {% load static %}
 {% load genre_list %}
 
@@ -161,7 +160,7 @@
 								{% block year %}
 									<li>{{ film.year }}</li>
 								{% endblock year %}
-								{% if film.rating|to_int >= 80 %}<li>🌶</li>{% endif %}
+								{% if film.rating >= 8.0 %}<li>🌶</li>{% endif %}
 							</ul>
 						</div>
 

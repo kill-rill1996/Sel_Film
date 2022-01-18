@@ -14,7 +14,7 @@ class Film(models.Model):
     title_en = models.CharField(max_length=255)
     year = models.IntegerField()
     duration = models.IntegerField()
-    rating = models.CharField(max_length=5)
+    rating = models.FloatField(blank=True, null=True)
     genres = models.ManyToManyField('Genre', related_name='films', blank=True)
     countries = models.ManyToManyField('Country', related_name='films', blank=True)
     directors = models.ManyToManyField('Director', related_name='films', blank=True)

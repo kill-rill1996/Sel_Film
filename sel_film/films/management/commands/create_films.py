@@ -17,10 +17,10 @@ class Command(BaseCommand):
                 title_en=film['title_en'],
                 year=film['year'],
                 duration=film['duration'],
-                rating=film['rating'],
                 plot=film['plot'],
             )
-
+            if film['rating']:
+                f.rating = float(film['rating'])
             # adding poster
             f.image.save(f'film_{film["id"]}.jpeg', self.get_image(film["id"]))
 

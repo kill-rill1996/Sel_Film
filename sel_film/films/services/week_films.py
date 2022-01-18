@@ -3,7 +3,6 @@ import datetime
 
 def read_id_from_log():
     log_id = {}
-
     default_films = [100, 101, 102, 103, 104, 105, 106]
     with open('logs/films/logs.log', 'r') as f:
         list_file = [row.split() for row in f if 'Искали фильм 1:' in row or 'Искали фильм 2:' in row]
