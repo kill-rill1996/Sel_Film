@@ -10,7 +10,7 @@ class Serial(models.Model):
     start_year = models.IntegerField()
     end_year = models.IntegerField(blank=True, null=True)
     duration = models.IntegerField()
-    rating = models.CharField(max_length=5)
+    rating = models.FloatField(blank=True, null=True)
     genres = models.ManyToManyField('Genre', related_name='films', blank=True)
     countries = models.ManyToManyField('Country', related_name='films', blank=True)
     directors = models.ManyToManyField('Director', related_name='films', blank=True)

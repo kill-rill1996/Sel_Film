@@ -1,6 +1,5 @@
 {% extends 'base.html' %}
 {% load static %}
-{% load to_int %}
 {% load actor_list %}
 
 
@@ -43,7 +42,7 @@
 								{% if film.start_year %}
 									<li>{{ film.start_year }}{% if film.end_year %} - {{ film.end_year }}{% endif %}</li>
 								{% endif %}
-								{% if film.rating|to_int >= 80 %}<li>🌶</li>{% endif %}
+								{% if film.rating >= 8.0 %}<li>🌶</li>{% endif %}
 							</ul>
 						</div>
 

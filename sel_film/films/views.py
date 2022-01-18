@@ -349,8 +349,6 @@ class FilterSearchListView(generic.ListView):
             context['chosen_country'] = self.request.GET.get('country')
         context['get_params'].append(f"years_start={self.request.GET.get('years_start')}&")
         context['get_params'].append(f"years_end={self.request.GET.get('years_end')}&")
-        context['chosen_years_start'] = self.request.GET.get('years_start')
-        context['chosen_years_end'] = self.request.GET.get('years_end')
 
         context['genres'] = Genre.objects.all().order_by('title')
         context['countries'] = Country.objects.all().order_by('title')
