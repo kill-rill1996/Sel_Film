@@ -11,20 +11,12 @@ from serials.models import Serial, Country as CountrySerial
 from .models import Film, Genre, Actor, Director, Country
 from .forms import Film1FindForm, Film2FindForm
 from films.services.service import find_films
-from films.services.index_films import read_id_from_log
+from films.services.week_films import read_id_from_log
 from serials.models import Genre as Serial_Genre
-
-# 31
-# 1010
-# 97
-# 122
-# 147
-# 109
 
 
 def index_page(request):
-    read_id_from_log()
-    header_films = Film.objects.all()[7:14]
+    week_films = Film.objects.filter(id__in=read_id_from_log())
     ten_films = Film.objects.all()[:6]
     ten_serials = Serial.objects.all()[:6]
     ten_anime = Serial.objects.filter(genres__title='аниме')[:6]
@@ -35,7 +27,7 @@ def index_page(request):
                                                   'ten_serials': ten_serials,
                                                   'ten_anime': ten_anime,
                                                   'ten_cartoons': ten_cartoons,
-                                                  'header_films': header_films,
+                                                  'week_films': week_films,
                                                   'recommended_films': recommended_films,
                                                   })
 
