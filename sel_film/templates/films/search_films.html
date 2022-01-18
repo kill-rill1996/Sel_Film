@@ -1,8 +1,32 @@
 {% extends 'base.html' %}
 {% load static %}
 
+{% block title %}Подбор фильмов{% endblock title %}
 
 {% block content %}
+
+<!-- page title -->
+<section class="section section--first section--bg" data-bg="{% static 'img/section/section.jpeg' %}">
+  <div class="container">
+    <div class="row">
+      <div class="col-12">
+        <div class="section__wrap">
+          <!-- section title -->
+          <h1 class="section__title">{% block left_section %}Подбор фильмов{% endblock left_section %}</h1>
+          <!-- end section title -->
+
+          <!-- breadcrumb -->
+          <ul class="breadcrumb">
+            <li class="breadcrumb__item"><a href="index.html">Главная</a></li>
+            <li class="breadcrumb__item breadcrumb__item--active">{% block right_section %}Подбор фильмов{% endblock right_section %}</li>
+          </ul>
+          <!-- end breadcrumb -->
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+<!-- end page title -->
 
 <div class="container mx-auto">
     <div class="grid grid-cols-1 sm:grid-cols-2 justify-items-center mt-10">
@@ -26,7 +50,7 @@
             </div>
             {% endif %}
         </div>
-
+ 
         <!--Правый фильм-->
         <div class="grid w-full justify-items-center">
             {% if film_2 %}

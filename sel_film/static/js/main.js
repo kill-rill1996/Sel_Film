@@ -136,20 +136,25 @@ $(document).ready(function () {
 
 	$('.filter__item-menu li').on('click', function() {
 		var text = $(this).text();
-		console.log(text)
 		var item = $(this);
 		var id = item.closest('.filter__item').attr('id');
 		$('#'+id).find('.filter__item-btn input').val(text);
 
-		if ($('#'+id).find('.filter__item-btn input').val().length > 0 && $('#'+id).find('.filter__item-btn input').val() != 'Все жанры' && text != 'Все жанры' && text != 'Все страны') {
-			var input_el = $(`<input type="text" hidden="true" name="${id.slice(8)}">`).val(text);
-			input_el.insertAfter($('#'+id).find('.filter__item-btn input'));
-		} else {
-			if ($('#'+id).find('.filter__item-btn input').val().length > 0 && $('#'+id).find('.filter__item-btn input').val() != 'Все страны' && text != 'Все жанры' && text != 'Все страны') {
-				var input_el = $(`<input type="text" hidden="true" name="${id.slice(8)}">`).val(text);
+		if (id.slice(8) == 'genre') {
+			if ($('#hidden_filter_genre').length == 0) {
+				var input_el = $(`<input id="hidden_filter_genre" type="text" hidden="true" name="${id.slice(8)}">`).val(text);
 				input_el.insertAfter($('#'+id).find('.filter__item-btn input'));
+			} else {
+				$('#hidden_filter_genre').val(text);
 			};
-		}
+		} else if (id.slice(8) == 'country') {
+			if ($('#hidden_filter_country').length == 0) {
+				var input_el = $(`<input id="hidden_filter_country" type="text" hidden="true" name="${id.slice(8)}">`).val(text);
+				input_el.insertAfter($('#'+id).find('.filter__item-btn input'));
+			} else {
+				$('#hidden_filter_country').val(text);
+			};
+		};
 	});
 
 	/*==============================

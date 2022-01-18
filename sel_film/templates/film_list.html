@@ -42,7 +42,10 @@
 							<span class="filter__item-label">ЖАНР:</span>
 
 							<div class="filter__item-btn dropdown-toggle" role="navigation" id="filter-genre" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-								<input type="button" value="{% if filter_genre %}{{ filter_genre }}{% else %}Все жанры{% endif %}">
+								<input type="button" value="{% if chosen_genre %}{{ chosen_genre }}{% else %}Все жанры{% endif %}">
+								{% if chosen_genre %}
+									<input id="hidden_filter_genre" type="text" hidden="true" name="genre" value="{{ chosen_genre }}">
+								{% endif %}
 								<span></span>
 							</div>
 
@@ -60,7 +63,10 @@
 							<span class="filter__item-label">СТРАНА:</span>
 
 							<div class="filter__item-btn dropdown-toggle" role="navigation" id="filter-quality" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-								<input type="button" value="{% if filter_country %}{{ filter_country }}{% else %}Все страны{% endif %}">
+								<input type="button" value="{% if chosen_country %}{{ chosen_country }}{% else %}Все страны{% endif %}">
+								{% if chosen_country %}
+									<input id="hidden_filter_country" type="text" hidden="true" name="country" value="{{ chosen_country }}">
+								{% endif %}
 								<span></span>
 							</div>
 
