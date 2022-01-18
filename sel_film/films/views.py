@@ -331,10 +331,10 @@ class FilterSearchListView(generic.ListView):
                 Q(year__gte=int(self.request.GET.get('years_start'))) &
                 Q(year__lte=int(self.request.GET.get('years_end'))))
 
-        if self.request.GET.get('genre'):
+        if self.request.GET.get('genre') and self.request.GET.get('genre') != 'Все жанры':
             films = films.filter(genres__title=self.request.GET.get('genre').lower())
 
-        if self.request.GET.get('country'):
+        if self.request.GET.get('country') and self.request.GET.get('country') != 'Все страны':
             films = films.filter(countries__title=self.request.GET.get('country'))
         return films
 
@@ -343,12 +343,14 @@ class FilterSearchListView(generic.ListView):
         context['get_params'] = []
         if self.request.GET.get('genre'):
             context['get_params'].append(f"genre={self.request.GET.get('genre')}&")
-            context['filter_genre'] = self.request.GET.get('genre')
+            context['chosen_genre'] = self.request.GET.get('genre')
         if self.request.GET.get('country'):
             context['get_params'].append(f"country={self.request.GET.get('country')}&")
-            context['filter_country'] = self.request.GET.get('country')
+            context['chosen_country'] = self.request.GET.get('country')
         context['get_params'].append(f"years_start={self.request.GET.get('years_start')}&")
         context['get_params'].append(f"years_end={self.request.GET.get('years_end')}&")
+        context['chosen_years_start'] = self.request.GET.get('years_start')
+        context['chosen_years_end'] = self.request.GET.get('years_end')
 
         context['genres'] = Genre.objects.all().order_by('title')
         context['countries'] = Country.objects.all().order_by('title')
