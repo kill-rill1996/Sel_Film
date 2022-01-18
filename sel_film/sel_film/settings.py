@@ -166,22 +166,25 @@ INTERNAL_IPS = [
 from datetime import timedelta
 td = timedelta(10)
 
+
 def search_only(record):
     return record['function'] == 'search'
 
 
-def about_page_only(record):
-    return record['function'] == 'about_page'
+def select_films_only(record):
+    return record['function'] == 'search_films'
 
-loguru_logger.add(os.path.join(BASE_DIR, 'logs/films/logs.log'),
-                  format='{level} {time: HH:mm.ss DD.MM.YYYY} {name} ({function}) {message}',
-                  level='INFO', filter="films.views",
-                  rotation='50 MB', compression='zip'
-                  )
-loguru_logger.add(os.path.join(BASE_DIR, 'logs/serials/logs.log'), format='{level} {time: HH:mm.ss DD.MM.YYYY} {name} ({function}) {message}', level='INFO', filter="serials.views", rotation='50 MB', compression='zip')
+
+def contact_page_only(record):
+    return record['function'] == 'contact_page'
+
+
+loguru_logger.add(os.path.join(BASE_DIR, 'logs/films/logs.log'), format='{level} {time: HH:mm.ss DD.MM.YYYY} {name} ({function}) {message}', level='INFO', filter="films.views", rotation='50 MB', compression='zip')
+loguru_logger.add(os.path.join(BASE_DIR, 'logs/serials/selected_serials.log'), format='{level} {time: HH:mm.ss DD.MM.YYYY} {name} ({function}) {message}', level='INFO', filter="serials.views", rotation='50 MB', compression='zip')
 loguru_logger.add(os.path.join(BASE_DIR, 'logs/warning.log'), format='{level} {time: HH:mm.ss DD.MM.YYYY} {name} ({function}) {message}', level='WARNING', rotation='50 MB', compression='zip')
 loguru_logger.add(os.path.join(BASE_DIR, 'logs/films/search.log'), format='{level} {time: HH:mm.ss DD.MM.YYYY} {name} ({function}) {message}', level='INFO', filter=search_only, rotation='50 MB', compression='zip')
-loguru_logger.add(os.path.join(BASE_DIR, 'logs/films/about_page.log'), format='{level} {time: HH:mm.ss DD.MM.YYYY} {name} ({function}) {message}', level='INFO', filter=about_page_only, rotation='50 MB', compression='zip')
+loguru_logger.add(os.path.join(BASE_DIR, 'logs/send_feedback.log'), format='{level} {time: HH:mm.ss DD.MM.YYYY} {name} ({function}) {message}', level='INFO', filter=contact_page_only, rotation='50 MB', compression='zip')
+loguru_logger.add(os.path.join(BASE_DIR, 'logs/films/selected_films.log'), format='{level} {time: HH:mm.ss DD.MM.YYYY} {name} ({function}) {message}', level='INFO', filter=select_films_only, rotation='50 MB', compression='zip')
 
 
 # Email settings
