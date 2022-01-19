@@ -1,5 +1,4 @@
 {% load static %}
-{% load to_int %}
 {% load genre_list %}
 
 
@@ -17,7 +16,7 @@
 			<h3 class="card__title"><a href="{{ film.get_absolute_url }}">{{ film.title_ru | capfirst }}</a></h3>
 			<span class="card__category">
 				{% for genre in film.genres.all|get_four_genres %}
-				<a>{{ genre }}</a>
+				<a>{{ genre|capfirst }}</a>
 				{% endfor %}
 			</span>
 
@@ -35,7 +34,7 @@
 					{% if film.start_year %}
 						<li>{{ film.start_year }}{% if film.end_year %} - {{ film.end_year }}{% endif %}</li>
 					{% endif %}
-					{% if film.rating|to_int >= 80 %}<li>🌶</li>{% endif %}
+					{% if film.rating >= 8.0 %}<li>🌶</li>{% endif %}
 				</ul>
 			</div>
 

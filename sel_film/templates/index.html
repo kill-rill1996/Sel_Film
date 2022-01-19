@@ -44,7 +44,7 @@
 								<h3 class="card__title"><a href="{{ film.get_absolute_url }}">{{ film.title_ru|capfirst }}</a></h3>
 								<span class="card__category">
 									{% for genre in film.genres.all|get_two_genres %}
-										<a>{{ genre.title }}</a>
+										<a>{{ genre.title|capfirst }}</a>
 									{% endfor %}
 								</span>
 								<span class="card__rate">{{ film.rating }}</span>
