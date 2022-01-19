@@ -4,7 +4,7 @@
 {% block title %}Подбор фильмов{% endblock title %}
 
 {% block content %}
-
+ 
 <!-- page title -->
 <section class="section section--first section--bg" data-bg="{% static 'img/section/section.jpeg' %}">
   <div class="container">
@@ -28,266 +28,182 @@
 </section>
 <!-- end page title -->
 
-<div class="container mx-auto">
-    <div class="grid grid-cols-1 sm:grid-cols-2 justify-items-center mt-10">
+<!-- selected films -->
+<section class="section">
+  <div class="container">
+    <!-- poster section -->
+    <div class="row align-items-center justify-content-center">
+      <!-- first film -->
+      <div class="col-12 col-md-6">
+        {% if film_1 %}
+          <a href="{{ film_1.get_absolute_url }}" target="_blank"><h3 class="section__title text-md-center" style="text-align: center; font-size: 30px;">{{ film_1.title_ru|capfirst }}
+          {% block year_1 %}{% if film_1.year %} ({{ film_1.year }}){% endif %}{% endblock year_1 %}</h3></a>
+          <a href="{{ film_1.get_absolute_url }}" target="_blank">
+            <div class="card">
+            <img src="{{ film_1.image.url }}" class="card__cover mx-auto" alt="">
+            </div>
+          </a>
+        {% else %}
+          <a><h3 class="section__title text-md-center" style="text-align: center; font-size: 30px;">{% block title_1 %}Фильм 1{% endblock title_1 %}</h3></a>
+          <div class="card">
+            <img src="{% static 'img/poster.jpeg' %}" class="card__cover mx-auto" alt="">
+          </div>
+        {% endif %}
+      </div>
 
-        <!--Левый фильм -->
-        <div class="grid w-full justify-items-center">
-            {% if film_1 %}
-            <div class="mb-4 sm:mb-6">
-                <h2 class="text-lg text-indigo-800"><a href="{{ film_1.get_absolute_url }}" target="_blank">{{ film_1.title_ru|capfirst }}
-                {% block year_1 %}{% if film_1.year %} ({{ film_1.year }}){% endif %}{% endblock year_1 %}</a></h2>
+      <!-- second film -->
+      <div class="col-12 col-md-6">
+        {% if film_2 %}
+          <a href="{{ film_2.get_absolute_url }}" target="_blank"><h3 class="section__title text-md-center mt-4 mt-md-0" style="text-align: center; font-size: 30px;">{{ film_2.title_ru|capfirst }}
+          {% block year_2 %}{% if film_2.year %} ({{ film_2.year }}){% endif %}{% endblock year_2 %}</h3></a>
+          <a href="{{ film_2.get_absolute_url }}" target="_blank">
+            <div class="card">
+              <img src="{{ film_2.image.url }}" class="card__cover mx-auto" alt="">
             </div>
-            <div class="grid w-2/5 sm:w-3/5 md:w-5/12 xl:w-3/5 justify-items-center">
-                <a href="{{ film_1.get_absolute_url }}" target="_blank"><img class="rounded-lg shadow-lg" src="{{ film_1.image.url }}" alt=""></a>
-            </div>
-            {% else %}
-            <div class="mb-4 sm:mb-6">
-                <h2 class="text-lg text-indigo-800">{% block title_1 %}Фильм 1{% endblock title_1 %}</h2>
-            </div>
-            <div class="grid w-2/5 sm:w-3/5 md:w-5/12 xl:w-3/5 justify-items-center">
-                <img class="rounded-lg shadow-lg" src="{% static 'images/poster.jpeg' %}" alt="">
-            </div>
-            {% endif %}
-        </div>
- 
-        <!--Правый фильм-->
-        <div class="grid w-full justify-items-center">
-            {% if film_2 %}
-                <div class="mt-8 sm:mt-0 mb-4 sm:mb-6">
-                    <h2 class="text-lg text-indigo-800"><a href="{{ film_2.get_absolute_url }}" target="_blank">{{ film_2.title_ru|capfirst }} 
-                    {% block year_2 %}{% if film_2.year %} ({{ film_2.year }}){% endif %}{% endblock year_2 %}</a></h2>
-                </div>
-                <div class="grid w-2/5 sm:w-3/5 md:w-5/12 xl:w-3/5 justify-items-center">
-                    <a href="{{ film_2.get_absolute_url }}" target="_blank"><img class="rounded-lg shadow-lg" src="{{ film_2.image.url }}" alt=""></a>
-                </div>
-            {% else %}
-                <div class="mt-8 sm:mt-0 mb-4 sm:mb-6">
-                    <h2 class="text-lg text-indigo-800">{% block title_2 %}Фильм 2{% endblock title_2 %}</h2>
-                </div>
-                <div class="grid w-2/5 sm:w-3/5 md:w-5/12 xl:w-3/5 justify-items-center">
-                    <img class="rounded-lg shadow-lg" src="{% static 'images/poster.jpeg' %}" alt="">
-                </div>
-            {% endif %}
-        </div>
+          </a>
+        {% else %}
+          <a><h3 class="section__title text-md-center mt-4 mt-md-0" style="text-align: center; font-size: 30px;">{% block title_2 %}Фильм 2{% endblock title_2 %}</h3></a>
+          <div class="card">
+            <img src="{% static 'img/poster.jpeg' %}" class="card__cover mx-auto" alt="">
+          </div>
+        {% endif %}
+      </div>
     </div>
-
-    <!--    Поисковые вводы, кнопка поиска-->
-    <div class="grid grid-cols-1">
-        <div class="w-full justify-items-center">
-               <div class="mt-6 w-full text-sm sm:text-base">
-                   <form method="post"  action="{% block action_form %}{% url 'search-films' %}{% endblock action_form %}">
-                        {% csrf_token %}
-                        <div class="grid grid-cols-1 sm:grid-cols-2 justify-items-center">
-                            <div class="w-44 mb-4 sm:mb-0 md:w-44 lg:w-56 xl:w-80 text-red-400">
-                                {{ form_1 }}
-                            </div>
-                            <div class="w-44 mb-4 sm:mb-0 md:w-44 lg:w-56 xl:w-80 text-red-400">
-                                {{ form_2 }}
-                            </div>
-                        </div>
-                        <div class="grid grid-cols-1 justify-items-center">
-                            <button type="submit" class="grid w-30 md:w-34 lg:w-40 bg-gray-100 text-gray-700 border-0 py-1 px-3 focus:outline-none hover:bg-gray-200 rounded-xl text-xs md:text-sm lg:text-base mt-4 md:mt-0"><span><i class="fas fa-search mr-2"></i>Подобрать</span></button>
-                        </div>
-                   </form>
-               </div>
-               {% if films_duplicate %}
-                   <hr class="mt-8 mb-4">
-                   <div class="flex flex-wrap -mx-4 -my-8 mb-4">
-                      <div class="py-10 px-4 lg:w-1/3">
-                        <div class="h-full flex items-start">
-                          <div class="flex-grow pl-6">
-                            <h2 class="tracking-widest text-xs title-font font-medium text-indigo-500 mb-1">РЕЗУЛЬТАТЫ ПОИСКА</h2>
-                            <h1 class="title-font text-lg font-medium text-gray-900 mb-3">{% block pick_smth %}Выберите разные фильмы.{% endblock pick_smth %}</h1>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-               {% else %}
-                    {% if films_1_query or films_2_query %}
-                        <hr class="mt-8 mb-4">
-                        {% if films_1_query and not film_2 and not films_2_query %}
-                            <div class="flex flex-wrap -mx-4 -my-8 mb-4">
-                              <div class="py-10 px-4 lg:w-1/3">
-                                <div class="h-full flex items-start">
-                                  <div class="flex-grow pl-6">
-                                    <h2 class="tracking-widest text-xs title-font font-medium text-indigo-500 mb-1">РЕЗУЛЬТАТЫ ПОИСКА</h2>
-                                    <h1 class="title-font text-lg font-medium text-gray-900 mb-3">Возможно вы имели в виду (Фильм № 1):</h1>
-                                    {% for film in films_1_query %}
-                                    <div>
-                                      <a target="_blank" href="{{ film.get_absolute_url }}" class="inline-flex items-center mb-4">
-                                        <img alt="blog" src="{{ film.image.url }}" class="w-10 h-10 rounded-full flex-shrink-0 object-cover object-center">
-                                        <span class="flex-grow flex flex-col pl-3">
-                                          <span class="title-font font-base text-gray-900">{{ film.title_ru|capfirst }} {% block year_q1 %}({{ film.year }}){% endblock year_q1 %}</span>
-                                        </span>
-                                      </a>
-                                    </div>
-                                    {% endfor %}
-                                    <h1 class="title-font text-lg font-medium text-gray-900 mb-3">Фильм № 2 не найден.</h1>
-                                  </div>
-                                </div>
-                              </div>
-                            </div>
-                        {% endif %}
-
-                        {% if films_1_query and film_2 %}
-                        <div class="flex flex-wrap -mx-4 -my-8 mb-4">
-                          <div class="py-10 px-4 lg:w-1/3">
-                            <div class="h-full flex items-start">
-                              <div class="flex-grow pl-6">
-                                <h2 class="tracking-widest text-xs title-font font-medium text-indigo-500 mb-1">РЕЗУЛЬТАТЫ ПОИСКА</h2>
-                                <h1 class="title-font text-lg font-medium text-gray-900 mb-3">Возможно вы имели в виду (Фильм № 1):</h1>
-                                {% for film in films_1_query %}
-                                <div>
-                                  <a target="_blank" href="{{ film.get_absolute_url }}" class="inline-flex items-center">
-                                    <img alt="blog" src="{{ film.image.url }}" class="w-10 h-10 rounded-full flex-shrink-0 object-cover object-center">
-                                    <span class="flex-grow flex flex-col pl-3">
-                                      <span class="title-font font-base text-gray-900">{{ film.title_ru|capfirst }} {% block year_q1f2 %}({{ film.year }}){% endblock year_q1f2 %}</span>
-                                    </span>
-                                  </a>
-                                </div>
-                                {% endfor %}
-                              </div>
-                            </div>
-                          </div>
-                        </div>
-                        {% endif %}
-
-                        {% if films_2_query and not film_1 and not films_1_query %}
-                            <div class="flex flex-wrap -mx-4 -my-8 mb-4">
-                              <div class="py-10 px-4 lg:w-1/3">
-                                <div class="h-full flex items-start">
-                                  <div class="flex-grow pl-6">
-                                    <h2 class="tracking-widest text-xs title-font font-medium text-indigo-500 mb-1">РЕЗУЛЬТАТЫ ПОИСКА</h2>
-                                    <h1 class="title-font text-lg font-medium text-gray-900 mb-4">Фильм № 1 не найден.</h1>
-                                    <h1 class="title-font text-lg font-medium text-gray-900 mb-3">Возможно вы имели в виду (Фильм № 2):</h1>
-                                    {% for film in films_2_query %}
-                                    <div>
-                                      <a target="_blank" href="{{ film.get_absolute_url }}" class="inline-flex items-center">
-                                        <img alt="blog" src="{{ film.image.url }}" class="w-10 h-10 rounded-full flex-shrink-0 object-cover object-center">
-                                        <span class="flex-grow flex flex-col pl-3">
-                                          <span class="title-font font-base text-gray-900">{{ film.title_ru|capfirst }} {% block year_q2 %}({{ film.year }}){% endblock year_q2 %}</span>
-                                        </span>
-                                      </a>
-                                    </div>
-                                    {% endfor %}
-                                  </div>
-                                </div>
-                              </div>
-                            </div>
-                        {% endif %}
-
-                        {% if films_2_query and film_1 %}
-                            <div class="flex flex-wrap -mx-4 -my-8 mb-4">
-                              <div class="py-10 px-4 lg:w-1/3">
-                                <div class="h-full flex items-start">
-                                  <div class="flex-grow pl-6">
-                                    <h2 class="tracking-widest text-xs title-font font-medium text-indigo-500 mb-1">РЕЗУЛЬТАТЫ ПОИСКА</h2>
-                                    <h1 class="title-font text-lg font-medium text-gray-900 mb-3">Возможно вы имели в виду (Фильм № 2):</h1>
-                                    {% for film in films_2_query %}
-                                    <div>
-                                      <a target="_blank" href="{{ film.get_absolute_url }}" class="inline-flex items-center">
-                                        <img alt="blog" src="{{ film.image.url }}" class="w-10 h-10 rounded-full flex-shrink-0 object-cover object-center">
-                                        <span class="flex-grow flex flex-col pl-3">
-                                          <span class="title-font font-base text-gray-900">{{ film.title_ru|capfirst }} {% block year_q2f1 %}({{ film.year }}){% endblock year_q2f1 %}</span>
-                                        </span>
-                                      </a>
-                                    </div>
-                                    {% endfor %}
-                                  </div>
-                                </div>
-                              </div>
-                            </div>
-                        {% endif %}
-
-                        {% if films_1_query and films_2_query %}
-                            <div class="flex flex-wrap -mx-4 -my-8 mb-4">
-                              <div class="py-10 px-4 lg:w-1/3">
-                                <div class="h-full flex items-start">
-                                  <div class="flex-grow pl-6">
-                                    <h2 class="tracking-widest text-xs title-font font-medium text-indigo-500 mb-1">РЕЗУЛЬТАТЫ ПОИСКА</h2>
-                                    <h1 class="title-font text-lg font-medium text-gray-900 mb-3">Возможно вы имели в виду (Фильм № 1):</h1>
-                                    {% for film in films_1_query %}
-                                    <div>
-                                      <a target="_blank" href="{{ film.get_absolute_url }}" class="inline-flex items-center">
-                                        <img alt="blog" src="{{ film.image.url }}" class="w-10 h-10 rounded-full flex-shrink-0 object-cover object-center">
-                                        <span class="flex-grow flex flex-col pl-3">
-                                          <span class="title-font font-base text-gray-900">{{ film.title_ru|capfirst }} {% block year_q2q1 %}({{ film.year }}){% endblock year_q2q1 %}</span>
-                                        </span>
-                                      </a>
-                                    </div>
-                                    {% endfor %}
-                                    <h1 class="title-font text-lg font-medium text-gray-900 mb-3">Возможно вы имели в виду (Фильм № 2):</h1>
-                                    {% for film in films_2_query %}
-                                    <div>
-                                      <a target="_blank" href="{{ film.get_absolute_url }}" class="inline-flex items-center">
-                                        <img alt="blog" src="{{ film.image.url }}" class="w-10 h-10 rounded-full flex-shrink-0 object-cover object-center">
-                                        <span class="flex-grow flex flex-col pl-3">
-                                          <span class="title-font font-base text-gray-900">{{ film.title_ru|capfirst }} {% block year_q1q2 %}({{ film.year }}){% endblock year_q1q2 %}</span>
-                                        </span>
-                                      </a>
-                                    </div>
-                                    {% endfor %}
-                                  </div>
-                                </div>
-                              </div>
-                            </div>
-                        {% endif %}
-
-                    {% elif film_1 and not film_2 %}
-                        <hr class="mt-8 mb-4">
-                        <div class="flex flex-wrap -mx-4 -my-8 mb-4">
-                          <div class="py-10 px-4 lg:w-1/3">
-                            <div class="h-full flex items-start">
-                              <div class="flex-grow pl-6">
-                                <h2 class="tracking-widest text-xs title-font font-medium text-indigo-500 mb-1">РЕЗУЛЬТАТЫ ПОИСКА</h2>
-                                <h1 class="title-font text-lg font-medium text-gray-900 mb-3">Фильм № 2 не найден.</h1>
-                              </div>
-                            </div>
-                          </div>
-                        </div>
-
-                    {% elif film_2 and not film_1 %}
-                        <hr class="mt-8 mb-4">
-                        <div class="flex flex-wrap -mx-4 -my-8 mb-4">
-                          <div class="py-10 px-4 lg:w-1/3">
-                            <div class="h-full flex items-start">
-                              <div class="flex-grow pl-6">
-                                <h2 class="tracking-widest text-xs title-font font-medium text-indigo-500 mb-1">РЕЗУЛЬТАТЫ ПОИСКА</h2>
-                                <h1 class="title-font text-lg font-medium text-gray-900 mb-3">Фильм № 1 не найден.</h1>
-                              </div>
-                            </div>
-                          </div>
-                        </div>
-                    {% elif request.method == 'POST' and not film_1 and not film_2 %}
-                        <hr class="mt-8 mb-4">
-                        <div class="flex flex-wrap -mx-4 -my-8 mb-4">
-                          <div class="py-10 px-4 lg:w-2/3">
-                            <div class="h-full flex items-start">
-                              <div class="flex-grow pl-6">
-                                <h2 class="tracking-widest text-xs title-font font-medium text-indigo-500 mb-1">РЕЗУЛЬТАТЫ ПОИСКА</h2>
-                                <p>По вашему запросу фильмы не найдены. Попробуйте найти названия фильмов через <a class="text-indigo-500" href="#search">поиск</a></p>
-                              </div>
-                            </div>
-                          </div>
-                        </div>
-                    {% endif %}
-                {% endif %}
+    <form method="post"  action="{% block action_form %}{% url 'search-films' %}{% endblock action_form %}" class="form--contacts">
+      {% csrf_token %}
+      <div class="row align-items-center mt-4">
+          <div class="col-12 px-5 px-md-4 px-lg-1 px-xl-4 mx-auto col-md-6 col-lg-4 offset-lg-1">
+            <div class="">
+                {{ form_1 }}
+            </div>
+          </div>
+          <div class="col-12 px-5 px-md-4 px-lg-1 px-xl-4 mx-auto col-md-6 col-lg-4 offset-lg-2">
+            <div class="">
+              {{ form_2 }}
+            </div>
+          </div>
+      </div>
+      <div class="row">
+        <div class="col-12">
+          <button class="section__btn mt-3" type="submit">Подобрать</button>
         </div>
+      </div>
+    </form>
+  </div>
+</section>
+
+<!-- search results -->
+{% if request.method == 'POST' %}
+<section class="section section--bg search__section" data-bg="{% static 'img/section/section.jpeg' %}">
+  <div class="container">
+    <div class="row">
+      <!-- section title -->
+      <div class="col-12">
+        <h2 class="section__title">Результаты поиска</h2>
+      </div>
+      <!-- end section title -->
     </div>
+{% endif %}
 
+     {% if films_duplicate %}
+       <p class="feature__text">{% block pick_smth %}Выберите разные фильмы.{% endblock pick_smth %}</p>
+     {% else %}
+       {% if films_1_query or films_2_query %}
 
-<!--Результаты поиска-->
+         {% if films_1_query and not film_2 and not films_2_query %}
+          <h5 class="footer__title">Возможно вы имели в виду (Фильм № 1):</h5>
+          <ul class="footer__list">
+            {% for film in films_1_query %}
+              <li><a href="{{ film.get_absolute_url }}" target="_blank">{{ film.title_ru|capfirst }} {% block year_q1 %}({{ film.year }}){% endblock year_q1 %}</a></li>
+            {% endfor %}
+          </ul>
+          <h5 class="footer__title mt-3">Фильм № 2 не найден.</h5>
+         {% endif %}
+
+         {% if films_1_query and film_2 %}
+         <h5 class="footer__title">Возможно вы имели в виду (Фильм № 1):</h5>
+          <ul class="footer__list">
+            {% for film in films_1_query %}
+              <li><a href="{{ film.get_absolute_url }}" target="_blank">{{ film.title_ru|capfirst }} {% block year_q1f2 %}({{ film.year }}){% endblock year_q1f2 %}</a></li>
+            {% endfor %}
+          </ul>
+         {% endif %}
+
+         {% if films_2_query and not film_1 and not films_1_query %}
+         <h5 class="footer__title">Фильм № 1 не найден.</h5>
+         <h5 class="footer__title">Возможно вы имели в виду (Фильм № 2):</h5>
+          <ul class="footer__list">
+            {% for film in films_2_query %}
+              <li><a href="{{ film.get_absolute_url }}" target="_blank">{{ film.title_ru|capfirst }} {% block year_q2 %}({{ film.year }}){% endblock year_q2 %}</a></li>
+            {% endfor %}
+          </ul>
+         {% endif %}
+
+         {% if films_2_query and film_1 %}
+         <h5 class="footer__title">Возможно вы имели в виду (Фильм № 2):</h5>
+          <ul class="footer__list">
+            {% for film in films_2_query %}
+              <li><a href="{{ film.get_absolute_url }}" target="_blank">{{ film.title_ru|capfirst }} {% block year_q2f1 %}({{ film.year }}){% endblock year_q2f1 %}</a></li>
+            {% endfor %}
+          </ul>
+         {% endif %}
+
+         {% if films_1_query and films_2_query %}
+         <h5 class="footer__title">Возможно вы имели в виду (Фильм № 1):</h5>
+          <ul class="footer__list">
+            {% for film in films_1_query %}
+              <li><a href="{{ film.get_absolute_url }}" target="_blank">{{ film.title_ru|capfirst }} {% block year_q2q1 %}({{ film.year }}){% endblock year_q2q1 %}</a></li>
+            {% endfor %}
+          </ul>
+          <h5 class="footer__title mt-3">Возможно вы имели в виду (Фильм № 2):</h5>
+          <ul class="footer__list">
+            {% for film in films_2_query %}
+              <li><a href="{{ film.get_absolute_url }}" target="_blank">{{ film.title_ru|capfirst }} {% block year_q1q2 %}({{ film.year }}){% endblock year_q1q2 %}</a></li>
+            {% endfor %}
+          </ul>
+         {% endif %}
+
+      {% elif film_1 and not film_2 %}
+      <h5 class="footer__title">Фильм № 2 не найден.</h5>
+
+      {% elif film_2 and not film_1 %}
+      <h5 class="footer__title">Фильм № 1 не найден.</h5>
+
+      {% elif request.method == 'POST' and not film_1 and not film_2 %}
+      <h5 class="footer__title">По вашему запросу фильмы не найдены. Попробуйте найти названия фильмов через поиск.</a></h5>
+
+      {% endif %}
+     {% endif %}
+
     {% if top_ten %}
-    <hr class="mt-8 mb-6">
-    <h2 class="tracking-widest text-xs title-font font-medium text-indigo-500 text-center sm:text-left md:ml-3 xl:ml-0">РЕЗУЛЬТАТЫ ПОИСКА</h2>
-        <div class="grid grid-cols-2 sm:grid-cols-5 xl:grid-cols-10 gap-x-4 gap-y-4 sm:gap-x-10 sm:gap-y-10 mt-10 text-sm sm:text-xs md:text-sm mb-8">
-                {% for film in top_ten %}
-                    {% include 'includes/card_for_top_ten.html' %}
-                {% endfor %}
+    <div class="row row--grid">
+      {% for film in top_ten %}
+      <!-- card -->
+      <div class="col-6 col-sm-4 col-lg-3 col-xl-2">
+        <div class="card">
+          <a href="{{ film.get_absolute_url }}" class="card__cover">
+            <img src="{{ film.image.url }}" alt="">
+            <span class="card__play">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M18.54,9,8.88,3.46a3.42,3.42,0,0,0-5.13,3V17.58A3.42,3.42,0,0,0,7.17,21a3.43,3.43,0,0,0,1.71-.46L18.54,15a3.42,3.42,0,0,0,0-5.92Zm-1,4.19L7.88,18.81a1.44,1.44,0,0,1-1.42,0,1.42,1.42,0,0,1-.71-1.23V6.42a1.42,1.42,0,0,1,.71-1.23A1.51,1.51,0,0,1,7.17,5a1.54,1.54,0,0,1,.71.19l9.66,5.58a1.42,1.42,0,0,1,0,2.46Z"/></svg>
+            </span>
+          </a>
+          <div class="card__content">
+            <h3 class="card__title"><a href="#">{{ film.title_ru|capfirst }}</a></h3>
+            <span class="card__category">
+              <a>{{ film.genres.all|first|capfirst }}</a>
+            </span>
+            <span class="card__rate">{{ film.rating }}</span>
+          </div>
         </div>
+      </div>
+      <!-- end card -->
+      {% endfor %}
+    </div>
     {% endif %}
-</div>
+  </div>
+</section>
+<!-- end search result -->
+
 
 {% endblock content %}
 

@@ -1019,6 +1019,21 @@ ul {
     margin-right: 0;
   }
 }
+
+/*.search__section:before {
+  content: '';
+  position: absolute;
+  width: 77%;
+  margin-left: auto;
+  margin-right: auto;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 2px;
+  display: block;
+  background-image: linear-gradient(90deg, #ff55a5 0%, #ff5860 100%);
+  box-shadow: 0 0 20px 0 rgba(255,88,96,0.5);
+}*/
 /*==============================
 	Section
 ==============================*/
