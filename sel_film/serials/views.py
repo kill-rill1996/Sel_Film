@@ -10,7 +10,7 @@ from films.forms import Film1FindForm, Film2FindForm
 from .service import find_serials
 
 
-class CatalogSerialListView(generic.ListView):
+class SerialListView(generic.ListView):
     model = Serial
     context_object_name = 'films'
     paginate_by = 8
@@ -18,24 +18,27 @@ class CatalogSerialListView(generic.ListView):
 
     def get_queryset(self):
         searched_type = get_serial_type(self.request)
-        if searched_type:
-            return Serial.objects.filter(genres__title=searched_type)
+        if searched_type[0]:
+            return Serial.objects.filter(genres__title=searched_type[0])
         return Serial.objects.all()
 
     def get_context_data(self, **kwargs):
         data = super().get_context_data(**kwargs)
-
-        data['list_type'] = 'сериалов'
-        url_path = self.request.path.split('/')[-2]
-        if url_path == 'cartoons':
-            data['list_type'] = 'мультфильмов'
-        elif url_path == 'anime':
-            data['list_type'] = 'аниме'
-
+        data['list_type'] = get_serial_type(self.request)[1]
         data['genres'] = Genre.objects.all().order_by('title')
         data['countries'] = Country.objects.all().order_by('title')
         data['recommended_films'] = Film.objects.filter(id__in=(31, 1010, 97, 122, 147, 109))
         return data
+
+
+def get_serial_type(request):
+    if request.path == '/serials/anime/':
+        searched_type = ('аниме', 'аниме')
+    elif request.path == '/serials/cartoons/':
+        searched_type = ('мультсериалы', 'мультфильмов')
+    else:
+        searched_type = (None, 'сериалов')
+    return searched_type
 
 
 # class SerialListView(generic.ListView):
@@ -69,7 +72,7 @@ class SerialDetailView(generic.DetailView):
 
     def get_context_data(self, **kwargs):
         data = super().get_context_data(**kwargs)
-        data['rec_films'] = Serial.objects.filter(genres__in=self.object.genres.all()).exclude(id=self.object.id)[:6]
+        data['rec_films'] = Serial.objects.exclude(id=self.object.id)[:6]
         return data
 
 
@@ -127,11 +130,3 @@ def search_serials(request):
         return render(request, 'serials/search_serials.html', context={'form_1': form_1, 'form_2': form_2})
 
 
-def get_serial_type(request):
-    if request.path == '/serials/anime/':
-        searched_type = 'аниме'
-    elif request.path == '/serials/cartoons/':
-        searched_type = 'мультсериалы'
-    else:
-        searched_type = None
-    return searched_type
