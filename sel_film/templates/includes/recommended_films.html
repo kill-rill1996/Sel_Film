@@ -24,7 +24,7 @@
 					<div class="card__content">
 						<h3 class="card__title"><a href="{{ film.get_absolute_url }}">{{ film.title_ru|capfirst }}</a></h3>
 						<span class="card__category">
-							<a>{{ film.genres.all|first|capfirst }}</a>
+							<a>{{ film.genres.all|first }}</a>
 						</span>
 						<span class="card__rate">{{ film.rating }}</span>
 					</div>

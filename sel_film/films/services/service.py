@@ -216,11 +216,11 @@ def get_film_by_id(id, films) -> dict:
 
 
 def get_top_ten_films(films) -> list:
-    """Возвращает лист из 10 кортежей (id: points)"""
+    """Возвращает лист из 12 кортежей (id: points)"""
     top_ten_list = []
     count = 0
     for k in sorted(films, key=films.get, reverse=True):
-        if count == 10:
+        if count == 12:
             break
         top_ten_list.append((k, films[f'{k}']))
         count += 1

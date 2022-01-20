@@ -114,7 +114,8 @@
           <h5 class="footer__title">Возможно вы имели в виду (Фильм № 1):</h5>
           <ul class="footer__list">
             {% for film in films_1_query %}
-              <li><a href="{{ film.get_absolute_url }}" target="_blank">{{ film.title_ru|capfirst }} {% block year_q1 %}({{ film.year }}){% endblock year_q1 %}</a></li>
+              <li><a href="{{ film.get_absolute_url }}" target="_blank">{{ film.title_ru|capfirst }} {% block year_q1 %}({{ film.year }}){% endblock year_q1 %}</a> 
+                <!-- <a href="" id="copy__btn"><i class="far fa-copy footer__title ml-2"></i></a></li> -->
             {% endfor %}
           </ul>
           <h5 class="footer__title mt-3">Фильм № 2 не найден.</h5>
