@@ -12,13 +12,21 @@
 			<div class="col-12">
 				<div class="section__wrap">
 					<!-- section title -->
+					{% if search_text %}
+					<h1 class="section__title">Поиск</h1>
+					{% else %}
 					<h1 class="section__title">Список {% block navigation_left %}фильмов{% endblock navigation_left %}</h1>
+					{% endif %}
 					<!-- end section title -->
 
 					<!-- breadcrumb -->
 					<ul class="breadcrumb">
 						<li class="breadcrumb__item"><a href="{% url 'index-page' %}">Главная</a></li>
+						{% if search_text %}
+						<li class="breadcrumb__item breadcrumb__item--active">Поиск</li>
+						{% else %}
 						<li class="breadcrumb__item breadcrumb__item--active">Список {% block navigation_right %}фильмов{% endblock navigation_right %}</li>
+						{% endif %}
 					</ul>
 					<!-- end breadcrumb -->
 				</div>
@@ -29,11 +37,17 @@
 <!-- end page title -->
 
 <!-- filter -->
+
 <div class="filter">
 	<div class="container">
+		{% if search_text and films %}
+			<h3 class="card__title py-4">Результаты поиска по запросу: "{{ search_text }}"</h3>
+		{% elif search_text %}
+			<h3 class="card__title py-4">По запросу "{{ search_text }}" ничего не найдено.</h3>
+		{% else %}
 		<div class="row">
 			<div class="col-12">
-				<form method="GET" action="{% url 'filter-search' %}">
+				<form method="GET" action="{% block form_action_url %}{% url 'filter-search-films' %}{% endblock %}">
 				<div class="filter__content">
 					<div class="filter__items">
 						<!-- filter item -->
@@ -51,7 +65,7 @@
 							<ul class="filter__item-menu dropdown-menu scrollbar-dropdown" aria-labelledby="filter-genre">
 								<li>Все жанры</li>
 								{% for genre in genres %}
-								<li>{{ genre }}</li>
+								<li>{{ genre|capfirst }}</li>
 								{% endfor %}
 							</ul>
 						</div>
@@ -79,7 +93,7 @@
 						<!-- end filter item -->
 
 						<!-- filter item -->
-						<!-- <div class="filter__item" id="filter__rate">
+						<div class="filter__item" id="filter__rate">
 							<span class="filter__item-label">IMBd:</span>
 
 							<div class="filter__item-btn dropdown-toggle" role="button" id="filter-rate" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
@@ -93,7 +107,7 @@
 							<div class="filter__item-menu filter__item-menu--range dropdown-menu" aria-labelledby="filter-rate">
 								<div id="filter__imbd"></div>
 							</div>
-						</div> -->
+						</div>
 						<!-- end filter item -->
 
 						<!-- filter item -->
@@ -122,12 +136,14 @@
 				</form>
 			</div>
 		</div>
+		{% endif %}
 	</div>
 </div>
+
 <!-- end filter -->
 
 <!-- catalog -->
-<div class="catalog">
+<div class="catalog{% if search_text and not films %} py-5 my-5{% endif %}">
 	<div class="container">
 		<div class="row row--grid">
 			{% for film in films %}
@@ -157,9 +173,12 @@
 							{% endif %}
 
 							<ul class="card__list">
-								{% block year %}
+								{% if film.year %}
 									<li>{{ film.year }}</li>
-								{% endblock year %}
+								{% endif %}
+								{% if film.start_year %}
+									<li>{{ film.start_year }}{% if film.end_year %} - {{ film.end_year }}{% endif %}</li>
+								{% endif %}
 								{% if film.rating >= 8.0 %}<li>🌶</li>{% endif %}
 							</ul>
 						</div>
@@ -173,12 +192,13 @@
 			<!-- end card -->
 			{% endfor %}
 		</div>
-
+		{% if films %}
 		<div class="row">
 			<!-- paginator -->
 			{% include 'includes/paginator.html' %}
 			<!-- end paginator -->
 		</div>
+		{% endif %}
 	</div>
 </div>
 <!-- end catalog -->

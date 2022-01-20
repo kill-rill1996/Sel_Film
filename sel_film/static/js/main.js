@@ -548,4 +548,10 @@ $(document).ready(function () {
 		return false;
 	}
 	$(window).on('load', initializeThirdSlider());
+	
+	// Copy film title
+	$('#copy__btn').on('click', function () {
+		var copy_text = $('#copy__btn').closest('a').innerHTML;
+		console.log(copy_text)
+	})
 });

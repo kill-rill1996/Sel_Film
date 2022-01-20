@@ -250,11 +250,11 @@ def get_serial_by_id(id, SERIALS) -> dict:
 
 
 def get_top_ten_serials(serials) -> list:
-    """Возвращает лист из 10 кортежей (id, points)"""
+    """Возвращает лист из 12 кортежей (id, points)"""
     top_ten_list = []
     count = 0
     for k in sorted(serials, key=serials.get, reverse=True):
-        if count == 10:
+        if count == 12:
             break
         top_ten_list.append((k, serials[f'{k}']))
         count += 1
