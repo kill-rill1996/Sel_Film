@@ -44,7 +44,7 @@
 								<h3 class="card__title"><a href="{{ film.get_absolute_url }}">{{ film.title_ru|capfirst }}</a></h3>
 								<span class="card__category">
 									{% for genre in film.genres.all|get_two_genres %}
-										<a>{{ genre.title|capfirst }}</a>
+										<a>{{ genre.title }}</a>
 									{% endfor %}
 								</span>
 								<span class="card__rate">{{ film.rating }}</span>
@@ -84,7 +84,7 @@
 						</li>
 
 						<li class="nav-item" role="presentation">
-							<a class="nav-link" data-toggle="tab" href="#tab-4" role="tab" aria-controls="tab-4" aria-selected="false">АНИМЭ</a>
+							<a class="nav-link" data-toggle="tab" href="#tab-4" role="tab" aria-controls="tab-4" aria-selected="false">АНИМЕ</a>
 						</li>
 					</ul>
 					<!-- end content tabs nav -->
@@ -104,7 +104,7 @@
 
 								<li class="nav-item"><a class="nav-link" id="3-tab" data-toggle="tab" href="#tab-3" role="tab" aria-controls="tab-3" aria-selected="false">МУЛЬТФИЛЬМЫ</a></li>
 
-								<li class="nav-item"><a class="nav-link" id="4-tab" data-toggle="tab" href="#tab-4" role="tab" aria-controls="tab-4" aria-selected="false">АНИМЭ</a></li>
+								<li class="nav-item"><a class="nav-link" id="4-tab" data-toggle="tab" href="#tab-4" role="tab" aria-controls="tab-4" aria-selected="false">АНИМЕ</a></li>
 							</ul>
 						</div>
 					</div>
@@ -180,7 +180,7 @@
 
 				<!-- section btn -->
 				<div class="col-12">
-					<a href="{% url 'anime-list' %}" class="section__btn">Все анимэ</a>
+					<a href="{% url 'anime-list' %}" class="section__btn">Все аниме</a>
 				</div>
 				<!-- end section btn -->
 			</div>

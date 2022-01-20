@@ -1,6 +1,6 @@
 from loguru import logger
 
-from django.db.models import Prefetch
+from django.db.models import Prefetch, Q
 from django.shortcuts import render
 from django.views import generic
 
@@ -24,7 +24,16 @@ class SerialListView(generic.ListView):
 
     def get_context_data(self, **kwargs):
         data = super().get_context_data(**kwargs)
-        data['list_type'] = get_serial_type(self.request)[1]
+
+        data['list_type'] = 'сериалов'
+        url_path = self.request.path.split('/')[-2]
+        if url_path == 'cartoons':
+            data['list_type'] = 'мультфильмов'
+            data['chosen_genre'] = 'Мультсериалы'
+        elif url_path == 'anime':
+            data['list_type'] = 'аниме'
+            data['chosen_genre'] = 'Аниме'
+
         data['genres'] = Genre.objects.all().order_by('title')
         data['countries'] = Country.objects.all().order_by('title')
         data['recommended_films'] = Film.objects.filter(id__in=(31, 1010, 97, 122, 147, 109))
@@ -130,3 +139,59 @@ def search_serials(request):
         return render(request, 'serials/search_serials.html', context={'form_1': form_1, 'form_2': form_2})
 
 
+def get_serial_type(request):
+    if request.path == '/serials/anime/':
+        searched_type = 'аниме'
+    elif request.path == '/serials/cartoons/':
+        searched_type = 'мультсериалы'
+    else:
+        searched_type = None
+    return searched_type
+
+
+class FilterSerialListView(generic.ListView):
+    paginate_by = 8
+    template_name = 'serial_list.html'
+    context_object_name = 'films'
+
+    def get_queryset(self):
+        if self.request.GET.get('years_start') == '1900' and self.request.GET.get('years_end') == '2021':
+            films = Serial.objects.all()
+        else:
+            films = Serial.objects.filter(
+                Q(start_year__gte=int(self.request.GET.get('years_start'))) &
+                Q(start_year__lte=int(self.request.GET.get('years_end')))
+            )
+
+        if self.request.GET.get('imbd_start') != '0.1' or self.request.GET.get('imbd_end') != '9.9':
+            films = films.filter(
+                Q(rating__gte=float(self.request.GET.get('imbd_start'))) &
+                Q(rating__lte=float(self.request.GET.get('imbd_end')))
+            )
+
+        if self.request.GET.get('genre') and self.request.GET.get('genre') != 'Все жанры':
+            films = films.filter(genres__title=self.request.GET.get('genre').lower())
+
+        if self.request.GET.get('country') and self.request.GET.get('country') != 'Все страны':
+            films = films.filter(countries__title=self.request.GET.get('country'))
+        return films
+
+    def get_context_data(self, *args, **kwargs):
+        context = super().get_context_data(*args, **kwargs)
+        context['get_params'] = []
+        if self.request.GET.get('genre'):
+            context['get_params'].append(f"genre={self.request.GET.get('genre')}&")
+            context['chosen_genre'] = self.request.GET.get('genre')
+        if self.request.GET.get('country'):
+            context['get_params'].append(f"country={self.request.GET.get('country')}&")
+            context['chosen_country'] = self.request.GET.get('country')
+        context['get_params'].append(f"years_start={self.request.GET.get('years_start')}&")
+        context['get_params'].append(f"years_end={self.request.GET.get('years_end')}&")
+        context['get_params'].append(f"imbd_start={self.request.GET.get('imbd_start')}&")
+        context['get_params'].append(f"imbd_end={self.request.GET.get('imbd_end')}&")
+
+        context['list_type'] = 'сериалов'
+        context['genres'] = Genre.objects.all().order_by('title')
+        context['countries'] = Country.objects.all().order_by('title')
+        context['recommended_films'] = Film.objects.filter(id__in=(31, 1010, 97, 122, 147, 109))
+        return context

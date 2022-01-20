@@ -10,11 +10,4 @@
 	{{ list_type }}
 {% endblock navigation_right %}
 
-{% block year %}
-	{% if film.year %}
-		<li>{{ film.year }}</li>
-	{% endif %}
-	{% if film.start_year %}
-		<li>{{ film.start_year }}{% if film.end_year %} - {{ film.end_year }}{% endif %}</li>
-	{% endif %}
-{% endblock year %}
+{% block form_action_url %}{% url 'filter-search-serials' %}{% endblock %}
