@@ -24,15 +24,11 @@ class SerialListView(generic.ListView):
 
     def get_context_data(self, **kwargs):
         data = super().get_context_data(**kwargs)
-
-        data['list_type'] = 'сериалов'
-        url_path = self.request.path.split('/')[-2]
-        if url_path == 'cartoons':
-            data['list_type'] = 'мультфильмов'
-            data['chosen_genre'] = 'Мультсериалы'
-        elif url_path == 'anime':
-            data['list_type'] = 'аниме'
-            data['chosen_genre'] = 'Аниме'
+        serial_type = get_serial_type(self.request)
+        data['list_type'] = serial_type[1]
+        if serial_type[0]:
+            data['list_type'] = serial_type[0]
+            data['chosen_genre'] = serial_type[2]
 
         data['genres'] = Genre.objects.all().order_by('title')
         data['countries'] = Country.objects.all().order_by('title')
@@ -42,25 +38,12 @@ class SerialListView(generic.ListView):
 
 def get_serial_type(request):
     if request.path == '/serials/anime/':
-        searched_type = ('аниме', 'аниме')
+        searched_type = ('аниме', 'аниме', 'Аниме')
     elif request.path == '/serials/cartoons/':
-        searched_type = ('мультсериалы', 'мультфильмов')
+        searched_type = ('мультсериалы', 'мультфильмов', 'Мультсериалы')
     else:
-        searched_type = (None, 'сериалов')
+        searched_type = (None, 'сериалов', None)
     return searched_type
-
-
-# class SerialListView(generic.ListView):
-#     model = Serial
-#     context_object_name = 'films'
-#     paginate_by = 6
-#
-#     def get_queryset(self):
-#         genres = Genre.objects.only('title')
-#         countries = Country.objects.only('title')
-#         return Serial.objects.only('title_ru', 'title_en', 'image', 'plot', 'start_year', 'end_year') \
-#             .prefetch_related(Prefetch('genres', queryset=genres))\
-#             .prefetch_related(Prefetch('countries', queryset=countries))
 
 
 class SerialDetailView(generic.DetailView):
@@ -137,16 +120,6 @@ def search_serials(request):
         form_1 = Film1FindForm()
         form_2 = Film2FindForm()
         return render(request, 'serials/search_serials.html', context={'form_1': form_1, 'form_2': form_2})
-
-
-def get_serial_type(request):
-    if request.path == '/serials/anime/':
-        searched_type = 'аниме'
-    elif request.path == '/serials/cartoons/':
-        searched_type = 'мультсериалы'
-    else:
-        searched_type = None
-    return searched_type
 
 
 class FilterSerialListView(generic.ListView):

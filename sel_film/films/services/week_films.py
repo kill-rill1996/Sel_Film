@@ -17,7 +17,7 @@ def read_id_from_log():
                 log_id[film_id] += 1
             else:
                 log_id[film_id] = 1
-    res = sorted(log_id.items(), key=lambda x: x[1], reverse=True)
+    res = sorted(log_id.items(), key=lambda x: x[1], reverse=True)[:7]
     if len(res) < 7:
         for i in range((7 - len(res))):
             res.append((default_films[i], 1))

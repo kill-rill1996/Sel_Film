@@ -133,81 +133,6 @@ def search_films(request):
                                                                     'form_2': form_2,
                                                                    })
 
-# Old search
-# def search(request):
-#     if request.method == "POST":
-#         context = {}
-#         search_data = request.POST['search_data']
-#         search_data_lower = request.POST['search_data'].lower()
-#         model_type = request.POST['currency']
-#
-#         # Films
-#         if model_type == 'Films':
-#             logger.info(f'Через поиск искали фильм \"{search_data}\"')
-#             try:
-#                 # Eng title
-#                 if search_data_lower[0] in ascii_lowercase:
-#                     films_list = Film.objects.only('title_ru', 'title_en', 'year', 'plot', 'image')\
-#                         .filter(title_en__icontains=search_data_lower)\
-#                         .prefetch_related('genres')\
-#                         .prefetch_related('countries').order_by('-rating')[:20]
-#                     # log
-#                     if films_list:
-#                         logger.info(f'Найден список фильмов (англ. запрос): {[f"{film.id}. {film.title_ru}" for film in films_list]}')
-#                     else:
-#                         logger.warning(f'Фильмы по запросу: \"{search_data}\" не найдены {films_list}')
-#                 else:
-#                     # Rus title
-#                     films_list = Film.objects.only('title_ru', 'title_en', 'year', 'plot', 'image')\
-#                         .filter(title_ru__icontains=search_data_lower)\
-#                         .prefetch_related('genres',)\
-#                         .prefetch_related('countries').order_by('-rating')[:20]
-#                     # log
-#                     if films_list:
-#                         logger.info(f'Найден список фильмов (рус. запрос): {[f"{film.id}. {film.title_ru}" for film in films_list]}')
-#                     else:
-#                         logger.warning(f'Фильмы по запросу: \"{search_data}\" не найдены {films_list}')
-#
-#             except IndexError:
-#                 films_list = []
-#                 logger.warning(f'Сраблотала IndexError при поиске фильмов')
-#         else:
-#             # Serials
-#             logger.info(f'Через поиск искали сериал \"{search_data}\"')
-#             try:
-#                 # Eng title
-#                 if search_data_lower[0] in ascii_lowercase:
-#                     films_list = Serial.objects.only('title_ru', 'title_en', 'start_year', 'end_year', 'plot', 'image', 'end_status')\
-#                         .filter(title_en__icontains=search_data_lower)\
-#                         .prefetch_related('genres')\
-#                         .prefetch_related('countries').order_by('-rating')[:20]
-#                     # log
-#                     if films_list:
-#                         logger.info(f'Найден список сериалов (англ. запрос): {[f"{film.id}. {film.title_ru}" for film in films_list]}')
-#                     else:
-#                         logger.warning(f'Сериалы по запросу: \"{search_data}\" не найдены {films_list}')
-#                 # Rus title
-#                 else:
-#                     films_list = Serial.objects.only('title_ru', 'title_en', 'start_year', 'end_year', 'plot', 'image', 'end_status')\
-#                         .filter(title_ru__icontains=search_data_lower)\
-#                         .prefetch_related(Prefetch('genres', queryset=Serial_Genre.objects.all()))\
-#                         .prefetch_related(Prefetch('countries', queryset=CountrySerial.objects.all())).order_by('-rating')[:20]
-#                     # log
-#                     if films_list:
-#                         logger.info(f'Найден список сериалов (русс. запрос): {[f"{film.id}. {film.title_ru}" for film in films_list]}')
-#                     else:
-#                         logger.warning(f'Сериалы по запросу: \"{search_data}\" не найдены {films_list}')
-#
-#             except IndexError:
-#                 films_list = []
-#                 logger.warning(f'Сраблотала IndexError при поиске сериалов')
-#
-#         context['films'] = films_list
-#         context['search_data'] = search_data
-#         return render(request, 'search_results.html', context)
-#     else:
-#         return render(request, 'search_results.html')
-
 
 def contact_page(request):
     if request.method == 'POST':
@@ -298,7 +223,7 @@ class FilterFilmListView(generic.ListView):
         return context
 
 
-class SearchFilmListView(generic.ListView):
+class SearchView(generic.ListView):
     context_object_name = 'films'
     template_name = 'film_list.html'
     paginate_by = 8
@@ -307,39 +232,31 @@ class SearchFilmListView(generic.ListView):
         if self.request.GET.get('search_text') and self.request.GET.get('search_text') != ' ':
             search_data = self.request.GET.get('search_text')
             search_data_lower = search_data.lower()
-            logger.info(f'Через поиск искали фильм \"{search_data}\"')
             try:
                 # Eng title
                 if search_data_lower[0] in ascii_lowercase:
                     films_list = Film.objects.only('title_ru', 'year', 'plot', 'image', 'rating')\
                                      .filter(title_en__icontains=search_data_lower) \
                                      .prefetch_related('genres') \
-                                     .prefetch_related('countries').order_by('-rating')
+                                     .prefetch_related('countries')[:100]
                     serials_list = Serial.objects.only('title_ru', 'rating', 'start_year', 'end_year', 'plot', 'image', 'end_status')\
                                     .filter(title_en__icontains=search_data_lower)\
                                     .prefetch_related('genres')\
-                                    .prefetch_related('countries').order_by('-rating')
-                    # log
-                    if films_list:
-                        logger.info(f'Найден список фильмов (англ. запрос): {[f"{film.id}. {film.title_ru}" for film in films_list]}')
-                        logger.info(f'Найден список сериалов (англ. запрос): {[f"{serial.id}. {serial.title_ru}" for serial in serials_list]}')
-                    else:
+                                    .prefetch_related('countries')[:100]
+                    if not films_list and not serials_list:
                         logger.warning(f'Фильмы и сериалы по запросу: \"{search_data}\" не найдены {films_list} {serials_list}')
                 else:
                     # Rus title
                     films_list = Film.objects.only('title_ru', 'year', 'plot', 'image', 'rating') \
                                      .filter(title_ru__icontains=search_data_lower) \
                                      .prefetch_related('genres',) \
-                                     .prefetch_related('countries').order_by('-rating')
+                                     .prefetch_related('countries')[:100]
                     serials_list = Serial.objects.only('title_ru', 'rating', 'start_year', 'end_year', 'plot', 'image', 'end_status') \
                                     .filter(title_ru__icontains=search_data_lower) \
                                     .prefetch_related('genres') \
-                                    .prefetch_related('countries').order_by('-rating')
+                                    .prefetch_related('countries')[:100]
                     # log
-                    if films_list:
-                        logger.info(f'Найден список фильмов (рус. запрос): {[f"{film.id}. {film.title_ru}" for film in films_list]}')
-                        logger.info(f'Найден список сериалов (рус. запрос): {[f"{serial.id}. {serial.title_ru}" for serial in serials_list]}')
-                    else:
+                    if not films_list and not serials_list:
                         logger.warning(f'Фильмы и сериалы по запросу: \"{search_data}\" не найдены {films_list} {serials_list}')
 
                 films_list = list(films_list) + list(serials_list)

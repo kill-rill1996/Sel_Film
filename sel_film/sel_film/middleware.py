@@ -14,6 +14,6 @@ class ErrorLogMiddleware:
     # TO DO: page for exceptions
     def process_exception(self, request, exception):
         logger.error(f'Error middleware: {exception}')
-        # return render(request, 'includes/404.html')
+        return render(request, 'includes/404.html')
 
 
