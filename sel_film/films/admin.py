@@ -4,6 +4,7 @@ from . import models
 admin.site.register(models.Film)
 admin.site.register(models.Actor)
 admin.site.register(models.Director)
+admin.site.register(models.Comment)
 
 
 @admin.register(models.Genre)
@@ -14,3 +15,4 @@ class GenreAdmin(admin.ModelAdmin):
 @admin.register(models.Country)
 class CountryAdmin(admin.ModelAdmin):
     prepopulated_fields = {'slug': ('title',)}
+

@@ -64,7 +64,15 @@ class SerialDetailView(generic.DetailView):
 
     def get_context_data(self, **kwargs):
         data = super().get_context_data(**kwargs)
-        data['rec_films'] = Serial.objects.exclude(id=self.object.id)[:6]
+        serial_genres = [genre.title for genre in self.object.genres.all()]
+        if 'аниме' in serial_genres:
+            data['rec_films'] = Serial.objects.filter(genres__title='аниме').exclude(
+                id=self.object.id)[:6]
+        elif 'мультсериалы' in serial_genres:
+            data['rec_films'] = Serial.objects.filter(genres__title='мультсериалы').exclude(
+                id=self.object.id)[:6]
+        else:
+            data['rec_films'] = Serial.objects.exclude(id=self.object.id)[:6]
         return data
 
 

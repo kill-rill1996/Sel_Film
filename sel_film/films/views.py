@@ -8,7 +8,7 @@ from string import ascii_lowercase
 from loguru import logger
 
 from serials.models import Serial, Country as CountrySerial
-from .models import Film, Genre, Actor, Director, Country
+from .models import Film, Genre, Actor, Director, Country, Comment
 from .forms import Film1FindForm, Film2FindForm
 from films.services.service import find_films
 from films.services.week_films import read_id_from_log
