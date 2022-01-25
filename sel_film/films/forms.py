@@ -1,11 +1,7 @@
 from django import forms
 
-<<<<<<< HEAD
-from .models import Comment
-=======
-from films.models import Review
+from .models import Comment, Review
 
->>>>>>> 80dad6b20bc813f7242f618897b735890ae8068c
 
 class Film1FindForm(forms.Form):
     film_1_title_ru = forms.CharField(label='', error_messages={'required': 'Заполните поле*'})
