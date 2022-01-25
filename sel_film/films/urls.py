@@ -2,8 +2,8 @@ from django.urls import path
 from django.views.decorators.cache import cache_page
 
 from django.conf import settings
-from .views import index_page, FilmDetailView, search_films, contact_page, FilmListView, about_page, \
-    FilterFilmListView, SearchView
+from .views import index_page, FilmDetailView, search_films, contact_page, FilmListView, about_page, FilterFilmListView, \
+    SearchView, add_review_for_film
 
 urlpatterns = [
     path('', index_page, name='index-page'),
@@ -14,6 +14,7 @@ urlpatterns = [
     path('films/<int:pk>/', FilmDetailView.as_view(), name='film-detail'),
     path('films/search_films/', search_films, name='search-films'),
     path('films/filter_search/', FilterFilmListView.as_view(), name='filter-search-films'),
+    path('films/review/<int:pk>/', add_review_for_film, name='add-film-review'),
 ]
 
 

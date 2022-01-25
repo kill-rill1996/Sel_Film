@@ -2,14 +2,14 @@ from django.core.mail import send_mail, BadHeaderError
 from django.core.paginator import Paginator
 from django.db.models import Prefetch, Q
 from django.http import HttpResponse
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from django.views import generic
 from string import ascii_lowercase
 from loguru import logger
 
 from serials.models import Serial, Country as CountrySerial
 from .models import Film, Genre, Actor, Director, Country, Comment
-from .forms import Film1FindForm, Film2FindForm
+from .forms import Film1FindForm, Film2FindForm, ReviewForm
 from films.services.service import find_films
 from films.services.week_films import read_id_from_log
 from serials.models import Genre as Serial_Genre
@@ -65,6 +65,8 @@ class FilmDetailView(generic.DetailView):
 
     def get_context_data(self, **kwargs):
         data = super().get_context_data(**kwargs)
+        data['type'] = 'film'
+        data['reviews'] = Film.objects.get(id=self.kwargs['pk']).reviews.order_by('-created')
         data['rec_films'] = Film.objects.filter(genres__in=self.object.genres.all()).exclude(id=self.object.id)[:6]
         return data
 
@@ -168,10 +170,18 @@ class FilmListView(generic.ListView):
     template_name = 'film_list.html'
     ordering = ['id']
 
+    def get_queryset(self):
+        genres = Genre.objects.only('title')
+        countries = Country.objects.only('title')
+        films = Film.objects.only('title_ru', 'year', 'image', 'plot', 'rating')\
+            .prefetch_related(Prefetch('genres', queryset=genres))\
+            .prefetch_related(Prefetch('countries', queryset=countries))
+        return films
+
     def get_context_data(self, **kwargs):
         data = super().get_context_data(**kwargs)
-        data['genres'] = Genre.objects.all().order_by('title')
-        data['countries'] = Country.objects.all().order_by('title')
+        data['genres'] = Genre.objects.only('title').order_by('title')
+        data['countries'] = Country.objects.only('title').order_by('title')
         data['recommended_films'] = Film.objects.filter(id__in=(31, 1010, 97, 122, 147, 109))
         return data
 
@@ -183,12 +193,20 @@ class FilterFilmListView(generic.ListView):
 
     def get_queryset(self):
         if self.request.GET.get('years_start') == '1900' and self.request.GET.get('years_end') == '2021':
-            films = Film.objects.all()
+            genres = Genre.objects.only('title')
+            countries = Country.objects.only('title')
+            films = Film.objects.only('title_ru', 'year', 'image', 'plot', 'rating') \
+                .prefetch_related(Prefetch('genres', queryset=genres)) \
+                .prefetch_related(Prefetch('countries', queryset=countries))
         else:
+            genres = Genre.objects.only('title')
+            countries = Country.objects.only('title')
             films = Film.objects.filter(
                 Q(year__gte=int(self.request.GET.get('years_start'))) &
                 Q(year__lte=int(self.request.GET.get('years_end')))
-            )
+            ).only('title_ru', 'year', 'image', 'plot', 'rating')\
+                .prefetch_related(Prefetch('genres', queryset=genres))\
+                .prefetch_related(Prefetch('countries', queryset=countries))
 
         if self.request.GET.get('imbd_start') != '0.1' or self.request.GET.get('imbd_end') != '9.9':
             films = films.filter(
@@ -277,3 +295,13 @@ class SearchView(generic.ListView):
         context['countries'] = Country.objects.all().order_by('title')
         context['recommended_films'] = Film.objects.filter(id__in=(31, 1010, 97, 122, 147, 109))
         return context
+
+
+def add_review_for_film(request, pk):
+    form = ReviewForm(request.POST)
+    film = Film.objects.get(id=pk)
+    if form.is_valid():
+        form = form.save(commit=False)
+        form.film = film
+        form.save()
+    return redirect(film.get_absolute_url())
