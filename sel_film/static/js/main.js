@@ -541,6 +541,7 @@ $(document).ready(function () {
 
 			thirdSlider.noUiSlider.on('update', function( values, handle ) {
 				thirdValue.innerHTML = values[handle];
+				$('#hidden_rating_input').val(values[handle]);
 			});
 		} else {
 			return false;

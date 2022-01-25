@@ -99,6 +99,7 @@ COMMENT_TYPE = (
     ('answer', 'reply'),
 )
 
+
 class Comment(models.Model):
     author = models.CharField(max_length=128)
     date_pub = models.DateField(auto_now=True)
@@ -116,3 +117,16 @@ class Comment(models.Model):
 
     def __str__(self):
         return f'{self.id}. {self.author}'
+
+
+class Review(models.Model):
+    title = models.CharField(max_length=256)
+    email = models.EmailField()
+    created = models.DateTimeField(auto_now_add=True)
+    text = models.TextField()
+    film = models.ForeignKey(Film, on_delete=models.CASCADE, related_name='reviews')
+    rating = models.FloatField()
+
+    def __str__(self):
+        return f'Film #{self.film.id} {self.email} - {self.title}'
+
