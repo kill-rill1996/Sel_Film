@@ -68,7 +68,6 @@ class FilmDetailView(generic.DetailView):
         data['type'] = 'film'
         data['reviews'] = Film.objects.get(id=self.kwargs['pk']).reviews.order_by('-created')
         data['rec_films'] = Film.objects.filter(genres__in=self.object.genres.all()).exclude(id=self.object.id)[:6]
-        data['comment_form'] = CommentForm()
         return data
 
     def post(self, *args, **kwargs):
@@ -77,6 +76,10 @@ class FilmDetailView(generic.DetailView):
         if form.is_valid():
             form = form.save(commit=False)
             form.film = film
+            if self.request.POST.get('parent', None):
+                form.is_child = True
+                form.parent_id = self.request.POST.get('parent')
+                form.type = 'answer'
             form.save()
         return redirect(film.get_absolute_url())
 
@@ -183,6 +186,7 @@ class FilmListView(generic.ListView):
     def get_queryset(self):
         genres = Genre.objects.only('title')
         countries = Country.objects.only('title')
+
         films = Film.objects.only('title_ru', 'year', 'image', 'plot', 'rating')\
             .prefetch_related(Prefetch('genres', queryset=genres))\
             .prefetch_related(Prefetch('countries', queryset=countries))
@@ -192,7 +196,9 @@ class FilmListView(generic.ListView):
         data = super().get_context_data(**kwargs)
         data['genres'] = Genre.objects.only('title').order_by('title')
         data['countries'] = Country.objects.only('title').order_by('title')
-        data['recommended_films'] = Film.objects.filter(id__in=(31, 1010, 97, 122, 147, 109))
+        data['recommended_films'] = Film.objects.filter(id__in=(31, 1010, 97, 122, 147, 109))\
+            .prefetch_related(Prefetch('genres', queryset=data['genres']))\
+            .prefetch_related(Prefetch('countries', queryset=data['countries']))
         return data
 
 
