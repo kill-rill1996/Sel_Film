@@ -97,7 +97,7 @@
 			<div class="row">
 				<div class="col-12">
 					<!-- content title -->
-					<h2 class="content__title">Discover</h2>
+					<h2 class="content__title">Отзывы</h2>
 					<!-- end content title -->
 
 					<!-- content tabs nav -->
@@ -115,7 +115,7 @@
 					<!-- content mobile tabs nav -->
 					<div class="content__mobile-tabs" id="content__mobile-tabs">
 						<div class="content__mobile-tabs-btn dropdown-toggle" role="navigation" id="mobile-tabs" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-							<input type="button" value="Comments">
+							<input type="button" value="Комментарии">
 							<span></span>
 						</div>
 
@@ -124,8 +124,6 @@
 								<li class="nav-item"><a class="nav-link active" id="1-tab" data-toggle="tab" href="#tab-1" role="tab" aria-controls="tab-1" aria-selected="true">Комментарии</a></li>
 
 								<li class="nav-item"><a class="nav-link" id="2-tab" data-toggle="tab" href="#tab-2" role="tab" aria-controls="tab-2" aria-selected="false">Рецензии</a></li>
-
-								<li class="nav-item"><a class="nav-link" id="3-tab" data-toggle="tab" href="#tab-3" role="tab" aria-controls="tab-3" aria-selected="false">Photos</a></li>
 							</ul>
 						</div>
 					</div>
@@ -209,115 +207,40 @@
 							<div class="col-12">
 								<div class="reviews">
 									<ul class="reviews__list">
-										<li class="reviews__item">
-											<div class="reviews__autor">
-												<img class="reviews__avatar" src="img/user.svg" alt="">
-												<span class="reviews__name">Best Marvel movie in my opinion</span>
-												<span class="reviews__time">24.08.2018, 17:53 by John Doe</span>
+										{% if reviews %}
+											{% for review in reviews %}
+											<li class="reviews__item">
+												<div class="reviews__autor">
+													<img class="reviews__avatar" src="{% static 'img/user.svg' %}" alt="">
+													<span class="reviews__name">{{ review.title }}</span>
+													<span class="reviews__time">{{ review.created|date:"d.m.Y" }}, {{ review.created|time:"G:i" }} от {{ review.email }}</span>
 
-												<span class="reviews__rating"><svg xmlns="http://www.w3.org/2000/svg" enable-background="new 0 0 24 24" viewBox="0 0 24 24"><path d="M22,10.1c0.1-0.5-0.3-1.1-0.8-1.1l-5.7-0.8L12.9,3c-0.1-0.2-0.2-0.3-0.4-0.4C12,2.3,11.4,2.5,11.1,3L8.6,8.2L2.9,9C2.6,9,2.4,9.1,2.3,9.3c-0.4,0.4-0.4,1,0,1.4l4.1,4l-1,5.7c0,0.2,0,0.4,0.1,0.6c0.3,0.5,0.9,0.7,1.4,0.4l5.1-2.7l5.1,2.7c0.1,0.1,0.3,0.1,0.5,0.1v0c0.1,0,0.1,0,0.2,0c0.5-0.1,0.9-0.6,0.8-1.2l-1-5.7l4.1-4C21.9,10.5,22,10.3,22,10.1z"></path></svg>8.4</span>
-											</div>
-											<p class="reviews__text">There are many variations of passages of Lorem Ipsum available, but the majority have suffered alteration in some form, by injected humour, or randomised words which don't look even slightly believable. If you are going to use a passage of Lorem Ipsum, you need to be sure there isn't anything embarrassing hidden in the middle of text.</p>
-										</li>
-
-										<li class="reviews__item">
-											<div class="reviews__autor">
-												<img class="reviews__avatar" src="img/user.svg" alt="">
-												<span class="reviews__name">Best Marvel movie in my opinion</span>
-												<span class="reviews__time">24.08.2018, 17:53 by John Doe</span>
-
-												<span class="reviews__rating"><svg xmlns="http://www.w3.org/2000/svg" enable-background="new 0 0 24 24" viewBox="0 0 24 24"><path d="M22,10.1c0.1-0.5-0.3-1.1-0.8-1.1l-5.7-0.8L12.9,3c-0.1-0.2-0.2-0.3-0.4-0.4C12,2.3,11.4,2.5,11.1,3L8.6,8.2L2.9,9C2.6,9,2.4,9.1,2.3,9.3c-0.4,0.4-0.4,1,0,1.4l4.1,4l-1,5.7c0,0.2,0,0.4,0.1,0.6c0.3,0.5,0.9,0.7,1.4,0.4l5.1-2.7l5.1,2.7c0.1,0.1,0.3,0.1,0.5,0.1v0c0.1,0,0.1,0,0.2,0c0.5-0.1,0.9-0.6,0.8-1.2l-1-5.7l4.1-4C21.9,10.5,22,10.3,22,10.1z"></path></svg>9.0</span>
-											</div>
-											<p class="reviews__text">There are many variations of passages of Lorem Ipsum available, but the majority have suffered alteration in some form, by injected humour, or randomised words which don't look even slightly believable. If you are going to use a passage of Lorem Ipsum, you need to be sure there isn't anything embarrassing hidden in the middle of text.</p>
-										</li>
-
-										<li class="reviews__item">
-											<div class="reviews__autor">
-												<img class="reviews__avatar" src="img/user.svg" alt="">
-												<span class="reviews__name">Best Marvel movie in my opinion</span>
-												<span class="reviews__time">24.08.2018, 17:53 by John Doe</span>
-
-												<span class="reviews__rating"><svg xmlns="http://www.w3.org/2000/svg" enable-background="new 0 0 24 24" viewBox="0 0 24 24"><path d="M22,10.1c0.1-0.5-0.3-1.1-0.8-1.1l-5.7-0.8L12.9,3c-0.1-0.2-0.2-0.3-0.4-0.4C12,2.3,11.4,2.5,11.1,3L8.6,8.2L2.9,9C2.6,9,2.4,9.1,2.3,9.3c-0.4,0.4-0.4,1,0,1.4l4.1,4l-1,5.7c0,0.2,0,0.4,0.1,0.6c0.3,0.5,0.9,0.7,1.4,0.4l5.1-2.7l5.1,2.7c0.1,0.1,0.3,0.1,0.5,0.1v0c0.1,0,0.1,0,0.2,0c0.5-0.1,0.9-0.6,0.8-1.2l-1-5.7l4.1-4C21.9,10.5,22,10.3,22,10.1z"></path></svg>7.5</span>
-											</div>
-											<p class="reviews__text">There are many variations of passages of Lorem Ipsum available, but the majority have suffered alteration in some form, by injected humour, or randomised words which don't look even slightly believable. If you are going to use a passage of Lorem Ipsum, you need to be sure there isn't anything embarrassing hidden in the middle of text.</p>
-										</li>
+													<span class="reviews__rating"><svg xmlns="http://www.w3.org/2000/svg" enable-background="new 0 0 24 24" viewBox="0 0 24 24"><path d="M22,10.1c0.1-0.5-0.3-1.1-0.8-1.1l-5.7-0.8L12.9,3c-0.1-0.2-0.2-0.3-0.4-0.4C12,2.3,11.4,2.5,11.1,3L8.6,8.2L2.9,9C2.6,9,2.4,9.1,2.3,9.3c-0.4,0.4-0.4,1,0,1.4l4.1,4l-1,5.7c0,0.2,0,0.4,0.1,0.6c0.3,0.5,0.9,0.7,1.4,0.4l5.1-2.7l5.1,2.7c0.1,0.1,0.3,0.1,0.5,0.1v0c0.1,0,0.1,0,0.2,0c0.5-0.1,0.9-0.6,0.8-1.2l-1-5.7l4.1-4C21.9,10.5,22,10.3,22,10.1z"></path></svg>{{ review.rating }}</span>
+												</div>
+												<p class="reviews__text">{{ review.text }}</p>
+											</li>
+											{% endfor %}
+										{% else %}
+											<p class="faq__text pt-4">Рецензий на "{{ film.title_ru|capfirst }}" пока нет. Станьте первым!</p>
+										{% endif %}
 									</ul>
 
-									<form action="#" class="form">
-										<input type="text" class="form__input" placeholder="Title">
-										<textarea class="form__textarea" placeholder="Review"></textarea>
+									<form {% if type %}action="{% url 'add-film-review' film.id %}"{% else %}action="{% url 'add-serial-review' film.id %}"{% endif %} method="POST" class="form">
+										{% csrf_token %}
+										<input type="email" required="true" class="form__input" placeholder="Email" name="email">
+										<input type="text" required="true" class="form__input" placeholder="Заголовок" name="title">
+										<textarea class="form__textarea" required="true" placeholder="Отзыв" name="text"></textarea>
 										<div class="form__slider">
 											<div class="form__slider-rating" id="slider__rating"></div>
 											<div class="form__slider-value" id="form__slider-value"></div>
+											<input type="text" hidden="true" value="8.6" id="hidden_rating_input" name="rating">
 										</div>
-										<button type="button" class="form__btn">Send</button>
+										<button type="submit" class="form__btn">Отправить</button>
 									</form>
 								</div>
 							</div>
 							<!-- end reviews -->
 						</div>
-					</div>
-
-					<div class="tab-pane fade" id="tab-3" role="tabpanel" aria-labelledby="3-tab">
-						<!-- project gallery -->
-						<div class="gallery" itemscope>
-							<div class="row row--grid">
-								<!-- gallery item -->
-								<figure class="col-12 col-sm-6 col-xl-4" itemprop="associatedMedia" itemscope>
-									<a href="img/gallery/project-1.jpg" itemprop="contentUrl" data-size="1920x1280">
-										<img src="img/gallery/project-1.jpg" itemprop="thumbnail" alt="Image description" />
-									</a>
-									<figcaption itemprop="caption description">Some image caption 1</figcaption>
-								</figure>
-								<!-- end gallery item -->
-
-								<!-- gallery item -->
-								<figure class="col-12 col-sm-6 col-xl-4" itemprop="associatedMedia" itemscope>
-									<a href="img/gallery/project-2.jpg" itemprop="contentUrl" data-size="1920x1280">
-										<img src="img/gallery/project-2.jpg" itemprop="thumbnail" alt="Image description" />
-									</a>
-									<figcaption itemprop="caption description">Some image caption 2</figcaption>
-								</figure>
-								<!-- end gallery item -->
-
-								<!-- gallery item -->
-								<figure class="col-12 col-sm-6 col-xl-4" itemprop="associatedMedia" itemscope>
-									<a href="img/gallery/project-3.jpg" itemprop="contentUrl" data-size="1920x1280">
-										<img src="img/gallery/project-3.jpg" itemprop="thumbnail" alt="Image description" />
-									</a>
-									<figcaption itemprop="caption description">Some image caption 3</figcaption>
-								</figure>
-								<!-- end gallery item -->
-
-								<!-- gallery item -->
-								<figure class="col-12 col-sm-6 col-xl-4" itemprop="associatedMedia" itemscope>
-									<a href="img/gallery/project-4.jpg" itemprop="contentUrl" data-size="1920x1280">
-										<img src="img/gallery/project-4.jpg" itemprop="thumbnail" alt="Image description" />
-									</a>
-									<figcaption itemprop="caption description">Some image caption 4</figcaption>
-								</figure>
-								<!-- end gallery item -->
-
-								<!-- gallery item -->
-								<figure class="col-12 col-sm-6 col-xl-4" itemprop="associatedMedia" itemscope>
-									<a href="img/gallery/project-5.jpg" itemprop="contentUrl" data-size="1920x1280">
-										<img src="img/gallery/project-5.jpg" itemprop="thumbnail" alt="Image description" />
-									</a>
-									<figcaption itemprop="caption description">Some image caption 5</figcaption>
-								</figure>
-								<!-- end gallery item -->
-
-								<!-- gallery item -->
-								<figure class="col-12 col-sm-6 col-xl-4" itemprop="associatedMedia" itemscope>
-									<a href="img/gallery/project-6.jpg" itemprop="contentUrl" data-size="1920x1280">
-										<img src="img/gallery/project-6.jpg" itemprop="thumbnail" alt="Image description" />
-									</a>
-									<figcaption itemprop="caption description">Some image caption 6</figcaption>
-								</figure>
-								<!-- end gallery item -->
-							</div>
-						</div>
-						<!-- end project gallery -->
 					</div>
 				</div>
 				<!-- end content tabs -->

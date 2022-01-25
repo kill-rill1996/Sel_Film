@@ -1,6 +1,11 @@
 from django import forms
 
+<<<<<<< HEAD
 from .models import Comment
+=======
+from films.models import Review
+
+>>>>>>> 80dad6b20bc813f7242f618897b735890ae8068c
 
 class Film1FindForm(forms.Form):
     film_1_title_ru = forms.CharField(label='', error_messages={'required': 'Заполните поле*'})
@@ -33,6 +38,18 @@ class Film2FindForm(forms.Form):
 
 
 class CommentForm(forms.ModelForm):
+
     class Meta:
         model = Comment
         fields = ['email', 'text']
+
+
+class ReviewForm(forms.ModelForm):
+
+    class Meta:
+        model = Review
+        fields = ('title', 'email', 'text', 'rating')
+
+
+
+>>>>>>> 80dad6b20bc813f7242f618897b735890ae8068c

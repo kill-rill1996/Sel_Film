@@ -5,6 +5,7 @@ admin.site.register(models.Film)
 admin.site.register(models.Actor)
 admin.site.register(models.Director)
 admin.site.register(models.Comment)
+admin.site.register(models.Review)
 
 
 @admin.register(models.Genre)
