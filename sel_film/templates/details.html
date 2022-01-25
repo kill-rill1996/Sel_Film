@@ -144,9 +144,11 @@
 						<div class="row">
 							<!-- comments -->
 							<div class="col-12">
-									<form action="#" class="form my-5">
-										<textarea id="text" name="text" class="form__textarea" placeholder="Оставить комментарий"></textarea>
-										<button type="button" class="form__btn">Отправить</button>
+									<form action="{{ film.get_absolute_url }}" method="POST" class="form my-5">
+										{% csrf_token %}
+										<input type="email" name="email" class="form__input" placeholder="Email" required="true">
+										<textarea id="text" name="text" class="form__textarea" placeholder="Оставить комментарий" required="true"></textarea>
+										<button type="submit" class="form__btn">Отправить</button>
 									</form>
 								<div class="comments">
 									<ul class="comments__list">
@@ -155,8 +157,8 @@
 												<li class="comments__item">
 													<div class="comments__autor">
 														<img class="comments__avatar" src="{% static 'img/user.svg' %}" alt="">
-														<span class="comments__name">{{ comment.author }}</span>
-														<span class="comments__time">{{ comment.date_pub }}</span>
+														<span class="comments__name">{{ comment.email }}</span>
+														<span class="comments__time">{{ comment.date_pub|date:"d.m.Y" }}, {{ comment.date_pub|time:"G:i" }}</span>
 													</div>
 													<p class="comments__text">{{ comment.text }}</p>
 													<div class="comments__actions">

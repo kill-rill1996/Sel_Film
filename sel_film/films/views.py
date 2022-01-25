@@ -2,14 +2,14 @@ from django.core.mail import send_mail, BadHeaderError
 from django.core.paginator import Paginator
 from django.db.models import Prefetch, Q
 from django.http import HttpResponse
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from django.views import generic
 from string import ascii_lowercase
 from loguru import logger
 
 from serials.models import Serial, Country as CountrySerial
 from .models import Film, Genre, Actor, Director, Country, Comment
-from .forms import Film1FindForm, Film2FindForm
+from .forms import Film1FindForm, Film2FindForm, CommentForm
 from films.services.service import find_films
 from films.services.week_films import read_id_from_log
 from serials.models import Genre as Serial_Genre
@@ -66,7 +66,17 @@ class FilmDetailView(generic.DetailView):
     def get_context_data(self, **kwargs):
         data = super().get_context_data(**kwargs)
         data['rec_films'] = Film.objects.filter(genres__in=self.object.genres.all()).exclude(id=self.object.id)[:6]
+        data['comment_form'] = CommentForm()
         return data
+
+    def post(self, *args, **kwargs):
+        form = CommentForm(self.request.POST)
+        film = Film.objects.get(id=self.kwargs['pk'])
+        if form.is_valid():
+            form = form.save(commit=False)
+            form.film = film
+            form.save()
+        return redirect(film.get_absolute_url())
 
 
 def search_films(request):
