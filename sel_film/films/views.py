@@ -16,12 +16,25 @@ from serials.models import Genre as Serial_Genre
 
 
 def index_page(request):
-    week_films = Film.objects.filter(id__in=read_id_from_log())
-    ten_films = Film.objects.all()[:6]
-    ten_serials = Serial.objects.all()[:6]
-    ten_anime = Serial.objects.filter(genres__title='аниме')[:6]
-    ten_cartoons = Serial.objects.filter(genres__title='мультсериалы')[:6]
-    recommended_films = Film.objects.filter(id__in=(31, 1010, 97, 122, 147, 109))
+    # film_genres = Genre.objects.only('title')
+    # serial_genres = Serial_Genre.objects.only('title')
+    week_films = Film.objects.filter(id__in=read_id_from_log())\
+                    .prefetch_related(Prefetch('genres', queryset=Genre.objects.only('title')))\
+                    .only('title_ru', 'image', 'rating')
+    ten_films = Film.objects.all().prefetch_related(Prefetch('genres', queryset=Genre.objects.only('title')))\
+                    .only('image', 'rating', 'title_ru', 'plot', 'year')[:6]
+    ten_serials = Serial.objects.all()\
+                    .prefetch_related(Prefetch('genres', queryset=Serial_Genre.objects.only('title')))\
+                    .only('image', 'plot', 'title_ru', 'rating', 'start_year', 'end_year')[:6]
+    ten_anime = Serial.objects.filter(genres__title='аниме')\
+                    .prefetch_related(Prefetch('genres', queryset=Serial_Genre.objects.only('title')))\
+                    .only('image', 'plot', 'title_ru', 'rating', 'start_year', 'end_year')[:6]
+    ten_cartoons = Serial.objects.filter(genres__title='мультсериалы')\
+                    .prefetch_related(Prefetch('genres', queryset=Serial_Genre.objects.only('title')))\
+                    .only('image', 'plot', 'title_ru', 'rating', 'start_year', 'end_year')[:6]
+    recommended_films = Film.objects.filter(id__in=(31, 1010, 97, 122, 147, 109))\
+                    .prefetch_related(Prefetch('genres', queryset=Genre.objects.only('title')))\
+                    .only('title_ru', 'rating', 'image')
     logger.info('Запущена index page')
     return render(request, 'index.html', context={'ten_films': ten_films,
                                                   'ten_serials': ten_serials,
