@@ -57,10 +57,12 @@ class FilmDetailView(generic.DetailView):
         actors = Actor.objects.only('first_name', 'last_name')
         directors = Director.objects.only('first_name', 'last_name')
         countries = Country.objects.only('title')
+        comments = Comment.objects.all().order_by('-date_pub')
         film = Film.objects.filter(id=self.kwargs['pk']).prefetch_related(Prefetch('genres', queryset=genres))\
             .prefetch_related(Prefetch('actors', queryset=actors))\
             .prefetch_related(Prefetch('directors', queryset=directors))\
-            .prefetch_related(Prefetch('countries', queryset=countries))[0]
+            .prefetch_related(Prefetch('countries', queryset=countries))\
+            .prefetch_related(Prefetch('comments', queryset=comments))[0]
         return film
 
     def get_context_data(self, **kwargs):
@@ -79,8 +81,9 @@ class FilmDetailView(generic.DetailView):
             if self.request.POST.get('parent', None):
                 form.is_child = True
                 form.parent_id = self.request.POST.get('parent')
-                form.type = 'answer'
+            print(form.date_pub)
             form.save()
+            print(form.date_pub)
         return redirect(film.get_absolute_url())
 
 

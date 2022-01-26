@@ -93,13 +93,6 @@ class Director(models.Model):
         return f'{self.first_name} {self.last_name}'
 
 
-COMMENT_TYPE = (
-    ('default', 'default'),
-    ('quote', 'quote'),
-    ('answer', 'reply'),
-)
-
-
 class Comment(models.Model):
     email = models.EmailField()
     date_pub = models.DateTimeField(auto_now_add=True)
@@ -107,13 +100,6 @@ class Comment(models.Model):
     film = models.ForeignKey(Film, on_delete=models.CASCADE, related_name='comments')
     parent = models.ForeignKey('self', related_name='child_comments', on_delete=models.CASCADE, blank=True, null=True)
     is_child = models.BooleanField(default=False)
-    type = models.CharField(choices=COMMENT_TYPE, max_length=16, default='default')
-
-    @property
-    def get_parent(self):
-        if not self.parent:
-            return ""
-        return self.parent.id
 
     def __str__(self):
         return f'{self.id}. {self.email}'
