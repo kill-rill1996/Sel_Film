@@ -251,9 +251,11 @@ class FilterFilmListView(generic.ListView):
         context['get_params'].append(f"imbd_start={self.request.GET.get('imbd_start')}&")
         context['get_params'].append(f"imbd_end={self.request.GET.get('imbd_end')}&")
 
-        context['genres'] = Genre.objects.all().order_by('title')
-        context['countries'] = Country.objects.all().order_by('title')
-        context['recommended_films'] = Film.objects.filter(id__in=(31, 1010, 97, 122, 147, 109))
+        context['genres'] = Genre.objects.only('title').order_by('title')
+        context['countries'] = Country.objects.only('title').order_by('title')
+        context['recommended_films'] = Film.objects.filter(id__in=(31, 1010, 97, 122, 147, 109)) \
+            .prefetch_related(Prefetch('genres', queryset=context['genres'])) \
+            .prefetch_related(Prefetch('countries', queryset=context['countries']))
         return context
 
 
@@ -309,7 +311,9 @@ class SearchView(generic.ListView):
         context['search_query'] = f'search_text={self.request.GET.get("search_text")}&'
         context['genres'] = Genre.objects.all().order_by('title')
         context['countries'] = Country.objects.all().order_by('title')
-        context['recommended_films'] = Film.objects.filter(id__in=(31, 1010, 97, 122, 147, 109))
+        context['recommended_films'] = Film.objects.filter(id__in=(31, 1010, 97, 122, 147, 109)) \
+            .prefetch_related(Prefetch('genres', queryset=context['genres'])) \
+            .prefetch_related(Prefetch('countries', queryset=context['countries']))
         return context
 
 
