@@ -176,7 +176,7 @@
 															<div class="comments__autor">
 																<img class="comments__avatar" src="{% static 'img/user.svg' %}" alt="">
 																<span class="comments__name">{{ child_comment.email }}</span>
-																<span class="comments__time">{{ child_comment.date_pub|date:"d.m.Y" }}, {{ comment.date_pub|time:"G:i" }}</span>
+																<span class="comments__time">{{ child_comment.date_pub|date:"d.m.Y" }}, {{ child_comment.date_pub|time:"G:i" }}</span>
 															</div>
 															<p class="comments__text">{{ child_comment.text }}</p>
 															<div class="comments__actions">
