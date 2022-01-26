@@ -33,12 +33,21 @@
 		<div class="row">
 			<div class="col-12 col-md-7 col-lg-8">
 				<div class="row">
+					{% if message_name %}
+					<!-- section title -->
+					<div class="col-12">
+						<h2 class="section__title">Ваше сообщение отправлено</h2>
+					</div>
+					<div class="col-12">
+						<p class="section__text">{{ message_name }}, спасибо за ваше сообщение! Мы обязательно прочтем его в ближайшее время и свяжемся с вами.</p>
+					</div>
+					<!-- end section title -->
+					{% else %}
 					<!-- section title -->
 					<div class="col-12">
 						<h2 class="section__title">Отправить отзыв</h2>
 					</div>
 					<!-- end section title -->
-
 					<div class="col-12">
 						<form method="POST" action="{% url 'contact-page' %}" class="form form--contacts">
 							{% csrf_token %}
@@ -46,9 +55,11 @@
 							<input type="text" class="form__input" placeholder="Email" name="email">
 							<input type="text" class="form__input" placeholder="Тема" name="subject">
 							<textarea id="text" name="message" class="form__textarea" placeholder="Ваше сообщение..."></textarea>
+							{{ captcha }}
 							<button type="submit" class="form__btn">Отправить</button>
 						</form>
 					</div>
+					{% endif %}
 				</div>
 			</div>
 			
@@ -62,7 +73,7 @@
 
 						<ul class="contacts__list">
 							<li><a href="tel:88002345678">8 969 711 84 24</a></li>
-							<li><a href="mailto:support@flixgo.com">selfilm.devs@gmail.com</a></li>
+							<li><a href="mailto:selfilm.devs@gmail.com">selfilm.devs@gmail.com</a></li>
 						</ul>
 
 						<ul class="contacts__social">

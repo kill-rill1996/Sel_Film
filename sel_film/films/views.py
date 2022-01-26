@@ -9,7 +9,7 @@ from loguru import logger
 
 from serials.models import Serial, Country as CountrySerial
 from .models import Film, Genre, Actor, Director, Country, Comment
-from .forms import Film1FindForm, Film2FindForm, ReviewForm, CommentForm
+from .forms import Film1FindForm, Film2FindForm, ReviewForm, CommentForm, RecaptchaForm
 from films.services.service import find_films
 from films.services.week_films import read_id_from_log
 from serials.models import Genre as Serial_Genre
@@ -68,12 +68,13 @@ class FilmDetailView(generic.DetailView):
         data['type'] = 'film'
         data['reviews'] = Film.objects.get(id=self.kwargs['pk']).reviews.order_by('-created')
         data['rec_films'] = Film.objects.filter(genres__in=self.object.genres.all()).exclude(id=self.object.id)[:6]
+        data['captcha'] = RecaptchaForm
         return data
 
     def post(self, *args, **kwargs):
         form = CommentForm(self.request.POST)
         film = Film.objects.get(id=self.kwargs['pk'])
-        if form.is_valid():
+        if form.is_valid() and self.request.POST.get('g-recaptcha-response'):
             form = form.save(commit=False)
             form.film = film
             if self.request.POST.get('parent', None):
@@ -155,7 +156,7 @@ def contact_page(request):
         message_email = request.POST.get('email', '')
         message_subject = request.POST.get('subject', '')
         message_text = request.POST.get('message', '')
-        if message_text and message_email and message_name and message_subject:
+        if message_text and message_email and message_name and message_subject and request.POST.get('g-recaptcha-response'):
             try:
                 send_mail(
                     message_name,
@@ -169,7 +170,8 @@ def contact_page(request):
                 logger.error(f'Сообщение от {message_name} {message_email} на тему {message_subject} \"{message_text}\" не отправлено BadHeaderError')
                 return HttpResponse('Invalid header found.')
     else:
-        return render(request, 'contacts.html')
+        captcha = RecaptchaForm
+        return render(request, 'contacts.html', {'captcha': captcha})
 
 
 def about_page(request):

@@ -16,7 +16,7 @@ SECRET_KEY = 'django-insecure-$8-b^@o!(b@4nme@m5p-j(o&e)3=yp09n^ok%awwsl!d3rcb4&
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['127.0.0.1']
 
 
 # Application definition
@@ -31,11 +31,10 @@ INSTALLED_APPS = [
 
     # debug_toolbar
     'debug_toolbar',
-    'mathfilters',
+    'captcha',
 
     'films',
     'serials',
-
 ]
 
 MIDDLEWARE = [
@@ -211,3 +210,8 @@ sentry_sdk.init(
     # django.contrib.auth) you may enable sending PII data.
     send_default_pii=True
 )
+
+
+# Captcha
+RECAPTCHA_PUBLIC_KEY = '6Lf0UjseAAAAACu5BiUqjALpsvt7LmSABYKJqtGA'
+RECAPTCHA_PRIVATE_KEY = '6Lf0UjseAAAAAPRF-FArmHsNhQiNp1IDooWWhM3n'
