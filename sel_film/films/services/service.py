@@ -265,14 +265,4 @@ def find_films(id_1, id_2):
 
         FILMS_POINTS[f'{current_film["id"]}'] += total_points
 
-    # get top films
-    # top_films = show_top_films(FILMS)
-    return get_top_ten_films(FILMS_POINTS)
-    # print('_____________________________________')
-    # for film in top_films:
-    #     print(film[0]['id'], film[0]['title_ru'], film[0]['year'], film[0]['genres'], film[0]['countries'],
-    #           film[0]['directors'], film[0]['actors'])
-
-#
-# FILMS = get_objects()
-# FILMS_POINTS = create_points_dict(FILMS)
+    return [id for id, _ in get_top_ten_films(FILMS_POINTS)]

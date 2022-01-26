@@ -16,8 +16,6 @@ from serials.models import Genre as Serial_Genre
 
 
 def index_page(request):
-    # film_genres = Genre.objects.only('title')
-    # serial_genres = Serial_Genre.objects.only('title')
     week_films = Film.objects.filter(id__in=read_id_from_log())\
                     .prefetch_related(Prefetch('genres', queryset=Genre.objects.only('title')))\
                     .only('title_ru', 'image', 'rating')
@@ -95,9 +93,7 @@ class FilmDetailView(generic.DetailView):
             if self.request.POST.get('parent', None):
                 form.is_child = True
                 form.parent_id = self.request.POST.get('parent')
-            print(form.date_pub)
             form.save()
-            print(form.date_pub)
         return redirect(film.get_absolute_url())
 
 
@@ -148,8 +144,10 @@ def search_films(request):
 
         elif film_1 and film_2:
             top_ten_points = find_films(id_1=film_1.id, id_2=film_2.id)
-            context['top_ten'] = Film.objects.only('title_ru', 'year', 'image')\
-                .filter(id__in=[id for id, _ in top_ten_points])
+            context['top_ten'] = Film.objects.only('title_ru', 'year', 'image', 'rating')\
+                .prefetch_related(Prefetch('genres', queryset=Genre.objects.only('title')))\
+                .filter(id__in=top_ten_points)
+
             logger.info('Подборка сделана')
 
         context['form_1'] = form_1
