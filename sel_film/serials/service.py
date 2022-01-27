@@ -296,14 +296,7 @@ def find_serials(id_1, id_2):
         #
         SERIALS_POINTS[f'{current_serial["id"]}'] += total_points
 
-    # get top films
-    # top_serials = show_top_serials(SERIALS, SERIALS_POINTS)
-    # print(get_top_ten_serials(SERIALS_POINTS))
-    return get_top_ten_serials(SERIALS_POINTS)
-    # print('_____________________________________')
-    # for serial in top_serials:
-    #     print(serial[0]['id'], serial[0]['title_ru'], serial[0]['year'],
-    #           serial[0]['genres'], serial[0]['countries'],
-    #           serial[0]['directors'], serial[0]['actors'])
+    return [id for id, _ in get_top_ten_serials(SERIALS_POINTS)]
+
 
 
