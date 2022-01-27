@@ -51,10 +51,10 @@
 					<div class="col-12">
 						<form method="POST" action="{% url 'contact-page' %}" class="form form--contacts">
 							{% csrf_token %}
-							<input type="text" class="form__input" placeholder="Ваше имя" name="name">
-							<input type="text" class="form__input" placeholder="Email" name="email">
-							<input type="text" class="form__input" placeholder="Тема" name="subject">
-							<textarea id="text" name="message" class="form__textarea" placeholder="Ваше сообщение..."></textarea>
+							<input type="text" class="form__input" required="true" placeholder="Ваше имя" name="name">
+							<input type="email" class="form__input" required="true" placeholder="Email" name="email">
+							<input type="text" class="form__input" required="true" placeholder="Тема" name="subject">
+							<textarea id="text" name="message" class="form__textarea" required="true" placeholder="Ваше сообщение..."></textarea>
 							{{ captcha }}
 							<button type="submit" class="form__btn">Отправить</button>
 						</form>
