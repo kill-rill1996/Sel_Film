@@ -53,7 +53,7 @@ class FilmDetailView(generic.DetailView):
         actors = Actor.objects.only('first_name', 'last_name')
         directors = Director.objects.only('first_name', 'last_name')
         countries = Country.objects.only('title')
-        comments = Comment.objects.all().order_by('-date_pub')
+        comments = Comment.objects.all().order_by('-date_pub').prefetch_related('child_comments')
         film = Film.objects.filter(id=self.kwargs['pk']).prefetch_related(Prefetch('genres', queryset=genres))\
             .prefetch_related(Prefetch('actors', queryset=actors))\
             .prefetch_related(Prefetch('directors', queryset=directors))\
@@ -239,20 +239,20 @@ class SearchView(generic.ListView):
                 if search_data_lower[0] in ascii_lowercase:
                     films_list = Film.objects.only('title_ru', 'year', 'plot', 'image', 'rating')\
                                      .filter(title_en__icontains=search_data_lower) \
-                                     .prefetch_related('genres')[:100]
+                                     .prefetch_related(Prefetch('genres', queryset=Genre.objects.only('title')))[:100]
                     serials_list = Serial.objects.only('title_ru', 'rating', 'start_year', 'end_year', 'plot', 'image', 'end_status')\
                                     .filter(title_en__icontains=search_data_lower)\
-                                    .prefetch_related('genres')[:100]
+                                    .prefetch_related(Prefetch('genres', queryset=Serial_Genre.objects.only('title')))[:100]
                     if not films_list and not serials_list:
                         logger.warning(f'Фильмы и сериалы по запросу: \"{search_data}\" не найдены {films_list} {serials_list}')
                 else:
                     # Rus title
                     films_list = Film.objects.only('title_ru', 'year', 'plot', 'image', 'rating') \
                                      .filter(title_ru__icontains=search_data_lower) \
-                                     .prefetch_related('genres')[:100]
+                                     .prefetch_related(Prefetch('genres', queryset=Genre.objects.only('title')))[:100]
                     serials_list = Serial.objects.only('title_ru', 'rating', 'start_year', 'end_year', 'plot', 'image', 'end_status') \
                                     .filter(title_ru__icontains=search_data_lower) \
-                                    .prefetch_related('genres')[:100]
+                                    .prefetch_related(Prefetch('genres', queryset=Serial_Genre.objects.only('title')))[:100]
                     # log
                     if not films_list and not serials_list:
                         logger.warning(f'Фильмы и сериалы по запросу: \"{search_data}\" не найдены {films_list} {serials_list}')
