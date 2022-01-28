@@ -5,7 +5,7 @@ from django.shortcuts import render, redirect
 from django.views import generic
 
 from films.models import Film, Genre as FilmGenre
-from .models import Serial, Genre, Actor, Director, Country
+from .models import Serial, Genre, Actor, Director, Country, Comment
 from films.forms import Film1FindForm, Film2FindForm
 from .forms import ReviewForm, CommentForm, RecaptchaForm
 from .service import find_serials
@@ -62,15 +62,17 @@ class SerialDetailView(generic.DetailView):
         actors = Actor.objects.only('first_name', 'last_name')
         directors = Director.objects.only('first_name', 'last_name')
         countries = Country.objects.only('title')
+        comments = Comment.objects.all().order_by('-date_pub').prefetch_related('child_comments')
         serial = Serial.objects.filter(id=self.kwargs['pk']).prefetch_related(Prefetch('genres', queryset=genres))\
             .prefetch_related(Prefetch('actors', queryset=actors))\
             .prefetch_related(Prefetch('directors', queryset=directors))\
-            .prefetch_related(Prefetch('countries', queryset=countries))[0]
+            .prefetch_related(Prefetch('countries', queryset=countries))\
+            .prefetch_related(Prefetch('comments', queryset=comments))[0]
         return serial
 
     def get_context_data(self, **kwargs):
         data = super().get_context_data(**kwargs)
-        data['reviews'] = Serial.objects.get(id=self.kwargs['pk']).reviews.order_by('-created')
+        data['reviews'] = self.object.reviews.order_by('-created')
         serial_genres = [genre.title for genre in self.object.genres.all()]
         data['captcha'] = RecaptchaForm
         if 'аниме' in serial_genres:
