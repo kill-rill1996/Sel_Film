@@ -99,7 +99,7 @@
     <div class="row">
       <!-- section title -->
       <div class="col-12">
-        <h2 class="section__title">Результаты поиска</h2>
+        <h2 class="section__title">Результаты подбора</h2>
       </div>
       <!-- end section title -->
     </div>
@@ -111,18 +111,18 @@
        {% if films_1_query or films_2_query %}
 
          {% if films_1_query and not film_2 and not films_2_query %}
-          <h5 class="footer__title">Возможно вы имели в виду (Фильм № 1):</h5>
+          <h5 class="footer__title">{% block case1 %}Возможно вы имели в виду (Фильм № 1):{% endblock case1 %}</h5>
           <ul class="footer__list">
             {% for film in films_1_query %}
               <li><a href="{{ film.get_absolute_url }}" target="_blank">{{ film.title_ru|capfirst }} {% block year_q1 %}({{ film.year }}){% endblock year_q1 %}</a> 
                 <!-- <a href="" id="copy__btn"><i class="far fa-copy footer__title ml-2"></i></a></li> -->
             {% endfor %}
           </ul>
-          <h5 class="footer__title mt-3">Фильм № 2 не найден.</h5>
+          <h5 class="footer__title mt-3">{% block case2 %}Фильм № 2 не найден.{% endblock case2 %}</h5>
          {% endif %}
 
          {% if films_1_query and film_2 %}
-         <h5 class="footer__title">Возможно вы имели в виду (Фильм № 1):</h5>
+         <h5 class="footer__title">{% block case3 %}Возможно вы имели в виду (Фильм № 1):{% endblock case3 %}</h5>
           <ul class="footer__list">
             {% for film in films_1_query %}
               <li><a href="{{ film.get_absolute_url }}" target="_blank">{{ film.title_ru|capfirst }} {% block year_q1f2 %}({{ film.year }}){% endblock year_q1f2 %}</a></li>
@@ -131,8 +131,8 @@
          {% endif %}
 
          {% if films_2_query and not film_1 and not films_1_query %}
-         <h5 class="footer__title">Фильм № 1 не найден.</h5>
-         <h5 class="footer__title">Возможно вы имели в виду (Фильм № 2):</h5>
+         <h5 class="footer__title">{% block case4 %}Фильм № 1 не найден.{% endblock case4 %}</h5>
+         <h5 class="footer__title">{% block case5 %}Возможно вы имели в виду (Фильм № 2):{% endblock case5 %}</h5>
           <ul class="footer__list">
             {% for film in films_2_query %}
               <li><a href="{{ film.get_absolute_url }}" target="_blank">{{ film.title_ru|capfirst }} {% block year_q2 %}({{ film.year }}){% endblock year_q2 %}</a></li>
@@ -141,7 +141,7 @@
          {% endif %}
 
          {% if films_2_query and film_1 %}
-         <h5 class="footer__title">Возможно вы имели в виду (Фильм № 2):</h5>
+         <h5 class="footer__title">{% block case6 %}Возможно вы имели в виду (Фильм № 2):{% endblock case6 %}</h5>
           <ul class="footer__list">
             {% for film in films_2_query %}
               <li><a href="{{ film.get_absolute_url }}" target="_blank">{{ film.title_ru|capfirst }} {% block year_q2f1 %}({{ film.year }}){% endblock year_q2f1 %}</a></li>
@@ -150,13 +150,13 @@
          {% endif %}
 
          {% if films_1_query and films_2_query %}
-         <h5 class="footer__title">Возможно вы имели в виду (Фильм № 1):</h5>
+         <h5 class="footer__title">{% block case7 %}Возможно вы имели в виду (Фильм № 1):{% endblock case7 %}</h5>
           <ul class="footer__list">
             {% for film in films_1_query %}
               <li><a href="{{ film.get_absolute_url }}" target="_blank">{{ film.title_ru|capfirst }} {% block year_q2q1 %}({{ film.year }}){% endblock year_q2q1 %}</a></li>
             {% endfor %}
           </ul>
-          <h5 class="footer__title mt-3">Возможно вы имели в виду (Фильм № 2):</h5>
+          <h5 class="footer__title mt-3">{% block case8 %}Возможно вы имели в виду (Фильм № 2):{% endblock case8 %}</h5>
           <ul class="footer__list">
             {% for film in films_2_query %}
               <li><a href="{{ film.get_absolute_url }}" target="_blank">{{ film.title_ru|capfirst }} {% block year_q1q2 %}({{ film.year }}){% endblock year_q1q2 %}</a></li>
@@ -165,13 +165,13 @@
          {% endif %}
 
       {% elif film_1 and not film_2 %}
-      <h5 class="footer__title">Фильм № 2 не найден.</h5>
+      <h5 class="footer__title">{% block case9 %}Фильм № 2 не найден.{% endblock case9 %}</h5>
 
       {% elif film_2 and not film_1 %}
-      <h5 class="footer__title">Фильм № 1 не найден.</h5>
+      <h5 class="footer__title">{% block case10 %}Фильм № 1 не найден.{% endblock case10 %}</h5>
 
       {% elif request.method == 'POST' and not film_1 and not film_2 %}
-      <h5 class="footer__title">По вашему запросу фильмы не найдены. Попробуйте найти названия фильмов через поиск.</a></h5>
+      <h5 class="footer__title">{% block case11 %}По вашему запросу фильмы не найдены. Попробуйте найти названия фильмов через поиск.{% endblock case11 %}</a></h5>
 
       {% endif %}
      {% endif %}
