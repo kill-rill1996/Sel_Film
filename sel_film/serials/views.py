@@ -20,10 +20,10 @@ class SerialListView(generic.ListView):
     def get_queryset(self):
         searched_type = get_serial_type(self.request)
         if searched_type[0]:
-            return Serial.objects.only('title_ru', 'image', 'plot', 'rating', 'start_year', 'end_year') \
+            return Serial.objects.only('title_ru', 'image', 'plot', 'rating', 'start_year', 'end_year', 'end_status') \
                 .prefetch_related(Prefetch('genres', queryset=Genre.objects.only('title')))\
                 .filter(genres__title=searched_type[0])
-        return Serial.objects.only('title_ru', 'image', 'plot', 'rating', 'start_year', 'end_year')\
+        return Serial.objects.only('title_ru', 'image', 'plot', 'rating', 'start_year', 'end_year', 'end_status')\
             .prefetch_related(Prefetch('genres', queryset=Genre.objects.only('title')))
 
     def get_context_data(self, **kwargs):
@@ -174,13 +174,13 @@ class FilterSerialListView(generic.ListView):
 
     def get_queryset(self):
         if self.request.GET.get('years_start') == '1900' and self.request.GET.get('years_end') == '2021':
-            films = Serial.objects.only('title_ru', 'start_year', 'end_year', 'image', 'plot', 'rating')\
+            films = Serial.objects.only('title_ru', 'start_year', 'end_year', 'image', 'plot', 'rating', 'end_status')\
                 .prefetch_related(Prefetch('genres', queryset=Genre.objects.only('title')))
         else:
             films = Serial.objects.filter(
                 Q(start_year__gte=int(self.request.GET.get('years_start'))) &
                 Q(start_year__lte=int(self.request.GET.get('years_end')))
-            ).only('title_ru', 'start_year', 'end_year', 'image', 'plot', 'rating')\
+            ).only('title_ru', 'start_year', 'end_year', 'image', 'plot', 'rating', 'end_status')\
                 .prefetch_related(Prefetch('genres', queryset=Genre.objects.only('title')))
 
         if self.request.GET.get('imbd_start') != '0.1' or self.request.GET.get('imbd_end') != '9.9':
