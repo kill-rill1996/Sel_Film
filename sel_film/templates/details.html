@@ -60,7 +60,7 @@
 							</li>
 
 							{% if film.duration %}
-								<li><span>Продолжительность:</span>{{ film.duration }} мин</li>
+								<li><span>Продолжительность:</span>{{ film.duration }} мин{% if film.series %}, Серий: {{ film.series }}{% endif %}{% if film.seasons %}, Сезонов: {{ film.seasons }}{% endif %}</li>
 							{% endif %}
 							<li><span>Страна:</span>{% for country in film.countries.all %}<a>{{ country }}</a>{% endfor %}</a></li>
 							<li><span>Режиссер:</span>
