@@ -23,13 +23,13 @@ def index_page(request):
                     .only('image', 'rating', 'title_ru', 'plot', 'year')[:6]
     ten_serials = Serial.objects.all()\
                     .prefetch_related(Prefetch('genres', queryset=Serial_Genre.objects.only('title')))\
-                    .only('image', 'plot', 'title_ru', 'rating', 'start_year', 'end_year')[:6]
+                    .only('image', 'plot', 'title_ru', 'rating', 'start_year', 'end_year', 'end_status')[:6]
     ten_anime = Serial.objects.filter(genres__title='аниме')\
                     .prefetch_related(Prefetch('genres', queryset=Serial_Genre.objects.only('title')))\
-                    .only('image', 'plot', 'title_ru', 'rating', 'start_year', 'end_year')[:6]
+                    .only('image', 'plot', 'title_ru', 'rating', 'start_year', 'end_year', 'end_status')[:6]
     ten_cartoons = Serial.objects.filter(genres__title='мультсериалы')\
                     .prefetch_related(Prefetch('genres', queryset=Serial_Genre.objects.only('title')))\
-                    .only('image', 'plot', 'title_ru', 'rating', 'start_year', 'end_year')[:6]
+                    .only('image', 'plot', 'title_ru', 'rating', 'start_year', 'end_year', 'end_status')[:6]
     recommended_films = Film.objects.filter(id__in=(31, 1010, 97, 122, 147, 109))\
                     .prefetch_related(Prefetch('genres', queryset=Genre.objects.only('title')))\
                     .only('title_ru', 'rating', 'image')
