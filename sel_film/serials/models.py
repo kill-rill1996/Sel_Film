@@ -92,6 +92,18 @@ class Director(models.Model):
         return f'{self.first_name} {self.last_name}'
 
 
+class Comment(models.Model):
+    email = models.EmailField()
+    date_pub = models.DateTimeField(auto_now_add=True)
+    text = models.TextField()
+    film = models.ForeignKey(Serial, on_delete=models.CASCADE, related_name='comments')
+    parent = models.ForeignKey('self', related_name='child_comments', on_delete=models.CASCADE, blank=True, null=True)
+    is_child = models.BooleanField(default=False)
+
+    def __str__(self):
+        return f'{self.id}. {self.email}'
+
+
 class Review(models.Model):
     title = models.CharField(max_length=256)
     email = models.EmailField()

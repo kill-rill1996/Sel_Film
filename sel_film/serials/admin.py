@@ -6,6 +6,7 @@ from . import models
 admin.site.register(models.Serial)
 admin.site.register(models.Actor)
 admin.site.register(models.Director)
+admin.site.register(models.Comment)
 admin.site.register(models.Review)
 
 

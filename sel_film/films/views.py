@@ -80,6 +80,7 @@ class FilmDetailView(generic.DetailView):
             if self.request.POST.get('parent', None):
                 form.is_child = True
                 form.parent_id = self.request.POST.get('parent')
+
             form.save()
         return redirect(film.get_absolute_url())
 

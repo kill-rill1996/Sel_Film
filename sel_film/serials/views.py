@@ -7,7 +7,7 @@ from django.views import generic
 from films.models import Film, Genre as FilmGenre
 from .models import Serial, Genre, Actor, Director, Country
 from films.forms import Film1FindForm, Film2FindForm
-from .forms import ReviewForm
+from .forms import ReviewForm, CommentForm, RecaptchaForm
 from .service import find_serials
 
 
@@ -72,6 +72,7 @@ class SerialDetailView(generic.DetailView):
         data = super().get_context_data(**kwargs)
         data['reviews'] = Serial.objects.get(id=self.kwargs['pk']).reviews.order_by('-created')
         serial_genres = [genre.title for genre in self.object.genres.all()]
+        data['captcha'] = RecaptchaForm
         if 'аниме' in serial_genres:
             data['rec_films'] = Serial.objects.only('title_ru', 'image', 'rating')\
                 .prefetch_related(Prefetch('genres', queryset=Genre.objects.only('title')))\
@@ -85,6 +86,18 @@ class SerialDetailView(generic.DetailView):
                 .prefetch_related(Prefetch('genres', queryset=Genre.objects.only('title')))\
                 .exclude(id=self.object.id).order_by('-rating')[:6]
         return data
+
+    def post(self, *args, **kwargs):
+        form = CommentForm(self.request.POST)
+        film = Serial.objects.get(id=self.kwargs['pk'])
+        if form.is_valid() and self.request.POST.get('g-recaptcha-response'):
+            form = form.save(commit=False)
+            form.film = film
+            if self.request.POST.get('parent', None):
+                form.is_child = True
+                form.parent_id = self.request.POST.get('parent')
+            form.save()
+        return redirect(film.get_absolute_url())
 
 
 def search_serials(request):
