@@ -1,70 +1,212 @@
 {% extends 'base.html' %}
+{% load static %}
 {% load genre_list %}
-{% load attrs_list %}
 
-
-{% block title %} Films {% endblock %}
-
+{% block title %}Список фильмов{% endblock title %}
 
 {% block content %}
+<!-- page title -->
+<section class="section section--first section--bg" data-bg="{% static 'img/section/section.jpeg' %}">
+	<div class="container">
+		<div class="row">
+			<div class="col-12">
+				<div class="section__wrap">
+					<!-- section title -->
+					{% if search_text %}
+					<h1 class="section__title">Поиск</h1>
+					{% else %}
+					<h1 class="section__title">Список {% block navigation_left %}фильмов{% endblock navigation_left %}</h1>
+					{% endif %}
+					<!-- end section title -->
 
-<section class="text-gray-600 body-font">
-  <div class="container px-5 py-20 mx-auto flex flex-wrap">
-    {% block searching %}
-    <div class="flex sm:flex-wrap mb-10 space-x-6 sm:-mx-0 mx-auto">
-      <a href="{% url 'film-list' %}" class="bg-gray-100 inline-flex py-3 px-5 rounded-lg items-center hover:bg-gray-200 focus:outline-none w-36">
-        <div class="text-xl w-6 h-6">
-          <i class="fas fa-video"></i>
-        </div>
-        <span class="ml-4 flex items-start flex-col leading-none">
-          <span class="text-xs text-gray-600 mb-1">Список</span>
-          <span class="title-font font-medium">Фильмов</span>
-        </span>
-      </a>
-      <a href="{% url 'serial-list' %}" class="bg-gray-100 inline-flex py-3 px-5 rounded-lg items-center hover:bg-gray-200 focus:outline-none w-36 sm:w-auto">
-        <div class="text-xl w-6 h-6">
-          <i class="fas fa-film"></i>
-        </div>
-        <span class="ml-4 flex items-start flex-col leading-none">
-          <span class="text-xs text-gray-600 mb-1">Список </span>
-          <span class="title-font font-medium">Сериалов</span>
-        </span>
-      </a>
-    </div>
-    {% endblock searching %}
-
-    <div class="flex flex-wrap -m-4">
-    {% for film in films %}
-      <div class="p-4 lg:w-1/2 md:w-full">
-        <div class="flex border-2 rounded-lg border-gray-200 border-opacity-50 p-8 sm:flex-row flex-col shadow-lg">
-          <div class="w-24 h-20 mx-auto mt-8 sm:mr-8 mb-8 sm:mb-0 inline-flex items-center rounded-full bg-indigo-100 text-indigo-500 flex-shrink-0">
-            <a href="{{ film.get_absolute_url }}">
-              <img class="rounded-lg shadow-lg mb-6 sm:mb-0" src="{{ film.image.url }}" alt="">
-            </a>
-          </div>
-          <div class="flex-grow text-center sm:text-left">
-            <a href="{{ film.get_absolute_url }}">
-              <h2 class="text-gray-900 text-lg title-font font-medium mb-3">{{ film.title_ru|capfirst|truncatechars:30 }} {% if film.title_en %}/ {{ film.title_en|truncatechars:8 }}{% endif %}</h2>
-            </a>
-            <p class="leading-relaxed text-base"><b>Жанр:</b> {% for genre in film.genres.all|split_genres %}{{ genre }}{% endfor %}</p>
-            <p class="leading-relaxed text-base"><b>Год:</b> {% block year %}{{ film.year }}{% endblock year %}</p>
-            <p class="leading-relaxed text-base"><b>Страна:</b> {% for country in film.countries.all|split_countries %}{{ country }}{% endfor %}</p>
-            <p class="leading-relaxed text-base text-justify sm:text-left"><b>Сюжет:</b> {{ film.plot|truncatechars:110 }}</p>
-            <a href="{{ film.get_absolute_url }}" class="mt-3 text-indigo-500 inline-flex items-center">Подробнее
-              <svg fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" class="w-4 h-4 ml-2" viewBox="0 0 24 24">
-                <path d="M5 12h14M12 5l7 7-7 7"></path>
-              </svg>
-            </a>
-          </div>
-        </div>
-      </div>
-    {% endfor %}
-    </div>
-  </div>
-  {% if films %}
-    {% include 'includes/pagination.html' %}
-  {% endif %}
+					<!-- breadcrumb -->
+					<ul class="breadcrumb">
+						<li class="breadcrumb__item"><a href="{% url 'index-page' %}">Главная</a></li>
+						{% if search_text %}
+						<li class="breadcrumb__item breadcrumb__item--active">Поиск</li>
+						{% else %}
+						<li class="breadcrumb__item breadcrumb__item--active">Список {% block navigation_right %}фильмов{% endblock navigation_right %}</li>
+						{% endif %}
+					</ul>
+					<!-- end breadcrumb -->
+				</div>
+			</div>
+		</div>
+	</div>
 </section>
+<!-- end page title -->
 
+<!-- filter -->
+
+<div class="filter">
+	<div class="container">
+		{% if search_text and films %}
+			<h3 class="card__title py-4">Результаты поиска по запросу: "{{ search_text }}"</h3>
+		{% elif search_text %}
+			<h3 class="card__title py-4">По запросу "{{ search_text }}" ничего не найдено.</h3>
+		{% else %}
+		<div class="row">
+			<div class="col-12">
+				<form method="GET" action="{% block form_action_url %}{% url 'filter-search-films' %}{% endblock %}">
+				<div class="filter__content">
+					<div class="filter__items">
+						<!-- filter item -->
+						<div class="filter__item" id="filter__genre">
+							<span class="filter__item-label">ЖАНР:</span>
+
+							<div class="filter__item-btn dropdown-toggle" role="navigation" id="filter-genre" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+								<input type="button" value="{% if chosen_genre %}{{ chosen_genre }}{% else %}Все жанры{% endif %}">
+								{% if chosen_genre %}
+									<input id="hidden_filter_genre" type="text" hidden="true" name="genre" value="{{ chosen_genre }}">
+								{% endif %}
+								<span></span>
+							</div>
+
+							<ul class="filter__item-menu dropdown-menu scrollbar-dropdown" aria-labelledby="filter-genre">
+								<li>Все жанры</li>
+								{% for genre in genres %}
+								<li>{{ genre|capfirst }}</li>
+								{% endfor %}
+							</ul>
+						</div>
+						<!-- end filter item -->
+
+						<!-- filter item -->
+						<div class="filter__item" id="filter__country">
+							<span class="filter__item-label">СТРАНА:</span>
+
+							<div class="filter__item-btn dropdown-toggle" role="navigation" id="filter-quality" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+								<input type="button" value="{% if chosen_country %}{{ chosen_country }}{% else %}Все страны{% endif %}">
+								{% if chosen_country %}
+									<input id="hidden_filter_country" type="text" hidden="true" name="country" value="{{ chosen_country }}">
+								{% endif %}
+								<span></span>
+							</div>
+
+							<ul class="filter__item-menu dropdown-menu scrollbar-dropdown" aria-labelledby="filter-quality">
+								<li>Все страны</li>
+								{% for country in countries %}
+								<li>{{ country|capfirst }}</li>
+								{% endfor %}
+							</ul>
+						</div>
+						<!-- end filter item -->
+
+						<!-- filter item -->
+						<div class="filter__item" id="filter__rate">
+							<span class="filter__item-label">IMBd:</span>
+
+							<div class="filter__item-btn dropdown-toggle" role="button" id="filter-rate" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+								<div class="filter__range">
+									<div id="filter__imbd-start"></div>
+									<div id="filter__imbd-end"></div>
+								</div>
+								<span></span>
+							</div>
+
+							<div class="filter__item-menu filter__item-menu--range dropdown-menu" aria-labelledby="filter-rate">
+								<div id="filter__imbd"></div>
+							</div>
+						</div>
+						<!-- end filter item -->
+
+						<!-- filter item -->
+						<div class="filter__item" id="filter__year">
+							<span class="filter__item-label">ГОД ВЫПУСКА:</span>
+
+							<div class="filter__item-btn dropdown-toggle" role="button" id="filter-year" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+								<div class="filter__range">
+									<div id="filter__years-start"></div>
+									<div id="filter__years-end"></div>
+								</div>
+								<span></span>
+							</div>
+
+							<div class="filter__item-menu filter__item-menu--range dropdown-menu" aria-labelledby="filter-year">
+								<div id="filter__years"></div>
+							</div>
+						</div>
+						<!-- end filter item -->
+					</div>
+					
+					<!-- filter btn -->
+					<button class="filter__btn" type="submit" id="filter_btn">применить</button>
+					<!-- end filter btn -->
+				</div>
+				</form>
+			</div>
+		</div>
+		{% endif %}
+	</div>
+</div>
+
+<!-- end filter -->
+
+<!-- catalog -->
+<div class="catalog{% if search_text and not films %} py-5 my-5{% endif %}">
+	<div class="container">
+		<div class="row row--grid">
+			{% for film in films %}
+			<!-- card -->
+			<div class="col-6 col-sm-12 col-lg-6">
+				<div class="card card--list">
+					<a href="{{ film.get_absolute_url }}" class="card__cover">
+						<img src="{{ film.image.url }}" alt="">
+						<span class="card__play">
+							<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M18.54,9,8.88,3.46a3.42,3.42,0,0,0-5.13,3V17.58A3.42,3.42,0,0,0,7.17,21a3.43,3.43,0,0,0,1.71-.46L18.54,15a3.42,3.42,0,0,0,0-5.92Zm-1,4.19L7.88,18.81a1.44,1.44,0,0,1-1.42,0,1.42,1.42,0,0,1-.71-1.23V6.42a1.42,1.42,0,0,1,.71-1.23A1.51,1.51,0,0,1,7.17,5a1.54,1.54,0,0,1,.71.19l9.66,5.58a1.42,1.42,0,0,1,0,2.46Z"/></svg>
+						</span>
+					</a>
+
+					<div class="card__content">
+						<h3 class="card__title"><a href="{{ film.get_absolute_url }}">{{ film.title_ru|capfirst }}</a></h3>
+						<span class="card__category">
+							{% for genre in film.genres.all|get_four_genres %}
+							<a>{{ genre }}</a>
+							{% endfor %}
+						</span>
+
+						<div class="card__wrap">
+							{% if film.rating %}
+								<span class="card__rate"> {{ film.rating }}</span>
+							{% else %}
+								<span class="card__rate"> -- </span>
+							{% endif %}
+
+							<ul class="card__list">
+								{% if film.year %}
+									<li>{{ film.year }}</li>
+								{% endif %}
+								{% if film.start_year %}
+									<li>{{ film.start_year }}{% if film.end_year %} - {{ film.end_year }}{% endif %}</li>
+								{% endif %}
+								{% if film.rating >= 8.0 %}<li>🌶</li>{% endif %}
+								{% if film.end_status %}<li>✔️</li>{% endif %}
+							</ul>
+						</div>
+
+						<div class="card__description">
+							<p>{{ film.plot }}</p>
+						</div>
+					</div>
+				</div>
+			</div>
+			<!-- end card -->
+			{% endfor %}
+		</div>
+		{% if films %}
+		<div class="row">
+			<!-- paginator -->
+			{% include 'includes/paginator.html' %}
+			<!-- end paginator -->
+		</div>
+		{% endif %}
+	</div>
+</div>
+<!-- end catalog -->
+
+<!-- recommended_films -->
+	{% include 'includes/recommended_films.html' %}
+<!-- end recommended_films -->
 
 {% endblock content %}
+

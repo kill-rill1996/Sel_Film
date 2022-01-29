@@ -1,10 +1,13 @@
 {% extends 'films/film_list.html' %}
-{% load genre_list %}
 
-{% block title %} Serials {% endblock %}
+{% block title %}Список {{ list_type }}{% endblock title %}
 
-{% block year %}
-    {{ film.start_year }}{% if film.end_year and film.end_year != film.start_year%} - {{ film.end_year }}{% endif %}
+{% block navigation_left %}
+	{{ list_type }}
+{% endblock navigation_left %}
 
+{% block navigation_right %}
+	{{ list_type }}
+{% endblock navigation_right %}
 
-{% endblock year %}
+{% block form_action_url %}{% url 'filter-search-serials' %}{% endblock %}

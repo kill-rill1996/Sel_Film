@@ -43,6 +43,28 @@ def index_page(request):
                                                   })
 
 
+class FilmListView(generic.ListView):
+    model = Film
+    context_object_name = 'films'
+    paginate_by = 8
+    template_name = 'films/film_list.html'
+    ordering = ['id']
+
+    def get_queryset(self):
+        genres = Genre.objects.only('title')
+        films = Film.objects.only('title_ru', 'year', 'image', 'plot', 'rating')\
+            .prefetch_related(Prefetch('genres', queryset=genres))
+        return films
+
+    def get_context_data(self, **kwargs):
+        data = super().get_context_data(**kwargs)
+        data['genres'] = Genre.objects.only('title').order_by('title')
+        data['countries'] = Country.objects.only('title').order_by('title')
+        data['recommended_films'] = Film.objects.filter(id__in=(31, 1010, 97, 122, 147, 109))\
+            .prefetch_related(Prefetch('genres', queryset=data['genres'])).only('title_ru', 'image', 'rating')
+        return data
+
+
 class FilmDetailView(generic.DetailView):
     model = Film
     context_object_name = 'film'
@@ -83,6 +105,111 @@ class FilmDetailView(generic.DetailView):
 
             form.save()
         return redirect(film.get_absolute_url())
+
+
+class FilterFilmListView(generic.ListView):
+    paginate_by = 8
+    template_name = 'films/film_list.html'
+    context_object_name = 'films'
+
+    def get_queryset(self):
+        if self.request.GET.get('years_start') == '1900' and self.request.GET.get('years_end') == '2021':
+            genres = Genre.objects.only('title')
+            films = Film.objects.only('title_ru', 'year', 'image', 'plot', 'rating') \
+                .prefetch_related(Prefetch('genres', queryset=genres))
+        else:
+            genres = Genre.objects.only('title')
+            films = Film.objects.filter(
+                Q(year__gte=int(self.request.GET.get('years_start'))) &
+                Q(year__lte=int(self.request.GET.get('years_end')))
+            ).only('title_ru', 'year', 'image', 'plot', 'rating')\
+                .prefetch_related(Prefetch('genres', queryset=genres))
+
+        if self.request.GET.get('imbd_start') != '0.1' or self.request.GET.get('imbd_end') != '9.9':
+            films = films.filter(
+                Q(rating__gte=float(self.request.GET.get('imbd_start'))) &
+                Q(rating__lte=float(self.request.GET.get('imbd_end')))
+            )
+
+        if self.request.GET.get('genre') and self.request.GET.get('genre') != 'Все жанры':
+            films = films.filter(genres__title=self.request.GET.get('genre').lower())
+
+        if self.request.GET.get('country') and self.request.GET.get('country') != 'Все страны':
+            films = films.filter(countries__title=self.request.GET.get('country'))
+        return films
+
+    def get_context_data(self, *args, **kwargs):
+        context = super().get_context_data(*args, **kwargs)
+        context['get_params'] = []
+        if self.request.GET.get('genre'):
+            context['get_params'].append(f"genre={self.request.GET.get('genre')}&")
+            context['chosen_genre'] = self.request.GET.get('genre')
+        if self.request.GET.get('country'):
+            context['get_params'].append(f"country={self.request.GET.get('country')}&")
+            context['chosen_country'] = self.request.GET.get('country')
+        context['get_params'].append(f"years_start={self.request.GET.get('years_start')}&")
+        context['get_params'].append(f"years_end={self.request.GET.get('years_end')}&")
+        context['get_params'].append(f"imbd_start={self.request.GET.get('imbd_start')}&")
+        context['get_params'].append(f"imbd_end={self.request.GET.get('imbd_end')}&")
+
+        context['genres'] = Genre.objects.only('title').order_by('title')
+        context['countries'] = Country.objects.only('title').order_by('title')
+        context['recommended_films'] = Film.objects.filter(id__in=(31, 1010, 97, 122, 147, 109)) \
+            .prefetch_related(Prefetch('genres', queryset=context['genres']))
+        return context
+
+
+class SearchView(generic.ListView):
+    context_object_name = 'films'
+    template_name = 'films/film_list.html'
+    paginate_by = 8
+
+    def get_queryset(self):
+        if self.request.GET.get('search_text') and self.request.GET.get('search_text') != ' ':
+            search_data = self.request.GET.get('search_text')
+            search_data_lower = search_data.lower()
+            try:
+                # Eng title
+                if search_data_lower[0] in ascii_lowercase:
+                    films_list = Film.objects.only('title_ru', 'year', 'plot', 'image', 'rating')\
+                                     .filter(title_en__icontains=search_data_lower) \
+                                     .prefetch_related(Prefetch('genres', queryset=Genre.objects.only('title')))[:100]
+                    serials_list = Serial.objects.only('title_ru', 'rating', 'start_year', 'end_year', 'plot', 'image', 'end_status')\
+                                    .filter(title_en__icontains=search_data_lower)\
+                                    .prefetch_related(Prefetch('genres', queryset=Serial_Genre.objects.only('title')))[:100]
+                    if not films_list and not serials_list:
+                        logger.warning(f'Фильмы и сериалы по запросу: \"{search_data}\" не найдены {films_list} {serials_list}')
+                else:
+                    # Rus title
+                    films_list = Film.objects.only('title_ru', 'year', 'plot', 'image', 'rating') \
+                                     .filter(title_ru__icontains=search_data_lower) \
+                                     .prefetch_related(Prefetch('genres', queryset=Genre.objects.only('title')))[:100]
+                    serials_list = Serial.objects.only('title_ru', 'rating', 'start_year', 'end_year', 'plot', 'image', 'end_status') \
+                                    .filter(title_ru__icontains=search_data_lower) \
+                                    .prefetch_related(Prefetch('genres', queryset=Serial_Genre.objects.only('title')))[:100]
+                    # log
+                    if not films_list and not serials_list:
+                        logger.warning(f'Фильмы и сериалы по запросу: \"{search_data}\" не найдены {films_list} {serials_list}')
+
+                films_list = list(films_list) + list(serials_list)
+                films_list = sorted(films_list, key=lambda f: f.id)
+
+            except IndexError:
+                films_list = []
+                logger.warning(f'Сраблотала IndexError при поиске фильмов')
+            return films_list
+        else:
+            raise Exception
+
+    def get_context_data(self, *args, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['search_text'] = self.request.GET.get("search_text")
+        context['search_query'] = f'search_text={self.request.GET.get("search_text")}&'
+        context['genres'] = Genre.objects.all().order_by('title')
+        context['countries'] = Country.objects.all().order_by('title')
+        context['recommended_films'] = Film.objects.filter(id__in=(31, 1010, 97, 122, 147, 109)) \
+            .prefetch_related(Prefetch('genres', queryset=context['genres']))
+        return context
 
 
 def search_films(request):
@@ -150,133 +277,6 @@ def search_films(request):
                                                                     'form_1': form_1,
                                                                     'form_2': form_2,
                                                                    })
-
-
-class FilmListView(generic.ListView):
-    model = Film
-    context_object_name = 'films'
-    paginate_by = 8
-    template_name = 'film_list.html'
-    ordering = ['id']
-
-    def get_queryset(self):
-        genres = Genre.objects.only('title')
-        films = Film.objects.only('title_ru', 'year', 'image', 'plot', 'rating')\
-            .prefetch_related(Prefetch('genres', queryset=genres))
-        return films
-
-    def get_context_data(self, **kwargs):
-        data = super().get_context_data(**kwargs)
-        data['genres'] = Genre.objects.only('title').order_by('title')
-        data['countries'] = Country.objects.only('title').order_by('title')
-        data['recommended_films'] = Film.objects.filter(id__in=(31, 1010, 97, 122, 147, 109))\
-            .prefetch_related(Prefetch('genres', queryset=data['genres'])).only('title_ru', 'image', 'rating')
-        return data
-
-
-class FilterFilmListView(generic.ListView):
-    paginate_by = 8
-    template_name = 'film_list.html'
-    context_object_name = 'films'
-
-    def get_queryset(self):
-        if self.request.GET.get('years_start') == '1900' and self.request.GET.get('years_end') == '2021':
-            genres = Genre.objects.only('title')
-            films = Film.objects.only('title_ru', 'year', 'image', 'plot', 'rating') \
-                .prefetch_related(Prefetch('genres', queryset=genres))
-        else:
-            genres = Genre.objects.only('title')
-            films = Film.objects.filter(
-                Q(year__gte=int(self.request.GET.get('years_start'))) &
-                Q(year__lte=int(self.request.GET.get('years_end')))
-            ).only('title_ru', 'year', 'image', 'plot', 'rating')\
-                .prefetch_related(Prefetch('genres', queryset=genres))
-
-        if self.request.GET.get('imbd_start') != '0.1' or self.request.GET.get('imbd_end') != '9.9':
-            films = films.filter(
-                Q(rating__gte=float(self.request.GET.get('imbd_start'))) &
-                Q(rating__lte=float(self.request.GET.get('imbd_end')))
-            )
-
-        if self.request.GET.get('genre') and self.request.GET.get('genre') != 'Все жанры':
-            films = films.filter(genres__title=self.request.GET.get('genre').lower())
-
-        if self.request.GET.get('country') and self.request.GET.get('country') != 'Все страны':
-            films = films.filter(countries__title=self.request.GET.get('country'))
-        return films
-
-    def get_context_data(self, *args, **kwargs):
-        context = super().get_context_data(*args, **kwargs)
-        context['get_params'] = []
-        if self.request.GET.get('genre'):
-            context['get_params'].append(f"genre={self.request.GET.get('genre')}&")
-            context['chosen_genre'] = self.request.GET.get('genre')
-        if self.request.GET.get('country'):
-            context['get_params'].append(f"country={self.request.GET.get('country')}&")
-            context['chosen_country'] = self.request.GET.get('country')
-        context['get_params'].append(f"years_start={self.request.GET.get('years_start')}&")
-        context['get_params'].append(f"years_end={self.request.GET.get('years_end')}&")
-        context['get_params'].append(f"imbd_start={self.request.GET.get('imbd_start')}&")
-        context['get_params'].append(f"imbd_end={self.request.GET.get('imbd_end')}&")
-
-        context['genres'] = Genre.objects.only('title').order_by('title')
-        context['countries'] = Country.objects.only('title').order_by('title')
-        context['recommended_films'] = Film.objects.filter(id__in=(31, 1010, 97, 122, 147, 109)) \
-            .prefetch_related(Prefetch('genres', queryset=context['genres']))
-        return context
-
-
-class SearchView(generic.ListView):
-    context_object_name = 'films'
-    template_name = 'film_list.html'
-    paginate_by = 8
-
-    def get_queryset(self):
-        if self.request.GET.get('search_text') and self.request.GET.get('search_text') != ' ':
-            search_data = self.request.GET.get('search_text')
-            search_data_lower = search_data.lower()
-            try:
-                # Eng title
-                if search_data_lower[0] in ascii_lowercase:
-                    films_list = Film.objects.only('title_ru', 'year', 'plot', 'image', 'rating')\
-                                     .filter(title_en__icontains=search_data_lower) \
-                                     .prefetch_related(Prefetch('genres', queryset=Genre.objects.only('title')))[:100]
-                    serials_list = Serial.objects.only('title_ru', 'rating', 'start_year', 'end_year', 'plot', 'image', 'end_status')\
-                                    .filter(title_en__icontains=search_data_lower)\
-                                    .prefetch_related(Prefetch('genres', queryset=Serial_Genre.objects.only('title')))[:100]
-                    if not films_list and not serials_list:
-                        logger.warning(f'Фильмы и сериалы по запросу: \"{search_data}\" не найдены {films_list} {serials_list}')
-                else:
-                    # Rus title
-                    films_list = Film.objects.only('title_ru', 'year', 'plot', 'image', 'rating') \
-                                     .filter(title_ru__icontains=search_data_lower) \
-                                     .prefetch_related(Prefetch('genres', queryset=Genre.objects.only('title')))[:100]
-                    serials_list = Serial.objects.only('title_ru', 'rating', 'start_year', 'end_year', 'plot', 'image', 'end_status') \
-                                    .filter(title_ru__icontains=search_data_lower) \
-                                    .prefetch_related(Prefetch('genres', queryset=Serial_Genre.objects.only('title')))[:100]
-                    # log
-                    if not films_list and not serials_list:
-                        logger.warning(f'Фильмы и сериалы по запросу: \"{search_data}\" не найдены {films_list} {serials_list}')
-
-                films_list = list(films_list) + list(serials_list)
-                films_list = sorted(films_list, key=lambda f: f.id)
-
-            except IndexError:
-                films_list = []
-                logger.warning(f'Сраблотала IndexError при поиске фильмов')
-            return films_list
-        else:
-            raise Exception
-
-    def get_context_data(self, *args, **kwargs):
-        context = super().get_context_data(**kwargs)
-        context['search_text'] = self.request.GET.get("search_text")
-        context['search_query'] = f'search_text={self.request.GET.get("search_text")}&'
-        context['genres'] = Genre.objects.all().order_by('title')
-        context['countries'] = Country.objects.all().order_by('title')
-        context['recommended_films'] = Film.objects.filter(id__in=(31, 1010, 97, 122, 147, 109)) \
-            .prefetch_related(Prefetch('genres', queryset=context['genres']))
-        return context
 
 
 def add_review_for_film(request, pk):

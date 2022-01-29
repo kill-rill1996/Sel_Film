@@ -143,7 +143,10 @@
 						<div class="row">
 							<!-- comments -->
 							<div class="col-12">
-									<form action="{{ film.get_absolute_url }}" method="POST" class="form my-5" id='formComment'>
+									{% if not film.comments.all %}
+										<p class="faq__text pt-4">Вы можете оставить свой комментарий здесь.</p>
+									{% endif %}
+									<form action="{{ film.get_absolute_url }}" method="POST" class="form my-4" id='formComment'>
 										{% csrf_token %}
 										<input type="hidden" id="contactParent" value="" name="parent">
 										<input type="email" name="email" class="form__input" placeholder="Email" required="true">
@@ -153,6 +156,7 @@
 									</form>
 								<div class="comments">
 									<ul class="comments__list">
+										
 										{% for comment in film.comments.all %}
 											{% if not comment.is_child %}
 												<li class="comments__item">

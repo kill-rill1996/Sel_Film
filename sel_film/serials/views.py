@@ -15,7 +15,7 @@ class SerialListView(generic.ListView):
     model = Serial
     context_object_name = 'films'
     paginate_by = 8
-    template_name = 'serial_list.html'
+    template_name = 'serials/serial_list.html'
 
     def get_queryset(self):
         searched_type = get_serial_type(self.request)
@@ -102,6 +102,57 @@ class SerialDetailView(generic.DetailView):
         return redirect(film.get_absolute_url())
 
 
+class FilterSerialListView(generic.ListView):
+    paginate_by = 8
+    template_name = 'serials/serial_list.html'
+    context_object_name = 'films'
+
+    def get_queryset(self):
+        if self.request.GET.get('years_start') == '1900' and self.request.GET.get('years_end') == '2021':
+            films = Serial.objects.only('title_ru', 'start_year', 'end_year', 'image', 'plot', 'rating', 'end_status')\
+                .prefetch_related(Prefetch('genres', queryset=Genre.objects.only('title')))
+        else:
+            films = Serial.objects.filter(
+                Q(start_year__gte=int(self.request.GET.get('years_start'))) &
+                Q(start_year__lte=int(self.request.GET.get('years_end')))
+            ).only('title_ru', 'start_year', 'end_year', 'image', 'plot', 'rating', 'end_status')\
+                .prefetch_related(Prefetch('genres', queryset=Genre.objects.only('title')))
+
+        if self.request.GET.get('imbd_start') != '0.1' or self.request.GET.get('imbd_end') != '9.9':
+            films = films.filter(
+                Q(rating__gte=float(self.request.GET.get('imbd_start'))) &
+                Q(rating__lte=float(self.request.GET.get('imbd_end')))
+            )
+
+        if self.request.GET.get('genre') and self.request.GET.get('genre') != 'Все жанры':
+            films = films.filter(genres__title=self.request.GET.get('genre').lower())
+
+        if self.request.GET.get('country') and self.request.GET.get('country') != 'Все страны':
+            films = films.filter(countries__title=self.request.GET.get('country'))
+        return films
+
+    def get_context_data(self, *args, **kwargs):
+        context = super().get_context_data(*args, **kwargs)
+        context['get_params'] = []
+        if self.request.GET.get('genre'):
+            context['get_params'].append(f"genre={self.request.GET.get('genre')}&")
+            context['chosen_genre'] = self.request.GET.get('genre')
+        if self.request.GET.get('country'):
+            context['get_params'].append(f"country={self.request.GET.get('country')}&")
+            context['chosen_country'] = self.request.GET.get('country')
+        context['get_params'].append(f"years_start={self.request.GET.get('years_start')}&")
+        context['get_params'].append(f"years_end={self.request.GET.get('years_end')}&")
+        context['get_params'].append(f"imbd_start={self.request.GET.get('imbd_start')}&")
+        context['get_params'].append(f"imbd_end={self.request.GET.get('imbd_end')}&")
+
+        context['list_type'] = 'сериалов'
+        context['genres'] = Genre.objects.all().order_by('title')
+        context['countries'] = Country.objects.all().order_by('title')
+        context['recommended_films'] = Film.objects.filter(id__in=(31, 1010, 97, 122, 147, 109))\
+            .prefetch_related(Prefetch('genres', queryset=FilmGenre.objects.only('title')))
+        return context
+
+
 def search_serials(request):
 
     if request.method == 'POST':
@@ -165,57 +216,6 @@ def search_serials(request):
         form_1 = Film1FindForm()
         form_2 = Film2FindForm()
         return render(request, 'serials/search_serials.html', context={'form_1': form_1, 'form_2': form_2})
-
-
-class FilterSerialListView(generic.ListView):
-    paginate_by = 8
-    template_name = 'serial_list.html'
-    context_object_name = 'films'
-
-    def get_queryset(self):
-        if self.request.GET.get('years_start') == '1900' and self.request.GET.get('years_end') == '2021':
-            films = Serial.objects.only('title_ru', 'start_year', 'end_year', 'image', 'plot', 'rating', 'end_status')\
-                .prefetch_related(Prefetch('genres', queryset=Genre.objects.only('title')))
-        else:
-            films = Serial.objects.filter(
-                Q(start_year__gte=int(self.request.GET.get('years_start'))) &
-                Q(start_year__lte=int(self.request.GET.get('years_end')))
-            ).only('title_ru', 'start_year', 'end_year', 'image', 'plot', 'rating', 'end_status')\
-                .prefetch_related(Prefetch('genres', queryset=Genre.objects.only('title')))
-
-        if self.request.GET.get('imbd_start') != '0.1' or self.request.GET.get('imbd_end') != '9.9':
-            films = films.filter(
-                Q(rating__gte=float(self.request.GET.get('imbd_start'))) &
-                Q(rating__lte=float(self.request.GET.get('imbd_end')))
-            )
-
-        if self.request.GET.get('genre') and self.request.GET.get('genre') != 'Все жанры':
-            films = films.filter(genres__title=self.request.GET.get('genre').lower())
-
-        if self.request.GET.get('country') and self.request.GET.get('country') != 'Все страны':
-            films = films.filter(countries__title=self.request.GET.get('country'))
-        return films
-
-    def get_context_data(self, *args, **kwargs):
-        context = super().get_context_data(*args, **kwargs)
-        context['get_params'] = []
-        if self.request.GET.get('genre'):
-            context['get_params'].append(f"genre={self.request.GET.get('genre')}&")
-            context['chosen_genre'] = self.request.GET.get('genre')
-        if self.request.GET.get('country'):
-            context['get_params'].append(f"country={self.request.GET.get('country')}&")
-            context['chosen_country'] = self.request.GET.get('country')
-        context['get_params'].append(f"years_start={self.request.GET.get('years_start')}&")
-        context['get_params'].append(f"years_end={self.request.GET.get('years_end')}&")
-        context['get_params'].append(f"imbd_start={self.request.GET.get('imbd_start')}&")
-        context['get_params'].append(f"imbd_end={self.request.GET.get('imbd_end')}&")
-
-        context['list_type'] = 'сериалов'
-        context['genres'] = Genre.objects.all().order_by('title')
-        context['countries'] = Country.objects.all().order_by('title')
-        context['recommended_films'] = Film.objects.filter(id__in=(31, 1010, 97, 122, 147, 109))\
-            .prefetch_related(Prefetch('genres', queryset=FilmGenre.objects.only('title')))
-        return context
 
 
 def add_review_for_serial(request, pk):
