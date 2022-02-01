@@ -3,7 +3,7 @@ import datetime
 
 def read_id_from_log():
     log_id = {}
-    default_films = [100, 101, 102, 103, 104, 105, 106]
+    default_films = [17, 29, 40, 44, 55, 1260, 1422]
     with open('logs/films/selected_films.log', 'r') as f:
         list_file = [row.split() for row in f if 'Искали фильм 1:' in row or 'Искали фильм 2:' in row]
         time_now = datetime.datetime.now()
