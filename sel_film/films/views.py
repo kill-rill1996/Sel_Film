@@ -6,6 +6,7 @@ from django.shortcuts import render, redirect
 from django.views import generic
 from string import ascii_lowercase
 from loguru import logger
+from django.views.decorators.cache import cache_page
 
 from serials.models import Serial, Country as CountrySerial
 from .models import Film, Genre, Actor, Director, Country, Comment
@@ -15,6 +16,7 @@ from films.services.week_films import read_id_from_log
 from serials.models import Genre as Serial_Genre
 
 
+@cache_page(15 * 60)
 def index_page(request):
     week_films = Film.objects.filter(id__in=read_id_from_log())\
                     .prefetch_related(Prefetch('genres', queryset=Genre.objects.only('title')))\
@@ -289,6 +291,7 @@ def add_review_for_film(request, pk):
     return redirect(film.get_absolute_url())
 
 
+@cache_page(15 * 60)
 def contact_page(request):
     if request.method == 'POST':
         message_name = request.POST.get('name', '')
@@ -313,5 +316,6 @@ def contact_page(request):
         return render(request, 'contacts.html', {'captcha': captcha})
 
 
+@cache_page(15 * 60)
 def about_page(request):
     return render(request, 'faq.html')
