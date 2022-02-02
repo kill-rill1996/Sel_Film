@@ -133,8 +133,8 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/3.2/howto/static-files/
 
 STATIC_URL = '/static/'
-STATIC_ROOT = os.path.join(BASE_DIR, '../static/')
-STATICFILES_DIRS = [BASE_DIR / "static"]
+STATIC_ROOT = os.path.join(BASE_DIR, 'static')
+# STATICFILES_DIRS = [BASE_DIR / "static"]
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/3.2/ref/settings/#default-auto-field
@@ -187,11 +187,11 @@ loguru_logger.add(os.path.join(BASE_DIR, 'logs/films/selected_films.log'), forma
 
 
 # Email settings
-EMAIL_HOST = 'smtp.gmail.com'
-EMAIL_PORT = 587
-EMAIL_HOST_USER = 'selfilm.devs@gmail.com'
-EMAIL_HOST_PASSWORD = '6wopnL4WRfZcllkl'
-EMAIL_USE_TLS = True
+EMAIL_HOST = os.environ.get('EMAIL_HOST')
+EMAIL_PORT = os.environ.get('EMAIL_PORT')
+EMAIL_HOST_USER = os.environ.get('EMAIL_HOST_USER')
+EMAIL_HOST_PASSWORD = os.environ.get('EMAIL_HOST_PASSWORD')
+EMAIL_USE_TLS = bool(int(os.environ.get('EMAIL_USE_TLS')))
 
 # Sentry monitoring
 import sentry_sdk
@@ -213,5 +213,5 @@ sentry_sdk.init(
 
 
 # Captcha
-RECAPTCHA_PUBLIC_KEY = '6Lf0UjseAAAAACu5BiUqjALpsvt7LmSABYKJqtGA'
-RECAPTCHA_PRIVATE_KEY = '6Lf0UjseAAAAAPRF-FArmHsNhQiNp1IDooWWhM3n'
+RECAPTCHA_PUBLIC_KEY = os.environ.get('RECAPTCHA_PUBLIC_KEY')
+RECAPTCHA_PRIVATE_KEY = os.environ.get('RECAPTCHA_PRIVATE_KEY')
