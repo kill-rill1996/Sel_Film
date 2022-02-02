@@ -1,0 +1,29 @@
+version: "3.7"
+
+services:
+  backend:
+    build: ./
+    restart: always
+    command: bash entrypoint.sh
+    volumes:
+      - ./:/usr/src/app
+      - ./static:/usr/src/app/static
+      - ./media:/usr/src/app/media
+    ports:
+      - 8000:8000
+    depends_on:
+      - postgresdb
+
+  postgresdb:
+    build:
+      context: ./docker/postgres
+      dockerfile: Dockerfile
+    restart: always
+    environment:
+      - POSTGRES_PASSWORD=devpass
+    volumes:
+      - selfilm_postgres_data:/var/lib/postgresql/data/
+    ports:
+      - 5432:5432
+volumes:
+  selfilm_postgres_data:

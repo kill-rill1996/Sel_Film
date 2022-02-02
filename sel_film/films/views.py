@@ -16,7 +16,7 @@ from films.services.week_films import read_id_from_log
 from serials.models import Genre as Serial_Genre
 
 
-@cache_page(15 * 60)
+# @cache_page(15 * 60)
 def index_page(request):
     week_films = Film.objects.filter(id__in=read_id_from_log())\
                     .prefetch_related(Prefetch('genres', queryset=Genre.objects.only('title')))\

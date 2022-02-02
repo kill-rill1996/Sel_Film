@@ -1,0 +1,5 @@
+CREATE USER admin WITH PASSWORD 'devpass';
+
+CREATE DATABASE selfilm;
+GRANT ALL PRIVILEGES ON DATABASE selfilm TO admin;
+
