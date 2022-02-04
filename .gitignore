@@ -352,4 +352,6 @@ Temporary Items
 .apdisk
 
 
+#sel_film/.env.dev
 /sel_film/data/
+/sel_film/selfilm_cache/
