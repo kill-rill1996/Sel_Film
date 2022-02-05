@@ -231,7 +231,7 @@ def get_objects() -> list:
     """Получает все фильмы"""
     with open('data/serials_info.json', 'r') as file:
         films = json.loads(file.read())
-    return films[:2000]
+    return films
 
 
 def create_points_dict(films) -> dict:
