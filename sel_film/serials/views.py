@@ -22,9 +22,9 @@ class SerialListView(generic.ListView):
         if searched_type[0]:
             return Serial.objects.only('title_ru', 'image', 'plot', 'rating', 'start_year', 'end_year', 'end_status') \
                 .prefetch_related(Prefetch('genres', queryset=Genre.objects.only('title')))\
-                .filter(genres__title=searched_type[0])
+                .filter(genres__title=searched_type[0]).order_by('id')
         return Serial.objects.only('title_ru', 'image', 'plot', 'rating', 'start_year', 'end_year', 'end_status')\
-            .prefetch_related(Prefetch('genres', queryset=Genre.objects.only('title')))
+            .prefetch_related(Prefetch('genres', queryset=Genre.objects.only('title'))).order_by('id')
 
     def get_context_data(self, **kwargs):
         data = super().get_context_data(**kwargs)
@@ -86,7 +86,7 @@ class SerialDetailView(generic.DetailView):
         else:
             data['rec_films'] = Serial.objects.only('title_ru', 'image', 'rating')\
                 .prefetch_related(Prefetch('genres', queryset=Genre.objects.only('title')))\
-                .exclude(id=self.object.id).order_by('-rating')[:6]
+                .exclude(id=self.object.id).order_by('id')[:6]
         return data
 
     def post(self, *args, **kwargs):
@@ -110,13 +110,13 @@ class FilterSerialListView(generic.ListView):
     def get_queryset(self):
         if self.request.GET.get('years_start') == '1900' and self.request.GET.get('years_end') == '2021':
             films = Serial.objects.only('title_ru', 'start_year', 'end_year', 'image', 'plot', 'rating', 'end_status')\
-                .prefetch_related(Prefetch('genres', queryset=Genre.objects.only('title')))
+                .prefetch_related(Prefetch('genres', queryset=Genre.objects.only('title'))).order_by('id')
         else:
             films = Serial.objects.filter(
                 Q(start_year__gte=int(self.request.GET.get('years_start'))) &
                 Q(start_year__lte=int(self.request.GET.get('years_end')))
             ).only('title_ru', 'start_year', 'end_year', 'image', 'plot', 'rating', 'end_status')\
-                .prefetch_related(Prefetch('genres', queryset=Genre.objects.only('title')))
+                .prefetch_related(Prefetch('genres', queryset=Genre.objects.only('title'))).order_by('id')
 
         if self.request.GET.get('imbd_start') != '0.1' or self.request.GET.get('imbd_end') != '9.9':
             films = films.filter(
@@ -166,7 +166,7 @@ def search_serials(request):
         if form_1.is_valid():
             try:
                 film_1 = Serial.objects.only('title_ru', 'image', 'start_year', 'end_year')\
-                    .filter(title_ru__iexact=form_1.cleaned_data['film_1_title_ru'])[0]
+                    .filter(title_ru__iexact=form_1.cleaned_data['film_1_title_ru']).order_by('id')[0]
                 context['film_1'] = film_1
 
                 logger.info(f'Искали сериал 1: {film_1}')
@@ -182,7 +182,7 @@ def search_serials(request):
         if form_2.is_valid():
             try:
                 film_2 = Serial.objects.only('title_ru', 'image', 'start_year', 'end_year')\
-                    .filter(title_ru__iexact=form_2.cleaned_data['film_2_title_ru'])[0]
+                    .filter(title_ru__iexact=form_2.cleaned_data['film_2_title_ru']).order_by('id')[0]
                 context['film_2'] = film_2
 
                 logger.info(f'Искали сериал 2: {film_2}')

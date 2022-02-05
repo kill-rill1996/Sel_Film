@@ -1,7 +1,6 @@
 from django.urls import path
 from django.views.decorators.cache import cache_page
 
-from django.conf import settings
 from .views import index_page, FilmDetailView, search_films, contact_page, FilmListView, about_page, FilterFilmListView, \
     SearchView, add_review_for_film
 

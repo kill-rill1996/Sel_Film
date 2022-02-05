@@ -48,33 +48,47 @@
 						</div>
 
 						<ul class="card__meta">
-							<li><span>Жанр:</span>
-							{% for genre in film.genres.all %}
-								<a>{{ genre }}</a>
-							{% endfor %}
-
-							<li><span>Год выпуска:</span>{{ film.year }}
-								{% if film.start_year %}
-									{{ film.start_year }}{% if film.end_year %} - {{ film.end_year }}{% if film.end_status %} (сериал закончился){% endif %}
-								{% endif %}
+							{% if film.gernes.all %}
+								<li><span>Жанр:</span>
+								{% for genre in film.genres.all %}
+									<a>{{ genre }}</a>
+								{% endfor %}
 							{% endif %}
-							</li>
+
+							{% if film.year or film.start_year %}
+								<li><span>Год выпуска:</span>{{ film.year }}
+									{% if film.start_year %}
+										{{ film.start_year }}{% if film.end_year %} - {{ film.end_year }}{% if film.end_status %} (сериал закончился){% endif %}
+									{% endif %}
+								{% endif %}
+								</li>
+							{% endif %}
 
 							{% if film.duration %}
 								<li><span>Продолжительность:</span>{{ film.duration }} мин{% if film.series %}|Серии: {{ film.series }}{% endif %}{% if film.seasons %}|Сезоны: {{ film.seasons }}{% endif %}</li>
 							{% endif %}
-							<li><span>Страна:</span>{% for country in film.countries.all %}<a>{{ country }}</a>{% endfor %}</a></li>
-							<li><span>Режиссер:</span>
-								{% for director in film.directors.all|actor_list %}
-									<a>{{ director }}</a>
-								{% endfor %}
-							</li>
+
+							{% if film.countries.all %}
+								<li><span>Страна:</span>{% for country in film.countries.all %}<a>{{ country }}</a>{% endfor %}</a></li>
+							{% endif %}
+
+							{% if film.directors.all %}
+								<li><span>Режиссер:</span>
+									{% for director in film.directors.all|actor_list %}
+										<a>{{ director }}</a>
+									{% endfor %}
+								</li>
+							{% endif %}
+
+							{% if film.actors.all %}
 							<li>
 								<span>Актеры:</span>
 								{% for actor in film.actors.all|actor_list %}
 									<a>{{ actor }}</a>
 								{% endfor %}
 							</li>
+							{% endif %}
+
 						</ul>
 
 						<div class="card__description card__description--details">

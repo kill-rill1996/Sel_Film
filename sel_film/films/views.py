@@ -16,22 +16,25 @@ from films.services.week_films import read_id_from_log
 from serials.models import Genre as Serial_Genre
 
 
-# @cache_page(15 * 60)
+@cache_page(15 * 60)
 def index_page(request):
-    week_films = Film.objects.filter(id__in=read_id_from_log())\
-                    .prefetch_related(Prefetch('genres', queryset=Genre.objects.only('title')))\
-                    .only('title_ru', 'image', 'rating')
+    id_for_week_films = read_id_from_log()
+    week_films = []
+    for film_id in id_for_week_films:
+        week_films.append(Film.objects.filter(id=film_id).only('title_ru', 'image', 'rating')
+                          .prefetch_related(Prefetch('genres', queryset=Genre.objects.only('title')))[0])
+
     ten_films = Film.objects.all().prefetch_related(Prefetch('genres', queryset=Genre.objects.only('title')))\
-                    .only('image', 'rating', 'title_ru', 'plot', 'year')[:6]
+                    .only('image', 'rating', 'title_ru', 'plot', 'year').order_by('id')[:6]
     ten_serials = Serial.objects.all()\
                     .prefetch_related(Prefetch('genres', queryset=Serial_Genre.objects.only('title')))\
-                    .only('image', 'plot', 'title_ru', 'rating', 'start_year', 'end_year', 'end_status')[:6]
+                    .only('image', 'plot', 'title_ru', 'rating', 'start_year', 'end_year', 'end_status').order_by('id')[:6]
     ten_anime = Serial.objects.filter(genres__title='аниме')\
                     .prefetch_related(Prefetch('genres', queryset=Serial_Genre.objects.only('title')))\
-                    .only('image', 'plot', 'title_ru', 'rating', 'start_year', 'end_year', 'end_status')[:6]
+                    .only('image', 'plot', 'title_ru', 'rating', 'start_year', 'end_year', 'end_status').order_by('id')[:6]
     ten_cartoons = Serial.objects.filter(genres__title='мультсериалы')\
                     .prefetch_related(Prefetch('genres', queryset=Serial_Genre.objects.only('title')))\
-                    .only('image', 'plot', 'title_ru', 'rating', 'start_year', 'end_year', 'end_status')[:6]
+                    .only('image', 'plot', 'title_ru', 'rating', 'start_year', 'end_year', 'end_status').order_by('id')[:6]
     recommended_films = Film.objects.filter(id__in=(31, 1010, 97, 122, 147, 109))\
                     .prefetch_related(Prefetch('genres', queryset=Genre.objects.only('title')))\
                     .only('title_ru', 'rating', 'image')
@@ -50,12 +53,11 @@ class FilmListView(generic.ListView):
     context_object_name = 'films'
     paginate_by = 8
     template_name = 'films/film_list.html'
-    ordering = ['id']
 
     def get_queryset(self):
         genres = Genre.objects.only('title')
         films = Film.objects.only('title_ru', 'year', 'image', 'plot', 'rating')\
-            .prefetch_related(Prefetch('genres', queryset=genres))
+            .prefetch_related(Prefetch('genres', queryset=genres)).order_by('id')
         return films
 
     def get_context_data(self, **kwargs):
@@ -91,7 +93,7 @@ class FilmDetailView(generic.DetailView):
         data['reviews'] = self.object.reviews.order_by('-created')
         data['rec_films'] = Film.objects.filter(genres__in=self.object.genres.all())\
             .prefetch_related(Prefetch('genres', queryset=Genre.objects.only('title')))\
-            .only('title_ru', 'image', 'rating').exclude(id=self.object.id)[:6]
+            .only('title_ru', 'image', 'rating').exclude(id=self.object.id).order_by('id').distinct()[:6]
         data['captcha'] = RecaptchaForm
         return data
 
@@ -104,7 +106,6 @@ class FilmDetailView(generic.DetailView):
             if self.request.POST.get('parent', None):
                 form.is_child = True
                 form.parent_id = self.request.POST.get('parent')
-
             form.save()
         return redirect(film.get_absolute_url())
 
@@ -118,14 +119,14 @@ class FilterFilmListView(generic.ListView):
         if self.request.GET.get('years_start') == '1900' and self.request.GET.get('years_end') == '2021':
             genres = Genre.objects.only('title')
             films = Film.objects.only('title_ru', 'year', 'image', 'plot', 'rating') \
-                .prefetch_related(Prefetch('genres', queryset=genres))
+                .prefetch_related(Prefetch('genres', queryset=genres)).order_by('id')
         else:
             genres = Genre.objects.only('title')
             films = Film.objects.filter(
                 Q(year__gte=int(self.request.GET.get('years_start'))) &
                 Q(year__lte=int(self.request.GET.get('years_end')))
             ).only('title_ru', 'year', 'image', 'plot', 'rating')\
-                .prefetch_related(Prefetch('genres', queryset=genres))
+                .prefetch_related(Prefetch('genres', queryset=genres)).order_by('id')
 
         if self.request.GET.get('imbd_start') != '0.1' or self.request.GET.get('imbd_end') != '9.9':
             films = films.filter(
@@ -168,27 +169,27 @@ class SearchView(generic.ListView):
 
     def get_queryset(self):
         if self.request.GET.get('search_text') and self.request.GET.get('search_text') != ' ':
-            search_data = self.request.GET.get('search_text')
+            search_data = self.request.GET.get('search_text').strip()
             search_data_lower = search_data.lower()
             try:
                 # Eng title
                 if search_data_lower[0] in ascii_lowercase:
                     films_list = Film.objects.only('title_ru', 'year', 'plot', 'image', 'rating')\
                                      .filter(title_en__icontains=search_data_lower) \
-                                     .prefetch_related(Prefetch('genres', queryset=Genre.objects.only('title')))[:100]
+                                     .prefetch_related(Prefetch('genres', queryset=Genre.objects.only('title'))).order_by('id')[:100]
                     serials_list = Serial.objects.only('title_ru', 'rating', 'start_year', 'end_year', 'plot', 'image', 'end_status')\
                                     .filter(title_en__icontains=search_data_lower)\
-                                    .prefetch_related(Prefetch('genres', queryset=Serial_Genre.objects.only('title')))[:100]
+                                    .prefetch_related(Prefetch('genres', queryset=Serial_Genre.objects.only('title'))).order_by('id')[:100]
                     if not films_list and not serials_list:
                         logger.warning(f'Фильмы и сериалы по запросу: \"{search_data}\" не найдены {films_list} {serials_list}')
                 else:
                     # Rus title
                     films_list = Film.objects.only('title_ru', 'year', 'plot', 'image', 'rating') \
                                      .filter(title_ru__icontains=search_data_lower) \
-                                     .prefetch_related(Prefetch('genres', queryset=Genre.objects.only('title')))[:100]
+                                     .prefetch_related(Prefetch('genres', queryset=Genre.objects.only('title'))).order_by('id')[:100]
                     serials_list = Serial.objects.only('title_ru', 'rating', 'start_year', 'end_year', 'plot', 'image', 'end_status') \
                                     .filter(title_ru__icontains=search_data_lower) \
-                                    .prefetch_related(Prefetch('genres', queryset=Serial_Genre.objects.only('title')))[:100]
+                                    .prefetch_related(Prefetch('genres', queryset=Serial_Genre.objects.only('title'))).order_by('id')[:100]
                     # log
                     if not films_list and not serials_list:
                         logger.warning(f'Фильмы и сериалы по запросу: \"{search_data}\" не найдены {films_list} {serials_list}')
@@ -226,7 +227,7 @@ def search_films(request):
         if form_1.is_valid():
             try:
                 film_1 = Film.objects.only('title_ru', 'image', 'year').\
-                    filter(title_ru__iexact=form_1.cleaned_data['film_1_title_ru'])[0]
+                    filter(title_ru__iexact=form_1.cleaned_data['film_1_title_ru']).order_by('id')[0]
 
                 context['film_1'] = film_1
                 logger.info(f'Искали фильм 1: {film_1}')
@@ -242,7 +243,7 @@ def search_films(request):
         if form_2.is_valid():
             try:
                 film_2 = Film.objects.only('title_ru', 'image', 'year')\
-                    .filter(title_ru__iexact=form_2.cleaned_data['film_2_title_ru'])[0]
+                    .filter(title_ru__iexact=form_2.cleaned_data['film_2_title_ru']).order_by('id')[0]
 
                 context['film_2'] = film_2
                 logger.info(f'Искали фильм 2: {film_2}')
@@ -294,17 +295,17 @@ def add_review_for_film(request, pk):
 @cache_page(15 * 60)
 def contact_page(request):
     if request.method == 'POST':
-        message_name = request.POST.get('name', '')
-        message_email = request.POST.get('email', '')
-        message_subject = request.POST.get('subject', '')
-        message_text = request.POST.get('message', '')
+        message_name = request.POST.get('name', '').strip()
+        message_email = request.POST.get('email', '').strip()
+        message_subject = request.POST.get('subject', '').strip()
+        message_text = request.POST.get('message', '').strip()
         if message_text and message_email and message_name and message_subject and request.POST.get('g-recaptcha-response'):
             try:
                 send_mail(
                     message_name,
                     message_subject + '\n' + message_text + f'\n\nMessage from: {message_email}',
                     message_email,
-                    ['w3qxnkst1ck@gmail.com', 'hizenberg228@mail.ru', '1996sasha2507@mail.ru']
+                    ['hizenberg228@mail.ru', '1996sasha2507@mail.ru']
                 )
                 logger.info(f'Отправлено сообщение от {message_name} {message_email} на тему {message_subject} \"{message_text}\" ')
                 return render(request, 'contacts.html', {'message_name': message_name})

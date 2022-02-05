@@ -18,7 +18,6 @@ DEBUG = bool(int(os.environ.get("DEBUG", default=False)))
 
 ALLOWED_HOSTS = os.environ.get("DJANGO_ALLOWED_HOSTS", "127.0.0.1").split(" ")
 
-
 # Application definition
 
 INSTALLED_APPS = [
@@ -187,12 +186,13 @@ loguru_logger.add(os.path.join(BASE_DIR, 'logs/films/selected_films.log'), forma
 
 
 # Email settings
+EMAIL_BACKEND = os.environ.get('EMAIL_BACKEND')
 EMAIL_HOST = os.environ.get('EMAIL_HOST')
 EMAIL_PORT = os.environ.get('EMAIL_PORT')
 EMAIL_HOST_USER = os.environ.get('EMAIL_HOST_USER')
 EMAIL_HOST_PASSWORD = os.environ.get('EMAIL_HOST_PASSWORD')
-# EMAIL_USE_TLS = bool(int(os.environ.get('EMAIL_USE_TLS')))
-EMAIL_USE_SSL = bool(int(os.environ.get('EMAIL_USE_SSL')))
+EMAIL_USE_TLS = bool(int(os.environ.get('EMAIL_USE_TLS')))
+# EMAIL_USE_SSL = bool(int(os.environ.get('EMAIL_USE_SSL')))
 
 # Sentry monitoring
 import sentry_sdk

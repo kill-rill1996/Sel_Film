@@ -18,7 +18,6 @@ def read_id_from_log():
             else:
                 log_id[film_id] = 1
     res = sorted(log_id.items(), key=lambda x: x[1], reverse=True)[:7]
-    print(res)
     if len(res) < 7:
         i = 0
         while len(res) < 7:

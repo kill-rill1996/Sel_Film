@@ -90,8 +90,7 @@ class Command(BaseCommand):
                 res = (year_start,)
 
             else:
-                res = s_year.split()[0]
-
+                res = (s_year.split('')[0],)
         return res
 
     def get_seasons(self, film_seasons):
