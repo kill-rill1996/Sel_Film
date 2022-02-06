@@ -5,8 +5,8 @@ from films.models import gen_slug
 
 
 class Serial(models.Model):
-    title_ru = models.CharField(max_length=255)
-    title_en = models.CharField(max_length=255)
+    title_ru = models.CharField(db_index=True, max_length=255)
+    title_en = models.CharField(db_index=True, max_length=255)
     start_year = models.IntegerField()
     end_year = models.IntegerField(blank=True, null=True)
     duration = models.IntegerField()

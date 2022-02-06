@@ -10,8 +10,8 @@ def gen_slug(s):
 
 
 class Film(models.Model):
-    title_ru = models.CharField(max_length=255)
-    title_en = models.CharField(max_length=255)
+    title_ru = models.CharField(db_index=True, max_length=255)
+    title_en = models.CharField(db_index=True, max_length=255)
     year = models.IntegerField()
     duration = models.IntegerField()
     rating = models.FloatField(blank=True, null=True)
