@@ -251,7 +251,7 @@ def find_films(id_1, id_2):
     film_2 = get_film_by_id(id_2, FILMS)
 
     # get points
-    for current_film in FILMS:
+    for current_film in FILMS[:40_000]:
         total_points = 0
         total_points += get_points_by_year(film_1, film_2, current_film)
         total_points += get_points_by_duration(film_1, film_2, current_film)
