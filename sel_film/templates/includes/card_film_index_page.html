@@ -34,7 +34,7 @@
 					{% if film.start_year %}
 						<li>{{ film.start_year }}{% if film.end_year %} - {{ film.end_year }}{% endif %}</li>
 					{% endif %}
-					{% if film.rating >= 8.0 %}<li>U+1F336</li>{% endif %}
+					{% if film.rating >= 8.0 %}<li>&#U+1F336;</li>{% endif %}
 					{% if film.end_status %}<li>✔️</li>{% endif %}
 				</ul>
 			</div>
