@@ -303,7 +303,7 @@ def contact_page(request):
             try:
                 send_mail(
                     message_name,
-                    f'Topic: {message_subject}' + '\n' + f'Text: {message_text}' + f'\n{message_name}' + f'\n\nMessage from: {message_email}',
+                    f'Topic: {message_subject}' + '\n' + f'Text: {message_text}' + f'\n\n{message_name}' + f'\nMessage from: {message_email}',
                     message_email,
                     ['hizenberg228@mail.ru', '1996sasha2507@mail.ru']
                 )
