@@ -1,196 +1,213 @@
 import json
 
 
-def get_points_by_year(film_1, film_2, current_film) -> None:
+def get_points_by_year(film_1, film_2, FILMS, FILMS_POINTS) -> None:
     """Начисляет фильмам очки за года"""
     year_1 = int(film_1['year'])
     year_2 = int(film_2['year'])
-    current_year = int(current_film['year'])
+    for current_film in FILMS:
+        current_year = int(current_film['year'])
 
-    if year_1 == year_2:
-        if current_year == year_1:
-            points = 15
-        elif abs(current_year - year_1) == 1:
-            points = 13
-        elif abs(current_year - year_1) == 2:
-            points = 11
-        elif abs(current_year - year_1) == 3:
-            points = 9
+        if year_1 == year_2:
+            if current_year == year_1:
+                points = 15
+            elif abs(current_year - year_1) == 1:
+                points = 13
+            elif abs(current_year - year_1) == 2:
+                points = 11
+            elif abs(current_year - year_1) == 3:
+                points = 9
+            else:
+                points = 0
+            FILMS_POINTS[f'{current_film["id"]}'] += points
         else:
-            points = 0
-        # FILMS_POINTS[f'{current_film["id"]}'] += points
-        return points
-    else:
-        if current_year in [year_1, year_2]:
-            points = 9
-        elif abs(current_year - year_1) == 1 or abs(current_year - year_2) == 1:
-            points = 7
-        elif abs(current_year - year_1) == 2 or abs(current_year - year_2) == 2:
-            points = 5
-        else:
-            points = 0
-        # FILMS_POINTS[f'{current_film["id"]}'] += points
-        return points
+            if current_year in [year_1, year_2]:
+                points = 9
+            elif abs(current_year - year_1) == 1 or abs(current_year - year_2) == 1:
+                points = 7
+            elif abs(current_year - year_1) == 2 or abs(current_year - year_2) == 2:
+                points = 5
+            else:
+                points = 0
+            if current_film['rating']:
+                points = points * (1 + (float(current_film['rating']) - 6.8) * 0.08)
+            FILMS_POINTS[f'{current_film["id"]}'] += points
 
 
 # max 10
-def get_points_by_duration(film_1, film_2, current_film) -> None:
+def get_points_by_duration(film_1, film_2, FILMS, FILMS_POINTS) -> None:
     """Начисляет фильмам очки за продолжительность"""
 
-    if film_1['duration'] and film_2['duration']:
-        time_1 = film_1['duration']
-        time_2 = film_2['duration']
-    elif film_1['duration'] or film_2['duration']:
-        for time in (film_1['duration'], film_2['duration']):
-            if time:
-                time_1 = time
-        time_2 = 105
-    else:
-        time_1 = 105
-        time_2 = 105
+    for current_film in FILMS:
+        if film_1['duration'] and film_2['duration']:
+            time_1 = film_1['duration']
+            time_2 = film_2['duration']
+        elif film_1['duration'] or film_2['duration']:
+            for time in (film_1['duration'], film_2['duration']):
+                if time:
+                    time_1 = time
+            time_2 = 105
+        else:
+            time_1 = 105
+            time_2 = 105
 
-    average_duration = (time_1 + time_2) / 2
-    points = 10 - abs(current_film['duration'] - average_duration) * 0.2
+        average_duration = (time_1 + time_2) / 2
+        points = 10 - abs(current_film['duration'] - average_duration) * 0.2
 
-    if points < 0:
-        points = 0
-    return points
+        if points < 0:
+            points = 0
+        if current_film['rating']:
+            points = points * (1 + (float(current_film['rating']) - 6.8) * 0.08)
+        FILMS_POINTS[f'{current_film["id"]}'] += points
 
 
 # max 170
-def get_points_by_genres(film_1, film_2, current_film) -> None:
+def get_points_by_genres(film_1, film_2, FILMS, FILMS_POINTS) -> None:
     """Начисляет очки в соответствии с жанрами"""
 
     coinciding = list(set(film_1['genres']) & set(film_2['genres']))
     film1_genres = list(set(film_1['genres']) - set(film_2['genres']))
     film2_genres = list(set(film_2['genres']) - set(film_1['genres']))
 
-    coinciding_count = 0
-    film1_count = 0
-    film2_count = 0
+    for current_film in FILMS:
+        coinciding_count = 0
+        film1_count = 0
+        film2_count = 0
+        if current_film['genres']:
+            for genre in current_film['genres']:
+                if genre in coinciding:
+                    coinciding_count += 1
+                elif genre in film1_genres:
+                    film1_count += 1
+                elif genre in film2_genres:
+                    film2_count += 1
 
-    if current_film['genres']:
-        for genre in current_film['genres']:
-            if genre in coinciding:
-                coinciding_count += 1
-            elif genre in film1_genres:
-                film1_count += 1
-            elif genre in film2_genres:
-                film2_count += 1
-
-        if film2_count and film1_count:
-            points = (15 * coinciding_count * 1.5 ** coinciding_count) + \
-                     (7 * film1_count * 1.3 ** film1_count) + \
-                     (7 * film2_count * 1.3 ** film2_count)
+            if film2_count and film1_count:
+                points = (15 * coinciding_count * 1.5 ** coinciding_count) + \
+                         (7 * film1_count * 1.3 ** film1_count) + \
+                         (7 * film2_count * 1.3 ** film2_count)
+            else:
+                points = (12 * coinciding_count * 1.5 ** coinciding_count) + \
+                         (5 * film1_count * 1.2 ** film1_count) + \
+                         (5 * film2_count * 1.2 ** film2_count)
+            if points > 170:
+                points = 170
         else:
-            points = (12 * coinciding_count * 1.5 ** coinciding_count) + \
-                     (5 * film1_count * 1.2 ** film1_count) + \
-                     (5 * film2_count * 1.2 ** film2_count)
-        if points > 170:
-            points = 170
-        return points
-    return 0
+            points = 0
+        if current_film['rating']:
+            points = points * (1 + (float(current_film['rating']) - 6.8) * 0.08)
+        FILMS_POINTS[f'{current_film["id"]}'] += points
 
 
 # max 50
-def get_points_by_country(film_1, film_2, current_film) -> None:
+def get_points_by_country(film_1, film_2, FILMS, FILMS_POINTS) -> None:
     """Начисляет фильмам очки за страну"""
     coinciding_countries = list(set(film_1['countries']) & set(film_2['countries']))
     film1_countries = list(set(film_1['countries']) - set(film_2['countries']))
     film2_countries = list(set(film_2['countries']) - set(film_1['countries']))
 
-    coinciding_count = 0
-    film1_count = 0
-    film2_count = 0
+    for current_film in FILMS:
+        coinciding_count = 0
+        film1_count = 0
+        film2_count = 0
 
-    if current_film['countries']:
-        for country in current_film['countries']:
-            if country in coinciding_countries:
-                coinciding_count += 1
-            elif country in film1_countries:
-                film1_count += 1
-            elif country in film2_countries:
-                film2_count += 1
+        if current_film['countries']:
+            for country in current_film['countries']:
+                if country in coinciding_countries:
+                    coinciding_count += 1
+                elif country in film1_countries:
+                    film1_count += 1
+                elif country in film2_countries:
+                    film2_count += 1
 
-        if film2_count and film1_count:
-            points = (12 * coinciding_count * 1.5 ** coinciding_count) + \
-                     (7 * film1_count * 1.3 ** film1_count) + \
-                     (7 * film2_count * 1.3 ** film2_count)
+            if film2_count and film1_count:
+                points = (12 * coinciding_count * 1.5 ** coinciding_count) + \
+                         (7 * film1_count * 1.3 ** film1_count) + \
+                         (7 * film2_count * 1.3 ** film2_count)
+            else:
+                points = (12 * coinciding_count * 1.5 ** coinciding_count) + \
+                         (5 * film1_count * 1.2 ** film1_count) + \
+                         (5 * film2_count * 1.2 ** film2_count)
+            if points > 50:
+                points = 50
         else:
-            points = (12 * coinciding_count * 1.5 ** coinciding_count) + \
-                     (5 * film1_count * 1.2 ** film1_count) + \
-                     (5 * film2_count * 1.2 ** film2_count)
-        if points > 50:
-            points = 50
-        return points
-    return 0
+            points = 0
+        if current_film['rating']:
+            points = points * (1 + (float(current_film['rating']) - 6.8) * 0.08)
+        FILMS_POINTS[f'{current_film["id"]}'] += points
 
 
 # max 100
-def get_points_by_directors(film_1, film_2, current_film) -> None:
+def get_points_by_directors(film_1, film_2, FILMS, FILMS_POINTS) -> None:
     """Начисляет очки в соответствии с режиссером"""
     coinciding_directors = list(set(film_1['directors']) & set(film_2['directors']))
     film1_directors = list(set(film_1['directors']) - set(film_2['directors']))
     film2_directors = list(set(film_2['directors']) - set(film_1['directors']))
 
-    coinciding_count = 0
-    film1_count = 0
-    film2_count = 0
+    for current_film in FILMS:
+        coinciding_count = 0
+        film1_count = 0
+        film2_count = 0
 
-    if current_film['directors']:
-        for director in current_film['directors']:
-            if director in coinciding_directors:
-                coinciding_count += 1
-            elif director in film1_directors:
-                film1_count += 1
-            elif director in film2_directors:
-                film2_count += 1
+        if current_film['directors']:
+            for director in current_film['directors']:
+                if director in coinciding_directors:
+                    coinciding_count += 1
+                elif director in film1_directors:
+                    film1_count += 1
+                elif director in film2_directors:
+                    film2_count += 1
 
-    if film2_count and film1_count:
-        points = (25 * coinciding_count * 1.5 ** coinciding_count) + \
-                 (12 * film1_count * 1.3 ** film1_count) + \
-                 (12 * film2_count * 1.3 ** film2_count)
-    else:
-        points = (25 * coinciding_count * 1.5 ** coinciding_count) + \
-                 (10 * film1_count * 1.2 ** film1_count) + \
-                 (10 * film2_count * 1.2 ** film2_count)
-    if points > 150:
-        points = 150
-    return points
+        if film2_count and film1_count:
+            points = (25 * coinciding_count * 1.5 ** coinciding_count) + \
+                     (12 * film1_count * 1.3 ** film1_count) + \
+                     (12 * film2_count * 1.3 ** film2_count)
+        else:
+            points = (25 * coinciding_count * 1.5 ** coinciding_count) + \
+                     (10 * film1_count * 1.2 ** film1_count) + \
+                     (10 * film2_count * 1.2 ** film2_count)
+        if points > 150:
+            points = 150
+        if current_film['rating']:
+            points = points * (1 + (float(current_film['rating']) - 6.8) * 0.08)
+        FILMS_POINTS[f'{current_film["id"]}'] += points
 
 
 # max 100
-def get_points_by_actors(film_1, film_2, current_film) -> None:
+def get_points_by_actors(film_1, film_2, FILMS, FILMS_POINTS) -> None:
     """Начисляет очки в соответствии с актерами"""
     coinciding_directors = list(set(film_1['actors']) & set(film_2['actors']))
     film1_directors = list(set(film_1['actors']) - set(film_2['actors']))
     film2_directors = list(set(film_2['actors']) - set(film_1['actors']))
 
-    coinciding_count = 0
-    film1_count = 0
-    film2_count = 0
+    for current_film in FILMS:
+        coinciding_count = 0
+        film1_count = 0
+        film2_count = 0
 
-    if current_film['actors']:
-        for actor in current_film['actors']:
-            if actor in coinciding_directors:
-                coinciding_count += 1
-            elif actor in film1_directors:
-                film1_count += 1
-            elif actor in film2_directors:
-                film2_count += 1
+        if current_film['actors']:
+            for actor in current_film['actors']:
+                if actor in coinciding_directors:
+                    coinciding_count += 1
+                elif actor in film1_directors:
+                    film1_count += 1
+                elif actor in film2_directors:
+                    film2_count += 1
 
-    if film2_count and film1_count:
-        points = (10 * coinciding_count * 1.5 ** coinciding_count) + \
-                 (7 * film1_count * 1.3 ** film1_count) + \
-                 (7 * film2_count * 1.3 ** film2_count)
+        if film2_count and film1_count:
+            points = (10 * coinciding_count * 1.5 ** coinciding_count) + \
+                     (7 * film1_count * 1.3 ** film1_count) + \
+                     (7 * film2_count * 1.3 ** film2_count)
 
-    else:
-        points = (10 * coinciding_count * 1.5 ** coinciding_count) + \
-                 (5 * film1_count * 1.2 ** film1_count) + \
-                 (5 * film2_count * 1.2 ** film2_count)
-    if points > 100:
-        points = 100 + points / 100
-    return points
+        else:
+            points = (10 * coinciding_count * 1.5 ** coinciding_count) + \
+                     (5 * film1_count * 1.2 ** film1_count) + \
+                     (5 * film2_count * 1.2 ** film2_count)
+        if points > 100:
+            points = 100 + points / 100
+        if current_film['rating']:
+            points = points * (1 + (float(current_film['rating']) - 6.8) * 0.08)
+        FILMS_POINTS[f'{current_film["id"]}'] += points
 
 
 def get_objects() -> list:
@@ -250,19 +267,10 @@ def find_films(id_1, id_2):
     film_1 = get_film_by_id(id_1, FILMS)
     film_2 = get_film_by_id(id_2, FILMS)
 
-    # get points
-    for current_film in FILMS[:40_000]:
-        total_points = 0
-        total_points += get_points_by_year(film_1, film_2, current_film)
-        total_points += get_points_by_duration(film_1, film_2, current_film)
-        total_points += get_points_by_genres(film_1, film_2, current_film)
-        total_points += get_points_by_country(film_1, film_2, current_film)
-        total_points += get_points_by_directors(film_1, film_2, current_film)
-        total_points += get_points_by_actors(film_1, film_2, current_film)
-
-        if current_film['rating']:
-            total_points = total_points * (1 + (float(current_film['rating']) - 6.8) * 0.08)
-
-        FILMS_POINTS[f'{current_film["id"]}'] += total_points
-
+    get_points_by_year(film_1, film_2, FILMS[:40_000], FILMS_POINTS)
+    get_points_by_duration(film_1, film_2, FILMS[:40_000], FILMS_POINTS)
+    get_points_by_genres(film_1, film_2, FILMS[:40_000], FILMS_POINTS)
+    get_points_by_country(film_1, film_2, FILMS[:40_000], FILMS_POINTS)
+    get_points_by_directors(film_1, film_2, FILMS[:40_000], FILMS_POINTS)
+    get_points_by_actors(film_1, film_2, FILMS[:40_000], FILMS_POINTS)
     return [id for id, _ in get_top_ten_films(FILMS_POINTS)]

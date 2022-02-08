@@ -193,7 +193,11 @@
             <span class="card__category">
               <a>{{ film.genres.all|first|capfirst }}</a>
             </span>
-            <span class="card__rate">{{ film.rating }}</span>
+            {% if film.rating %}
+              <span class="card__rate">{{ film.rating }}</span>
+            {% else %}
+              <span class="card__rate"> -- </span>
+            {% endif %}
           </div>
         </div>
       </div>
